@@ -13,7 +13,7 @@
                         radius="200">
                     <v-row class="justify-center my-6">
                         <v-card-title>
-                            zaloguj się
+                            Zaloguj się
                         </v-card-title>
                     </v-row>
                     

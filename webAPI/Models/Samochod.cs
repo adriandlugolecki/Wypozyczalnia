@@ -2,15 +2,15 @@
 
 namespace webAPI.Models
 {
-    public class Samochody
+    public class Samochod
     {
         [Key]
         public int Id { get; set; }
         public string Nazwa { get; set; } = string.Empty;
         public string Marka { get; set; } = string.Empty;
-        public string MocSilnika { get; set; } = string.Empty;
-        public string Rocznik { get; set; } = string.Empty;
-        public string liczbaMiejsc { get; set; } = string.Empty;
+        public float MocSilnika { get; set; } 
+        public int Rocznik { get; set; }
+        public int liczbaMiejsc { get; set; }
         public string RodzajSkrzyni { get; set; } = string.Empty;
 
 

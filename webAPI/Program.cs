@@ -1,13 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 using webAPI.Data;
+using webAPI.Models;
+using webAPI.Services;
 using webAPI.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 builder.Services.AddAuthentication(o =>
     {
@@ -38,6 +44,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOpcje>();
 
+builder.Services.AddScoped<IUserService<LoginDto>, PracownikService>();
 
 
 var getConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -45,6 +52,9 @@ var getConnectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(getConnectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityCore<Pracownik>().AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 

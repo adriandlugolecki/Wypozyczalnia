@@ -12,8 +12,9 @@ namespace webAPI.Models
         public string Nazwisko { get; set; } = string.Empty;
 
         [Required]
-        public string DataUrodzenia { get; set; } = string.Empty;
+        public string DataUrodzenia { get; set; } 
         [Required]
+        [StringLength(11)]
         public string Pesel { get; set; } = string.Empty;
 
     }

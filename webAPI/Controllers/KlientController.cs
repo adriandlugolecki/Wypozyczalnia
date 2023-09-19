@@ -19,5 +19,12 @@ namespace webAPI.Controllers
         {
             return await _context.Klienci.ToListAsync();
         }
+        [HttpPost]
+        public async Task<IActionResult> PostSamochod(Klient klient)
+        {
+            await _context.Klienci.AddAsync(klient);
+            await _context.SaveChangesAsync();
+            return Ok(klient);
+        }
     }
 }

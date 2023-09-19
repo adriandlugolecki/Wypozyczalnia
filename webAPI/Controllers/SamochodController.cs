@@ -15,7 +15,7 @@ namespace webAPI.Controllers
         public SamochodController(AppDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Samochody>> GetSamochodyList() 
+        public async Task<IEnumerable<Samochod>> GetSamochodyList() 
         {
             return await _context.Samochody.ToListAsync();
         }
@@ -26,7 +26,7 @@ namespace webAPI.Controllers
             return Samochod == null ? NotFound("Brak takiego samochodu") : Ok(Samochod);
         }
         [HttpPost]
-        public async Task<IActionResult> PostSamochod(Samochody samochod)
+        public async Task<IActionResult> PostSamochod(Samochod samochod)
         {
             await _context.Samochody.AddAsync(samochod);
             await _context.SaveChangesAsync();
