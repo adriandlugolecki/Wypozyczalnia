@@ -32,5 +32,23 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(samochod);
         }
+        [HttpGet("wolneSamochody/{data}/{dataZakonczenia}")]
+        public IActionResult WolneAuta([FromRoute] DateTime data,[FromRoute] DateTime dataZakonczenia)
+        {
+            var samochody = _context.Samochody.Select(s=>s.Id).ToList();
+
+            var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data)>=0 && w.Data.CompareTo(dataZakonczenia)==-1 || w.Data == dataZakonczenia).Select(w => w.IdSamochodu).ToList();
+           
+            
+            foreach (var auto in zablokowaneAuta)
+            {
+                samochody.Remove(auto);
+            }
+            
+            return Ok(samochody);
+
+            
+
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,22 +7,22 @@ using webAPI.Models;
 
 namespace webAPI.Services
 {
-    public class PracownikService
+    public class KlientService
     {
-        private readonly UserManager<Pracownik> _pracownikManager;
+        private readonly UserManager<Klient> _klientManager;
         private readonly IConfiguration _konfiguracja;
-        public PracownikService(UserManager<Pracownik> pracownikManager, IConfiguration konfiguracja) 
+        public KlientService(UserManager<Klient> klientManager, IConfiguration konfiguracja)
         {
-            _pracownikManager = pracownikManager;
+            _klientManager = klientManager;
             _konfiguracja = konfiguracja;
         }
-        public async Task<ServicesResponse> RejestracjaPacownikAsync(RejestracjaPracownikDto rejestracja)
+        public async Task<ServicesResponse> RejestracjaAsync(RejestracjaDto rejestracja)
         {
             if (rejestracja == null)
             {
                 throw new NullReferenceException("Wypełnij wymagane pola");
             }
-            var pracownik = new Pracownik
+            var klient = new Klient
             {
                 Email = rejestracja.Email,
                 UserName = rejestracja.Email,
@@ -33,7 +32,7 @@ namespace webAPI.Services
                 Pesel = rejestracja.Pesel,
 
             };
-            var result = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo);
+            var result = await _klientManager.CreateAsync(klient, rejestracja.Haslo);
 
             if (result.Succeeded)
             {
@@ -51,12 +50,12 @@ namespace webAPI.Services
         }
         public async Task<ServicesResponse> LoginAsync(LoginDto login)
         {
-            var pracownik = await _pracownikManager.FindByEmailAsync(login.Email);
-            if (pracownik == null)
+            var klient = await _klientManager.FindByEmailAsync(login.Email);
+            if (klient == null)
             {
                 return new ServicesResponse
                 {
-                    Wiadomosc = "Brak takiego Pracownika",
+                    Wiadomosc = "Brak takiego Klienta",
                     Powodzenie = false
                 };
 
@@ -64,27 +63,29 @@ namespace webAPI.Services
             var claims = new[]
             {
                 new Claim("Email",login.Email),
-                new Claim("Id", pracownik.Id),
+                new Claim(ClaimTypes.NameIdentifier, klient.Id),
 
             };
+            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_konfiguracja["Jwt:Key"]!));
-            var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _konfiguracja["Jwt:Issuer"],
                 audience: _konfiguracja["Jwt:Audience"],
                 claims: claims,
-                expires:DateTime.Now.AddDays(3),
+                expires: DateTime.Now.AddDays(3),
                 signingCredentials: credentials
                 );
 
             return new ServicesResponse
             {
-                Wiadomosc = "Zalogowano jako pracownik",
+                Wiadomosc = "Zaogowano jako klient",
                 Powodzenie = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
 
             };
         }
+
     }
 }

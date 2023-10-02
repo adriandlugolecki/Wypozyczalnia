@@ -44,8 +44,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOpcje>();
 
-builder.Services.AddScoped<IUserService<LoginDto>, PracownikService>();
-
+builder.Services.AddScoped<PracownikService>();
+builder.Services.AddScoped<KlientService>();
 
 var getConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Nie znaleziono DefaultConnection");
@@ -55,6 +55,7 @@ builder.Services.AddDbContext<AppDbContext>(
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentityCore<Pracownik>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityCore<Klient>().AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 

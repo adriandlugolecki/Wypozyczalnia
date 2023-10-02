@@ -1,21 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace webAPI.Models
 {
-    public class Pracownik:IdentityUser
+    public class RejestracjaDto
     {
         
-        [Required]
         public string? Imie { get; set; } 
-        [Required]
         public string? Nazwisko { get; set; } 
-
-        [Required]
         public string? DataUrodzenia { get; set; } 
-        [Required]
-        [StringLength(11)]
         public string? Pesel { get; set; } 
+        public string? Email { get; set; } 
+        public string? Haslo { get; set; } 
 
     }
 }

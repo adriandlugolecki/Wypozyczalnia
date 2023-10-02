@@ -9,10 +9,18 @@ namespace webAPI.Models
     [Required]
     public int SamochodId { get; set; } 
     [Required]
-    public int KlientId { get; set; }
+    public string? KlientId { get; set; }
     [Required]
-    public string Data { get; set; }
+    public DateTime Data { get; set; }
     [Required]
-    public int IleDni { get; set; }
+    public DateTime DataZakonczenia { get; set; }
+    [Required]
+    public float kwota { get; set; }
+    public bool CzyZapłacono { get; set; } = false;
+    public bool CzyOddano { get; set; } = false;
+
+    
+
     }
+    
 }

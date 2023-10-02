@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class stworzenieBazyDanych : Migration
+    public partial class UtworzenieBazyDanych : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,17 +51,34 @@ namespace webAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Kalendarz",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdWypozyczenia = table.Column<int>(type: "int", nullable: false),
+                    IdSamochodu = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kalendarz", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Samochody",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nazwa = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Marka = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MocSilnika = table.Column<float>(type: "real", nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rocznik = table.Column<int>(type: "int", nullable: false),
-                    liczbaMiejsc = table.Column<int>(type: "int", nullable: false),
-                    RodzajSkrzyni = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LiczbaMiejsc = table.Column<int>(type: "int", nullable: false),
+                    LiczbaDrzwi = table.Column<int>(type: "int", nullable: false),
+                    RodzajSkrzyni = table.Column<int>(type: "int", nullable: false),
+                    RodzajPaliwa = table.Column<int>(type: "int", nullable: false),
+                    Cena = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,9 +106,12 @@ namespace webAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SamochodId = table.Column<int>(type: "int", nullable: false),
-                    KlientId = table.Column<int>(type: "int", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IleDni = table.Column<int>(type: "int", nullable: false)
+                    KlientId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataZakonczenia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    kwota = table.Column<float>(type: "real", nullable: false),
+                    CzyZapłacono = table.Column<bool>(type: "bit", nullable: false),
+                    CzyOddano = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -317,6 +337,9 @@ namespace webAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Kalendarz");
 
             migrationBuilder.DropTable(
                 name: "Klienci");

@@ -12,8 +12,8 @@ using webAPI.Data;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230918212319_stworzenieBazyDanych")]
-    partial class stworzenieBazyDanych
+    [Migration("20231001190112_UtworzenieBazyDanych")]
+    partial class UtworzenieBazyDanych
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,6 +229,28 @@ namespace webAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("webAPI.Models.Kalendarz", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdSamochodu")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdWypozyczenia")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kalendarz");
+                });
+
             modelBuilder.Entity("webAPI.Models.Samochod", b =>
                 {
                     b.Property<int>("Id")
@@ -237,25 +259,30 @@ namespace webAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Cena")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LiczbaDrzwi")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LiczbaMiejsc")
+                        .HasColumnType("int");
+
                     b.Property<string>("Marka")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("MocSilnika")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Nazwa")
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rocznik")
                         .HasColumnType("int");
 
-                    b.Property<string>("RodzajSkrzyni")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RodzajPaliwa")
+                        .HasColumnType("int");
 
-                    b.Property<int>("liczbaMiejsc")
+                    b.Property<int>("RodzajSkrzyni")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -292,18 +319,27 @@ namespace webAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Data")
+                    b.Property<bool>("CzyOddano")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CzyZapłacono")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataZakonczenia")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("KlientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IleDni")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KlientId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SamochodId")
                         .HasColumnType("int");
+
+                    b.Property<float>("kwota")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

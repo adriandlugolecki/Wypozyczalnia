@@ -11,7 +11,7 @@ namespace webAPI.Data
         public DbSet<Samochod> Samochody { get; set; }
         public DbSet<Ubezpieczenie> Ubezpieczenia { get; set; }
         public DbSet<Wypozyczenie> Wypozyczenia { get; set; }
-
+        public DbSet<Kalendarz> Kalendarz { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

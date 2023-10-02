@@ -26,5 +26,24 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(klient);
         }
+        [HttpPost("WypozyczenieSamochodu")]
+        public async Task<IActionResult> WypozyczenieSamochodu(Wypozyczenie wypozyczenie)
+        {
+            await _context.Wypozyczenia.AddAsync(wypozyczenie);
+            await _context.SaveChangesAsync();
+            var ileDni = wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
+
+            for (int i = 0; i <= ileDni; i++)
+            {
+                await _context.Kalendarz.AddAsync(new Kalendarz
+                {
+                    IdWypozyczenia = wypozyczenie.Id,
+                    IdSamochodu = wypozyczenie.SamochodId,
+                    Data = wypozyczenie.Data.AddDays(i)
+                });  
+            }
+            await _context.SaveChangesAsync();
+            return Ok(wypozyczenie);
+        }
     }
 }
