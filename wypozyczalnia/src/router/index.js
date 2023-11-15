@@ -1,41 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'rezerwacja',
+      component: () => import('../components/Rezerwacja.vue'),
+      meta:{ uprawnienia: null }
     },
     {
       path: '/logowanie',
       name: 'logowanie',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/StronaLogowania.vue')
+      component: () => import('../components/StronaLogowania.vue'),
+      meta:{ uprawnienia: null }
     },
     {
       path: '/rejestracja',
       name: 'rejestracja',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Rejestracja.vue')
+      component: () => import('../components/Rejestracja.vue'),
+      meta:{ uprawnienia: null }
     },
     {
       path: '/brak',
       name: 'brakdostepu',
-      component: () => import('../views/BrakDostepu.vue')
+      component: () => import('../components/BrakDostepu.vue'),
+      meta:{ uprawnienia: null }
     },
     {
-      path: '/rezerwacja',
-      name: 'rezerwacja',
-      component: () => import('../views/Rezerwacja.vue')
-    }
+      path: '/rezerwacja/:id/ubezpieczenia',
+      name: 'rezerwacjaUbezpieczenie',
+      component: () => import('../components/RezerwacjaUbezpieczenie.vue'),
+      meta:{ uprawnienia: null }
+    },
+    {
+      path: '/podsumowanie',
+      name: 'podsumowanie',
+      component: () => import('../components/RezerwacjaPodsumowanie.vue'),
+      meta:{ uprawnienia: "klient" }
+    },
   ]
 })
 
 export default router
+
+router.beforeEach((to,from)=> {
+  if(to.meta.uprawnienia != null && to.meta.uprawnienia != uzytkownik.uprawnienia ){
+    return {
+      path:"/logowanie",
+      query: { redirect: from.fullPath },
+    }
+  }
+});

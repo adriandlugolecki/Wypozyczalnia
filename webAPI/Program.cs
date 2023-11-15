@@ -57,6 +57,15 @@ builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<App
 builder.Services.AddIdentityCore<Pracownik>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentityCore<Klient>().AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.AddCors(
+   o =>
+   {
+       o.AddPolicy(name: "CorsPolicy",
+           p =>
+           {
+               p.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+           });
+   });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

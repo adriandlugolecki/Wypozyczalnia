@@ -6,7 +6,7 @@
     <v-app-bar :elevaton="5" color="primary" height="50">
             <v-tabs 
             :mandatory="false">
-                <RouterLink to="/rezerwacja" custom v-slot="{ navigate }">
+                <RouterLink to="/" custom v-slot="{ navigate }">
                     <v-tab @click="navigate">rezerwacje</v-tab>
                 </RouterLink>
                 
