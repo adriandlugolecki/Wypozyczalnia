@@ -65,6 +65,7 @@ namespace webAPI.Services
             {
                 new Claim("Email",login.Email),
                 new Claim("Id", pracownik.Id),
+                new Claim(ClaimTypes.Role,"pracownik"),
 
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_konfiguracja["Jwt:Key"]!));
@@ -83,6 +84,7 @@ namespace webAPI.Services
                 Wiadomosc = "Zalogowano jako pracownik",
                 Powodzenie = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Role = "pracownik",
 
             };
         }

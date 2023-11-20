@@ -17,6 +17,15 @@ export const axioss = axios.create({
     baseURL: `${prefix}/api`,
     timeout: 5000,
 })
+export const axiosToken = axios.create({
+    baseURL: `${prefix}/api`,
+    timeout: 5000,
+})
+
+axiosToken.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+    return config;
+});
 
 export const uzytkownik = reactive({
     uprawnienia: localStorage.getItem("uprawnienia")?localStorage.getItem("uprawnienia"): null

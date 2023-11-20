@@ -36,6 +36,7 @@ namespace webAPI.Services
 
             if (result.Succeeded)
             {
+                await _klientManager.AddToRoleAsync(klient, "klient");
                 return new ServicesResponse
                 {
                     Wiadomosc = "ok",
@@ -64,6 +65,7 @@ namespace webAPI.Services
             {
                 new Claim("Email",login.Email),
                 new Claim(ClaimTypes.NameIdentifier, klient.Id),
+                new Claim(ClaimTypes.Role,"klient"),
 
             };
             
@@ -83,6 +85,7 @@ namespace webAPI.Services
                 Wiadomosc = "Zaogowano jako klient",
                 Powodzenie = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Role = "klient",
 
             };
         }

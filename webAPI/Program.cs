@@ -54,8 +54,14 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(getConnectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddIdentityCore<Pracownik>().AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddIdentityCore<Klient>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityCore<Pracownik>()
+    .AddDefaultTokenProviders()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentityCore<Klient>()
+    .AddDefaultTokenProviders()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddCors(
    o =>

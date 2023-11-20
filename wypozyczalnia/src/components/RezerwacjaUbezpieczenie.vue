@@ -19,16 +19,19 @@
         
             <div>
                 <v-card elevation="5" >
-                    <input type="radio" v-model="cos" value="1" checked/>
+                    <input type="radio" v-model="cos" value="1" checked name="cos"/>
+                    <label>podstawowy</label>
                     <input type="radio" v-model="cos" value="2"/>
+                    <label>Komfort</label>
                     <input type="radio" v-model="cos" value="3"/>
+                    <label>Premium</label>
                     
-                    <v-btn class="mt-5 mb-5" type="submit">
-                            szukaj
-                    </v-btn>
                     
                     
                 </v-card>
+                <v-btn class="mt-5 mb-5" type="submit">
+                            szukaj
+                    </v-btn>
             </div>
         </v-form>  
                 

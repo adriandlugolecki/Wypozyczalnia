@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import {uzytkownik} from "../main"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -28,6 +28,12 @@ const router = createRouter({
       meta:{ uprawnienia: null }
     },
     {
+      path: '/mojeRezerwacje',
+      name: 'mojeRezerwacje',
+      component: () => import('../components/MojeRezerwacje.vue'),
+      meta:{ uprawnienia: null }
+    },
+    {
       path: '/rezerwacja/:id/ubezpieczenia',
       name: 'rezerwacjaUbezpieczenie',
       component: () => import('../components/RezerwacjaUbezpieczenie.vue'),
@@ -39,6 +45,20 @@ const router = createRouter({
       component: () => import('../components/RezerwacjaPodsumowanie.vue'),
       meta:{ uprawnienia: "klient" }
     },
+    // Pracownik
+    {
+      path:'/pracownik',
+      name: 'pracownik',
+      component: () => import('../components/Pracownik.vue'),
+      children: [
+        {
+          path:'rezerwacje',
+          name:'rezerwacje',
+          component: () => import('../components/Rezerwacja.vue'),
+        },
+      ]
+    }
+    
   ]
 })
 
@@ -48,7 +68,7 @@ router.beforeEach((to,from)=> {
   if(to.meta.uprawnienia != null && to.meta.uprawnienia != uzytkownik.uprawnienia ){
     return {
       path:"/logowanie",
-      query: { redirect: from.fullPath },
+      query: { redirect: to.fullPath },
     }
   }
 });

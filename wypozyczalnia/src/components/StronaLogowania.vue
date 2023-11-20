@@ -1,10 +1,19 @@
 <script setup>
-    import { ref } from "vue";
+    import { ref, onMounted } from "vue";
     import {zasadyHaslo, zasadyLogin} from "../zasady";
-    import {axioss} from "../main";
+    import {axioss, uzytkownik} from "../main";
+    import { useRoute } from 'vue-router';
+    import router from '../router'
 
     const email = ref();
     const haslo = ref();
+    const route = useRoute();
+    let redirectParam = null;
+
+    onMounted(() => {
+    redirectParam = route.query.redirect;
+    console.log(redirectParam);
+    });
 
     const submit = async () => {
         var zapytanie = await axioss.post("/autoryzacja/logowanie", {
@@ -12,7 +21,18 @@
             password : haslo.value,
         });
         localStorage.setItem("token", zapytanie.data.token);
-        localStorage.SetItem("uprawnienia", "klient")
+        localStorage.setItem("uprawnienia", zapytanie.data.role);
+        console.log(redirectParam);
+        if(redirectParam == null){
+            router.push("/")
+        }else{
+            
+            router.push(`${redirectParam}`)
+        }
+
+        if(localStorage.getItem("uprawnienia")=="pracownik"){
+            router.push("/pracownik")
+        }
         
     }
 </script>

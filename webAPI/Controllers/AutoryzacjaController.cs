@@ -14,11 +14,13 @@ namespace webAPI.Controllers
         private PracownikService _pracownikService;
         private KlientService _klientService;
         private UserManager<Pracownik> _pracownikManager;
-        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Pracownik> pracownikManager)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Pracownik> pracownikManager, RoleManager<IdentityRole> roleManager)
         {
             _pracownikManager = pracownikManager;
             _pracownikService = pracwonikService;
             _klientService = klientService;
+            _roleManager = roleManager;
         }
 
         [HttpPost("Rejestracja")]
@@ -74,5 +76,19 @@ namespace webAPI.Controllers
             
             return BadRequest(result);
         }
+        [HttpPost("DodanieRoli")]
+        public async Task<IActionResult> DodanieRoliAsync([FromBody] string nazwa)
+        {
+            if (nazwa == null) return BadRequest("Nazwa jest pusta");
+            if (!_roleManager.RoleExistsAsync(nazwa).GetAwaiter().GetResult())
+            {
+                await _roleManager.CreateAsync(new IdentityRole(nazwa));
+
+                return Ok("Dodano role");
+            }
+
+            return BadRequest("Error");
+        }
+
     }
 }
