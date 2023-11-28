@@ -12,8 +12,8 @@ using webAPI.Data;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231115002915_dodanorole")]
-    partial class dodanorole
+    [Migration("20231120125556_StworzenieBazyDanych")]
+    partial class StworzenieBazyDanych
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -333,7 +333,7 @@ namespace webAPI.Migrations
 
                     b.Property<string>("KlientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SamochodId")
                         .HasColumnType("int");
@@ -342,6 +342,10 @@ namespace webAPI.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KlientId");
+
+                    b.HasIndex("SamochodId");
 
                     b.ToTable("Wypozyczenia");
                 });
@@ -451,6 +455,25 @@ namespace webAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("webAPI.Models.Wypozyczenie", b =>
+                {
+                    b.HasOne("webAPI.Models.Klient", "Klient")
+                        .WithMany()
+                        .HasForeignKey("KlientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webAPI.Models.Samochod", "Samochod")
+                        .WithMany()
+                        .HasForeignKey("SamochodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Klient");
+
+                    b.Navigation("Samochod");
                 });
 
             modelBuilder.Entity("webAPI.Models.Klient", b =>

@@ -1,15 +1,18 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { alert } from './main'
 import HelloWorld from './components/HelloWorld.vue'
-import NavBar from './components/NavBar.vue';
+import NavBar from './components/NavBar.vue'
 </script>
 
 <template>
-  <v-app >
-    <NavBar/>
+  <v-app>
+    <NavBar />
     <RouterView />
   </v-app>
-  
+  <!-- <v-snackbar location="top" :viewmodel="alert.show" :color="alert.error ? 'error' : 'success'">
+    {{ alert.text }}
+  </v-snackbar> -->
   <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
@@ -22,12 +25,10 @@ import NavBar from './components/NavBar.vue';
       </nav>
     </div>
   </header> -->
-
-  
 </template>
 
 <style scoped>
-#app{
+#app {
   text-align: center;
 }
 /* header {

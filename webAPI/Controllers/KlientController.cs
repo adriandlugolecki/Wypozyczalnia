@@ -52,14 +52,16 @@ namespace webAPI.Controllers
         public IActionResult WypozyczeniaKlienta()
         {
             string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var WypozyczeniaKlienta = _context.Wypozyczenia.Where(w => w.KlientId == id).OrderByDescending(w=> w.DataZakonczenia).Select(w=> new {
-                w.SamochodId,
-                w.Data,
-                w.DataZakonczenia,
-                w.kwota,
-                w.CzyOddano,
-            }).ToList();
+            var WypozyczeniaKlienta = _context.Wypozyczenia.Where(w => w.KlientId == id).OrderByDescending(w=> w.DataZakonczenia).Include(w=> w.Samochod).ToList();
             return Ok(WypozyczeniaKlienta);
+        }
+        [HttpDelete("UsunWypozyczenie/{id}")]
+        public async Task<IActionResult> UsunWypozyczenie([FromRoute] int id) 
+        {
+            await _context.Wypozyczenia.Where(w=>w.Id == id).ExecuteDeleteAsync();
+            await _context.Kalendarz.Where(w => w.IdWypozyczenia == id).ExecuteDeleteAsync();
+            await _context.SaveChangesAsync();
+            return Ok("usunięto");
         }
     }
 }

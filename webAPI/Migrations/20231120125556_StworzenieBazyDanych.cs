@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class UtworzenieBazyDanych : Migration
+    public partial class StworzenieBazyDanych : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -97,25 +97,6 @@ namespace webAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ubezpieczenia", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Wypozyczenia",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SamochodId = table.Column<int>(type: "int", nullable: false),
-                    KlientId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataZakonczenia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    kwota = table.Column<float>(type: "real", nullable: false),
-                    CzyZapłacono = table.Column<bool>(type: "bit", nullable: false),
-                    CzyOddano = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Wypozyczenia", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -266,6 +247,37 @@ namespace webAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Wypozyczenia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SamochodId = table.Column<int>(type: "int", nullable: false),
+                    KlientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataZakonczenia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    kwota = table.Column<float>(type: "real", nullable: false),
+                    CzyZapłacono = table.Column<bool>(type: "bit", nullable: false),
+                    CzyOddano = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wypozyczenia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Wypozyczenia_Klienci_KlientId",
+                        column: x => x.KlientId,
+                        principalTable: "Klienci",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Wypozyczenia_Samochody_SamochodId",
+                        column: x => x.SamochodId,
+                        principalTable: "Samochody",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -318,6 +330,16 @@ namespace webAPI.Migrations
                 column: "Pesel",
                 unique: true,
                 filter: "[Pesel] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wypozyczenia_KlientId",
+                table: "Wypozyczenia",
+                column: "KlientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wypozyczenia_SamochodId",
+                table: "Wypozyczenia",
+                column: "SamochodId");
         }
 
         /// <inheritdoc />
@@ -342,13 +364,7 @@ namespace webAPI.Migrations
                 name: "Kalendarz");
 
             migrationBuilder.DropTable(
-                name: "Klienci");
-
-            migrationBuilder.DropTable(
                 name: "Pracownicy");
-
-            migrationBuilder.DropTable(
-                name: "Samochody");
 
             migrationBuilder.DropTable(
                 name: "Ubezpieczenia");
@@ -358,6 +374,12 @@ namespace webAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Klienci");
+
+            migrationBuilder.DropTable(
+                name: "Samochody");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

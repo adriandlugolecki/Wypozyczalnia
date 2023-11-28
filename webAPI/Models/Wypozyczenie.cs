@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webAPI.Models
 {
@@ -7,9 +8,13 @@ namespace webAPI.Models
     [Key]
     public int Id { get; set; }
     [Required]
+    [ForeignKey("Samochod")]
     public int SamochodId { get; set; } 
+    public Samochod? Samochod { get; set; }
     [Required]
+    [ForeignKey("Klient")]
     public string? KlientId { get; set; }
+    public Klient? Klient { get; set; }
     [Required]
     public DateTime Data { get; set; }
     [Required]
