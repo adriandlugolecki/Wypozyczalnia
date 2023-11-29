@@ -9,7 +9,7 @@ const wyloguj = () => {
 </script>
 
 <template>
-  <v-app-bar :elevaton="5" color="primary" height="50">
+  <v-app-bar :elevaton="5" color="#C0C0C0" height="50">
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'klient'">
       <RouterLink to="/" custom v-slot="{ navigate }">
         <v-tab @click="navigate">rezerwacje</v-tab>

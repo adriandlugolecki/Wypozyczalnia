@@ -107,11 +107,11 @@ const typPaliwa = (paliwo) => {
     <div class="listaSamochod">
       <v-list-item v-for="samochod in samochody" :key="samochod.id">
         <div>
-          <v-card class="samochod" elevation="10">
+          <div class="samochod">
             <div class="nazwaSamochodu">{{ samochod.marka }} {{ samochod.model }}</div>
 
             <div class="infoSamochod">
-              <div class="zdjecieSamochodu"><img width="200" src="../assets/samochod.png" /></div>
+              <div class="zdjecieSamochodu"><img width="170" src="../assets/samochod.png" /></div>
               <div class="oSamochodzie" style="float: left">
                 rocznik: {{ samochod.rocznik }}<br />
                 rodzaj paliwa: {{ typPaliwa(samochod.rodzajPaliwa) }}<br />
@@ -131,7 +131,7 @@ const typPaliwa = (paliwo) => {
                 </RouterLink>
               </div>
             </div>
-          </v-card>
+          </div>
         </div>
       </v-list-item>
     </div>
@@ -148,6 +148,7 @@ const typPaliwa = (paliwo) => {
   margin: auto;
 }
 .filtrowanie {
+  margin-top: 10px;
   width: 25vw;
   text-align: center;
   height: 600px;
@@ -159,6 +160,17 @@ const typPaliwa = (paliwo) => {
 }
 .samochod {
   font-size: larger;
+  width: 90%;
+  height: 200px;
+  padding: 10px;
+  box-shadow:
+    0 8px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: auto;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  border: 1px solid gray;
+  border-radius: 15px;
 }
 .nazwaSamochodu {
   text-align: center;

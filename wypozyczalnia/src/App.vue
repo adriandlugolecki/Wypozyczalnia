@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { alert } from './main'
-import HelloWorld from './components/HelloWorld.vue'
+
 import NavBar from './components/NavBar.vue'
 </script>
 
@@ -30,6 +30,10 @@ import NavBar from './components/NavBar.vue'
 <style scoped>
 #app {
   text-align: center;
+}
+.tlo {
+  height: 100vh;
+  width: 100vw;
 }
 /* header {
   line-height: 1.5;
