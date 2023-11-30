@@ -17,7 +17,7 @@ const submit = async () => {
     })
     localStorage.setItem('token', zapytanie.data.token)
     localStorage.setItem('uprawnienia', zapytanie.data.role)
-
+    uzytkownik.uprawnienia = zapytanie.data.role
     if (localStorage.getItem('uprawnienia') == 'pracownik') {
       router.push('/pracownik')
     } else {

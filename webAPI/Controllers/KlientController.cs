@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -27,6 +28,7 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(klient);
         }
+        [Authorize(Roles = "klient")]
         [HttpPost("WypozyczenieSamochodu")]
         public async Task<IActionResult> WypozyczenieSamochodu(Wypozyczenie wypozyczenie)
         {
@@ -48,6 +50,7 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(wypozyczenie);
         }
+        [Authorize(Roles = "klient")]
         [HttpGet("WypozyczeniaKlienta")]
         public IActionResult WypozyczeniaKlienta()
         {
@@ -55,6 +58,7 @@ namespace webAPI.Controllers
             var WypozyczeniaKlienta = _context.Wypozyczenia.Where(w => w.KlientId == id).OrderByDescending(w=> w.DataZakonczenia).Include(w=> w.Samochod).ToList();
             return Ok(WypozyczeniaKlienta);
         }
+        [Authorize(Roles = "klient")]
         [HttpDelete("UsunWypozyczenie/{id}")]
         public async Task<IActionResult> UsunWypozyczenie([FromRoute] int id) 
         {

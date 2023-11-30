@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeMount } from 'vue'
 import { axioss } from '../main'
 import { ref } from 'vue'
 const cenaMin = ref(null)
@@ -11,17 +12,29 @@ const samochody = ref([])
 const wiek = ref()
 const strona = ref(false)
 console.log(strona.value)
+onBeforeMount(() => {
+  try {
+    if (localStorage.getItem('data') && localStorage.getItem('dataZakonczenia')) {
+      data.value = localStorage.getItem('data')
+      dataZakonczenia.value = localStorage.getItem('dataZakonczenia')
+    }
+  } catch (error) {}
+})
 const submit = async () => {
-  var res = await axioss.get(`/samochod/wolnesamochody/${data.value}/${dataZakonczenia.value}`)
-  localStorage.setItem('data', data.value)
-  localStorage.setItem('dataZakonczenia', dataZakonczenia.value)
-  console.log(wiek)
-  console.log(res.data)
-  zapytanie.value = res.data
-  samochody.value = [...zapytanie.value]
-  strona.value = true
-  console.log(strona.value)
-  console.log(zapytanie.value)
+  if (dataZakonczenia.value > data.value) {
+    var res = await axioss.get(`/samochod/wolnesamochody/${data.value}/${dataZakonczenia.value}`)
+    localStorage.setItem('data', data.value)
+    localStorage.setItem('dataZakonczenia', dataZakonczenia.value)
+    console.log(wiek)
+    console.log(res.data)
+    zapytanie.value = res.data
+    samochody.value = [...zapytanie.value]
+    strona.value = true
+    console.log(strona.value)
+    console.log(zapytanie.value)
+  } else {
+    console.log('błąd z datą')
+  }
 }
 const filtruj = () => {
   // if (rodzajSkrzyni.value != null) rodzajSkrzyni.value = parseInt(rodzajSkrzyni.value, 10)
@@ -52,12 +65,14 @@ const typPaliwa = (paliwo) => {
       <v-card elevation="5" width="400" class="datyElementy">
         <div>
           <input
+            class="kalendarz"
             type="date"
             v-model="data"
             :min="new Date().toJSON().slice(0, 10)"
             :max="new Date(Date.now() + 2592000000).toJSON().slice(0, 10)"
           />
           <input
+            class="kalendarz"
             type="date"
             v-model="dataZakonczenia"
             :min="new Date().toJSON().slice(0, 10)"
@@ -143,6 +158,15 @@ const typPaliwa = (paliwo) => {
   height: 35vh;
   text-align: center;
   padding-top: 10vh;
+}
+.kalendarz {
+  border: 1px solid grey;
+  border-radius: 8px;
+  padding: 5px;
+  margin: 5px;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .datyElementy {
   margin: auto;
