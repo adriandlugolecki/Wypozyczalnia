@@ -22,7 +22,7 @@ const router = createRouter({
       meta: { uprawnienia: null }
     },
     {
-      path: '/brak',
+      path: '/brakDostepu',
       name: 'brakdostepu',
       component: () => import('../components/BrakDostepu.vue'),
       meta: { uprawnienia: null }
@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: '/mojeRezerwacje',
       name: 'mojeRezerwacje',
-      component: () => import('../components/MojeRezerwacje.vue'),
+      component: () => import('../components/klient/MojeRezerwacje.vue'),
       meta: { uprawnienia: null }
     },
     {
@@ -42,28 +42,35 @@ const router = createRouter({
     {
       path: '/podsumowanie',
       name: 'podsumowanie',
-      component: () => import('../components/RezerwacjaPodsumowanie.vue'),
-      meta: { uprawnienia: 'klient' }
+      component: () => import('../components/klient/RezerwacjaPodsumowanie.vue'),
+      meta: { uprawnienia: ['klient'] }
     },
     // Pracownik
     {
       path: '/pracownik',
       name: 'pracownik',
-      component: () => import('../components/Pracownik.vue'),
-      meta: { uprawnienia: 'pracownik' },
-      children: [
-        {
-          path: 'rezerwacje',
-          name: 'rezerwacje',
-          component: () => import('../components/Rezerwacja.vue')
-        }
-      ]
+      component: () => import('../components/pracownik/Pracownik.vue'),
+      meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     {
       path: '/rezerwacja/:id/info',
       name: 'rezerwacje',
-      component: () => import('../components/RezerwacjaInfo.vue'),
-      meta: { uprawnienia: 'pracownik' }
+      component: () => import('../components/pracownik/RezerwacjaInfo.vue'),
+      meta: { uprawnienia: ['pracownik'] }
+    },
+    //admin
+
+    {
+      path: '/listaPracownikow',
+      name: 'listaPracownikow',
+      component: () => import('../components/admin/ListaPracownikow.vue'),
+      meta: { uprawnienia: ['admin'] }
+    },
+    {
+      path: '/listaSamochodow',
+      name: 'listaSamochodow',
+      component: () => import('../components/admin/ListaSamochodow.vue'),
+      meta: { uprawnienia: ['admin'] }
     }
   ]
 })
@@ -71,9 +78,9 @@ const router = createRouter({
 export default router
 
 router.beforeEach((to, from) => {
-  if (to.meta.uprawnienia != null && to.meta.uprawnienia != uzytkownik.uprawnienia) {
+  if (to.meta.uprawnienia != null && !to.meta.uprawnienia.includes(uzytkownik.uprawnienia)) {
     return {
-      path: '/logowanie',
+      path: '/brakDostepu',
       query: { redirect: to.fullPath }
     }
   }

@@ -15,7 +15,9 @@ namespace webAPI.Models
         public string? DataUrodzenia { get; set; } 
         [Required]
         [StringLength(11)]
-        public string? Pesel { get; set; } 
+        public string? Pesel { get; set; }
+        [Required]
+        public bool czyAdmin {  get; set; }
 
     }
 }

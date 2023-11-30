@@ -14,28 +14,28 @@ namespace webAPI.Controllers
         private readonly AppDbContext _context;
 
         public PracownikController(AppDbContext context) => _context = context;
-        [Authorize(Roles = "pracownik")]
+        [Authorize(Roles = "pracownik, admin")]
         [HttpGet("ListaWypozyczenNaDzis/{data}")]
         public IActionResult ListaWypozyczenNaDzis([FromRoute] DateTime data)
         {
             var WypozyczeniaKlienta = _context.Wypozyczenia.Where(w => w.Data == data).Include(w=> w.Samochod).Include(w => w.Klient).OrderBy(w => w.CzyWydano).ToList();
             return Ok(WypozyczeniaKlienta);
         }
-        [Authorize(Roles = "pracownik")]
+        [Authorize(Roles = "pracownik, admin")]
         [HttpGet("ListaZakonczenNaDzis/{data}")]
         public IActionResult ListaZakonczenNaDzis([FromRoute] DateTime data)
         {
             var WypozyczeniaKlienta = _context.Wypozyczenia.Where(w => w.DataZakonczenia == data).Include(w => w.Samochod).Include(w => w.Klient).OrderBy(w=> w.CzyOddano).ToList();
             return Ok(WypozyczeniaKlienta);
         }
-        [Authorize(Roles = "pracownik")]
+        [Authorize(Roles = "pracownik, admin")]
         [HttpGet("WypozyczenieInfo/{id}")]
         public IActionResult WypozyczenieInfo([FromRoute] int id)
         {
             var Wypozyczenie = _context.Wypozyczenia.Include(w => w.Samochod).Include(w => w.Klient).FirstOrDefault(w=>w.Id == id);
             return Ok(Wypozyczenie);
         }
-        [Authorize(Roles = "pracownik")]
+        [Authorize(Roles = "pracownik, admin")]
         [HttpPatch("ZmianaStatusuWypozyczenia/{id}")]
         public async Task<IActionResult> ZmianaStatusuWypozyczenie([FromRoute] int id, [FromBody] WypozyczenieDto dto)
         {

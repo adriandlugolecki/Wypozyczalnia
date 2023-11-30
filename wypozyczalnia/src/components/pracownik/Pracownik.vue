@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken } from '../main'
+import { axiosToken } from '../../main'
 const listaWypozyczen = ref([])
 const listaZakonczen = ref([])
 const data = ref()

@@ -19,8 +19,22 @@ const wyloguj = () => {
       </RouterLink>
     </v-tabs>
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'pracownik'">
-      <RouterLink to="/" custom v-slot="{ navigate }">
+      <RouterLink to="/pracownik" custom v-slot="{ navigate }">
         <v-tab @click="navigate">rezerwacje</v-tab>
+      </RouterLink>
+    </v-tabs>
+    <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'admin'">
+      <RouterLink to="/pracownik" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">rezerwacje</v-tab>
+      </RouterLink>
+      <RouterLink to="/listaPracownikow" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">Pracownicy</v-tab>
+      </RouterLink>
+      <RouterLink to="/listaSamochodow" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">Samochody</v-tab>
+      </RouterLink>
+      <RouterLink to="/listaSamochodow" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">Ubezpieczenia</v-tab>
       </RouterLink>
     </v-tabs>
     <template v-slot:append v-if="uzytkownik.uprawnienia">

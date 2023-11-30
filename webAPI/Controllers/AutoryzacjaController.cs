@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webAPI.Models;
@@ -38,7 +39,7 @@ namespace webAPI.Controllers
             return BadRequest("niedziala");
 
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost("PracownikRejestracja")]
         public async Task<IActionResult> RejestracjaPracownikAsync([FromBody] RejestracjaPracownikDto rejestracja)
         {

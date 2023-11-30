@@ -31,9 +31,9 @@ namespace webAPI.Services
                 Nazwisko = rejestracja.Nazwisko,
                 DataUrodzenia = rejestracja.DataUrodzenia,
                 Pesel = rejestracja.Pesel,
-
+                czyAdmin = rejestracja.czyAdmin
             };
-            var result = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo);
+            var result = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo!);
 
             if (result.Succeeded)
             {
@@ -61,13 +61,16 @@ namespace webAPI.Services
                 };
 
             }
-            var claims = new[]
+            
+            string role = pracownik.czyAdmin ? "admin": "pracownik";
+            Claim[] claims = new[]
             {
                 new Claim("Email",login.Email),
                 new Claim("Id", pracownik.Id),
-                new Claim(ClaimTypes.Role,"pracownik"),
+                new Claim(ClaimTypes.Role, role),
 
             };
+            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_konfiguracja["Jwt:Key"]!));
             var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
@@ -81,10 +84,10 @@ namespace webAPI.Services
 
             return new ServicesResponse
             {
-                Wiadomosc = "Zalogowano jako pracownik",
+                Wiadomosc = "Zalogowano",
                 Powodzenie = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Role = "pracownik",
+                Role = role,
 
             };
         }
