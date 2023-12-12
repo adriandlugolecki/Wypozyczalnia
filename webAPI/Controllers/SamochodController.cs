@@ -15,18 +15,18 @@ namespace webAPI.Controllers
         public SamochodController(AppDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Samochod>> GetSamochodyList() 
+        public async Task<IEnumerable<Samochod>> ListaSamochodow() 
         {
             return await _context.Samochody.ToListAsync();
         }
-        [HttpGet("id")]
-        public async Task<IActionResult> GetSamochod(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Samochod([FromRoute]int id)
         {
             var Samochod = await _context.Samochody.FindAsync(id);
             return Samochod == null ? NotFound("Brak takiego samochodu") : Ok(Samochod);
         }
         [HttpPost]
-        public async Task<IActionResult> PostSamochod(Samochod samochod)
+        public async Task<IActionResult> DodajSamochod(Samochod samochod)
         {
             await _context.Samochody.AddAsync(samochod);
             await _context.SaveChangesAsync();

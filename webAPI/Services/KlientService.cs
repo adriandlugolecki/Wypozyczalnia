@@ -63,6 +63,7 @@ namespace webAPI.Services
             }
             var claims = new[]
             {
+                new Claim("id", klient.Id),
                 new Claim("Email",login.Email),
                 new Claim(ClaimTypes.NameIdentifier, klient.Id),
                 new Claim(ClaimTypes.Role,"klient"),
@@ -82,7 +83,8 @@ namespace webAPI.Services
 
             return new ServicesResponse
             {
-                Wiadomosc = "Zaogowano jako klient",
+
+                Wiadomosc = "Zalogowano jako klient",
                 Powodzenie = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Role = "klient",

@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken } from '../main'
-import router from '../router'
+import { axiosToken } from '../../main'
+import router from '../../router'
 
 const wypozyczenie = ref()
 const czyWydano = ref(false)

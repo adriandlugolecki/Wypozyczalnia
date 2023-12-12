@@ -15,6 +15,7 @@ const submit = async () => {
       email: email.value,
       password: haslo.value
     })
+
     localStorage.setItem('token', zapytanie.data.token)
     localStorage.setItem('uprawnienia', zapytanie.data.role)
     uzytkownik.uprawnienia = zapytanie.data.role

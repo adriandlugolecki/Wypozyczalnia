@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken } from '../main'
+import { axiosToken } from '../../main'
 let props
 const listaWypozyczen = ref([])
 onBeforeMount(async () => {

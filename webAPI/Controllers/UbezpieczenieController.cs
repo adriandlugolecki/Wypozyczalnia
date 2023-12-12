@@ -14,10 +14,24 @@ namespace webAPI.Controllers
 
         public UbezpieczenieController(AppDbContext context) => _context = context;
 
-        [HttpGet]
-        public async Task<IEnumerable<Ubezpieczenie>> GetUbezpieczeniaList()
+        [HttpGet("ListaUbezpieczen")]
+        public async Task<IEnumerable<Ubezpieczenie>> ListaUbezpieczen()
         {
             return await _context.Ubezpieczenia.ToListAsync();
+        }
+        
+        [HttpPost("DodajUbezpieczenie")]
+        public async Task<IActionResult> DodajUbezpieczenie(Ubezpieczenie ubezpieczenie)
+        {
+            await _context.Ubezpieczenia.AddAsync(ubezpieczenie);
+            await _context.SaveChangesAsync();
+            return Ok(ubezpieczenie);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Ubezpieczenie([FromRoute] int id)
+        {
+            var Ubezpieczenie = await _context.Ubezpieczenia.FindAsync(id);
+            return Ubezpieczenie == null ? NotFound("Brak takiego Ubezpieczenia") : Ok(Ubezpieczenie);
         }
     }
 }

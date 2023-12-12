@@ -11,6 +11,8 @@ namespace webAPI.Models
         [Required]
         public string? Model { get; set; }
         [Required]
+        public string? Rejestracja { get; set; }
+        [Required]
         public int Rocznik { get; set; }
         [Required]
         public int LiczbaMiejsc { get; set; }

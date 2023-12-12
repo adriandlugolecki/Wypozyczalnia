@@ -33,7 +33,7 @@ const wyloguj = () => {
       <RouterLink to="/listaSamochodow" custom v-slot="{ navigate }">
         <v-tab @click="navigate">Samochody</v-tab>
       </RouterLink>
-      <RouterLink to="/listaSamochodow" custom v-slot="{ navigate }">
+      <RouterLink to="/listaUbezpieczen" custom v-slot="{ navigate }">
         <v-tab @click="navigate">Ubezpieczenia</v-tab>
       </RouterLink>
     </v-tabs>

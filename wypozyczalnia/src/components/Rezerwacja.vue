@@ -94,7 +94,10 @@ const typPaliwa = (paliwo) => {
       </v-card>
     </div>
   </v-form>
-  <div v-if="!strona">xd</div>
+  <div v-if="!strona">
+    <img height="433" src="../assets/fotor-ai-20231212195159.jpg" />
+    <img height="434" src="../assets/fotor-ai-20231212195953.jpg" />
+  </div>
   <div v-if="strona">
     <div class="filtrowanie">
       <v-card elevation="10" class="ml-10 mr-10">
@@ -126,7 +129,9 @@ const typPaliwa = (paliwo) => {
             <div class="nazwaSamochodu">{{ samochod.marka }} {{ samochod.model }}</div>
 
             <div class="infoSamochod">
-              <div class="zdjecieSamochodu"><img width="170" src="../assets/samochod.png" /></div>
+              <div class="zdjecieSamochodu">
+                <img width="170" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
+              </div>
               <div class="oSamochodzie" style="float: left">
                 rocznik: {{ samochod.rocznik }}<br />
                 rodzaj paliwa: {{ typPaliwa(samochod.rodzajPaliwa) }}<br />

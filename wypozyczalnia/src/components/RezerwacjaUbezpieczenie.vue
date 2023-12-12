@@ -1,11 +1,19 @@
 <script setup>
-import { axioss } from '../main'
+import { axiosToken } from '../main'
 import { ref } from 'vue'
 import router from '../router'
 import { onBeforeMount } from 'vue'
 const strona = ref(1)
-onBeforeMount(() => {
-  localStorage.setItem('auto', router.currentRoute.value.params['id'])
+const listaUbezpieczen = ref()
+onBeforeMount(async () => {
+  try {
+    localStorage.setItem('auto', router.currentRoute.value.params['id'])
+    var res = await axiosToken.get(`/Admin/ListaUbezpieczen`)
+    listaUbezpieczen.value = res.data
+    console.log(listaUbezpieczen)
+  } catch (error) {
+    console.error('Błąd', error)
+  }
 })
 
 const wybierz = () => {
@@ -29,7 +37,41 @@ const wybierz = () => {
       </div>
       <div class="ubezpieczenia">
         <v-window v-model="strona" direction="horizontal" :touch="false">
-          <v-window-item :value="1">
+          <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
+            <v-window-item :value="ubezpieczenie.id">
+              <div class="oknoTytul">Pakiet bez ochrony</div>
+              <div class="oknoTytul">{{ ubezpieczenie.nazwa }}</div>
+
+              <div class="oknoTresc">Kradzież</div>
+              <div class="oknoZnaczek">
+                <v-icon v-if="!ubezpieczenie.Kradzież" icon="mdi-close"></v-icon>
+                <v-icon v-if="ubezpieczenie.Kradzież" icon="mdi-check"> </v-icon>
+              </div>
+              <div class="oknoTresc">Uszkodzenie pojazdu</div>
+              <div class="oknoZnaczek">
+                <v-icon v-if="!ubezpieczenie.UszkodzeniePojazdu" icon="mdi-close"></v-icon>
+                <v-icon v-if="ubezpieczenie.UszkodzeniePojazdu" icon="mdi-check"> </v-icon>
+              </div>
+              <div class="oknoTresc">Uszkodzenie Szyby</div>
+              <div class="oknoZnaczek">
+                <v-icon v-if="!ubezpieczenie.UszkodzenieSzyby" icon="mdi-close"></v-icon>
+                <v-icon v-if="ubezpieczenie.UszkodzenieSzyby" icon="mdi-check"> </v-icon>
+              </div>
+              <div class="oknoTresc">Uszkodzenie Opony</div>
+              <div class="oknoZnaczek">
+                <v-icon v-if="!ubezpieczenie.UszkodzenieOpony" icon="mdi-close"></v-icon>
+                <v-icon v-if="ubezpieczenie.UszkodzenieOpony" icon="mdi-check"> </v-icon>
+              </div>
+              <div class="oknoTresc">Auto zastępcze</div>
+              <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
+              <div class="oknoTresc">Kaucja</div>
+              <div class="oknoZnaczek">2000 zł</div>
+              <div class="oknoTresc">Udział własny w szkodzie</div>
+              <div class="oknoZnaczek">2000 zł</div>
+            </v-window-item>
+          </div>
+
+          <!-- <v-window-item :value="1">
             <div class="oknoTytul">Pakiet bez ochrony</div>
             <div class="oknoTytul">Podstawowy</div>
 
@@ -50,6 +92,7 @@ const wybierz = () => {
 
             cena
           </v-window-item>
+
           <v-window-item :value="2">
             <div class="oknoTytul">Pakiet z ochroną</div>
             <div class="oknoTytul">Komfort</div>
@@ -90,7 +133,7 @@ const wybierz = () => {
             <div class="oknoTresc">Udział własny w szkodzie</div>
             <div class="oknoZnaczek">0 zł</div>
             cena
-          </v-window-item>
+          </v-window-item> -->
         </v-window>
       </div>
       <div class="prawyPrzycisk">

@@ -56,7 +56,7 @@ const router = createRouter({
       path: '/rezerwacja/:id/info',
       name: 'rezerwacje',
       component: () => import('../components/pracownik/RezerwacjaInfo.vue'),
-      meta: { uprawnienia: ['pracownik'] }
+      meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     //admin
 
@@ -70,6 +70,12 @@ const router = createRouter({
       path: '/listaSamochodow',
       name: 'listaSamochodow',
       component: () => import('../components/admin/ListaSamochodow.vue'),
+      meta: { uprawnienia: ['admin'] }
+    },
+    {
+      path: '/listaUbezpieczen',
+      name: 'listaUbezpieczen',
+      component: () => import('../components/admin/ListaUbezpieczen.vue'),
       meta: { uprawnienia: ['admin'] }
     }
   ]
