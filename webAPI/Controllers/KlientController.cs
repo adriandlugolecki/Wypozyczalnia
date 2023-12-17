@@ -38,7 +38,7 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             var ileDni = wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
 
-            for (int i = 0; i <= ileDni; i++)
+            for (int i = 0; i < ileDni; i++)
             {
                 await _context.Kalendarz.AddAsync(new Kalendarz
                 {

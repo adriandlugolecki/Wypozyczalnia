@@ -130,7 +130,7 @@ const typPaliwa = (paliwo) => {
 
             <div class="infoSamochod">
               <div class="zdjecieSamochodu">
-                <img width="170" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
+                <img width="150" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
               </div>
               <div class="oSamochodzie" style="float: left">
                 rocznik: {{ samochod.rocznik }}<br />
@@ -141,7 +141,7 @@ const typPaliwa = (paliwo) => {
               </div>
 
               <div class="cenaSamochodu">
-                {{ samochod.cena }} zł<br />
+                {{ samochod.cena }} zł za dzień<br />
                 <RouterLink
                   :to="'/rezerwacja/' + samochod.id + '/ubezpieczenia'"
                   custom

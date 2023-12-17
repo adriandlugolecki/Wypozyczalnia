@@ -28,15 +28,13 @@ const submit = async () => {
     } else {
       router.push('/')
     }
-
-    
   } catch (error) {}
 }
 </script>
 <template>
   <v-card width="100vw" height="100vh" class="d-flex justify-center align-center">
     <v-container class="d-flex justify-center align-center">
-      <v-card elevation="10" width="400px" height="400px" class="px-6" radius="200">
+      <v-card elevation="10" width="400px" height="400px" class="px-6 card">
         <v-form ref="formularzLogowania" @submit.prevent="submit">
           <v-row class="justify-center my-6">
             <v-card-title> Zaloguj się </v-card-title>
@@ -63,4 +61,6 @@ const submit = async () => {
     </v-container>
   </v-card>
 </template>
-<style></style>
+<style>
+
+</style>

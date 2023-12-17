@@ -2,7 +2,14 @@
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
 const listaPracownikow = ref([])
-
+const dodaj = ref(false)
+const imie = ref()
+const nazwisko = ref()
+const dataUrodzenia = ref()
+const pesel = ref()
+const email = ref()
+const haslo = ref()
+const czyAdmin = ref(false)
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Admin/ListaPracownikow`)
@@ -11,11 +18,40 @@ onBeforeMount(async () => {
     console.error('Błąd', error)
   }
 })
+const submit = async () => {
+  await axiosToken.post(`/Autoryzacja/PracownikRejestracja`, {
+    imie: imie.value,
+    nazwisko: nazwisko.value,
+    dataUrodzenia: dataUrodzenia.value,
+    pesel: pesel.value,
+    email: email.value,
+    haslo: haslo.value,
+    czyAdmin: czyAdmin.value
+  })
+  location.reload()
+}
 </script>
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">Pracownicy</div>
+      <div class="tytul">
+        Pracownicy
+        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj">
+        </v-btn>
+      </div>
+      <div v-if="dodaj" class="formularz">
+        <v-form @submit.prevent>
+          <div>
+            <input type="text" v-model="imie" placeholder="Imię" />
+            <input type="text" v-model="nazwisko" placeholder="Nazwisko" />
+            <input type="text" v-model="dataUrodzenia" placeholder="DataUrodzenia" />
+            <input type="text" v-model="pesel" placeholder="Pesel" />
+            <input type="text" v-model="email" placeholder="Email" />
+            <input type="text" v-model="haslo" placeholder="Hasło" />
+          </div>
+          <v-btn @click="submit()" class="mt-5">Dodaj </v-btn>
+        </v-form>
+      </div>
       <v-list-item v-for="pracownik in listaPracownikow" :key="pracownik.id">
         <div>
           {{ pracownik.imie }}
@@ -28,6 +64,9 @@ onBeforeMount(async () => {
 .tlo {
   height: 100vh;
   width: 100vw;
+}
+.dodanie {
+  float: right;
 }
 .okno {
   width: 450px;
@@ -45,5 +84,8 @@ onBeforeMount(async () => {
   width: 100%;
   text-align: center;
   font-size: 26px;
+}
+.formularz {
+  text-align: center;
 }
 </style>

@@ -10,7 +10,7 @@ onBeforeMount(async () => {
     localStorage.setItem('auto', router.currentRoute.value.params['id'])
     var res = await axiosToken.get(`/Admin/ListaUbezpieczen`)
     listaUbezpieczen.value = res.data
-    console.log(listaUbezpieczen)
+    console.log(listaUbezpieczen.value)
   } catch (error) {
     console.error('Błąd', error)
   }
@@ -37,7 +37,7 @@ const wybierz = () => {
       </div>
       <div class="ubezpieczenia">
         <v-window v-model="strona" direction="horizontal" :touch="false">
-          <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
+          <!-- <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
             <v-window-item :value="ubezpieczenie.id">
               <div class="oknoTytul">Pakiet bez ochrony</div>
               <div class="oknoTytul">{{ ubezpieczenie.nazwa }}</div>
@@ -69,9 +69,9 @@ const wybierz = () => {
               <div class="oknoTresc">Udział własny w szkodzie</div>
               <div class="oknoZnaczek">2000 zł</div>
             </v-window-item>
-          </div>
+          </div> -->
 
-          <!-- <v-window-item :value="1">
+          <v-window-item :value="1">
             <div class="oknoTytul">Pakiet bez ochrony</div>
             <div class="oknoTytul">Podstawowy</div>
 
@@ -90,7 +90,7 @@ const wybierz = () => {
             <div class="oknoTresc">Udział własny w szkodzie</div>
             <div class="oknoZnaczek">2000 zł</div>
 
-            cena
+            cena 0 zł
           </v-window-item>
 
           <v-window-item :value="2">
@@ -111,7 +111,7 @@ const wybierz = () => {
             <div class="oknoZnaczek">500 zł</div>
             <div class="oknoTresc">Udział własny w szkodzie</div>
             <div class="oknoZnaczek">0 zł</div>
-            cena
+            cena 60 zł
           </v-window-item>
           <v-window-item :value="3">
             <div class="oknoTytul">Pakiet z ochroną</div>
@@ -132,8 +132,8 @@ const wybierz = () => {
             <div class="oknoZnaczek">1 zł</div>
             <div class="oknoTresc">Udział własny w szkodzie</div>
             <div class="oknoZnaczek">0 zł</div>
-            cena
-          </v-window-item> -->
+            cena 90 zł
+          </v-window-item>
         </v-window>
       </div>
       <div class="prawyPrzycisk">

@@ -39,7 +39,7 @@ namespace webAPI.Controllers
             return BadRequest("niedziala");
 
         }
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("PracownikRejestracja")]
         public async Task<IActionResult> RejestracjaPracownikAsync([FromBody] RejestracjaPracownikDto rejestracja)
         {

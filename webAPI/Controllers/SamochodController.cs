@@ -37,7 +37,7 @@ namespace webAPI.Controllers
         {
             var samochody = _context.Samochody.ToList();
 
-            var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data) >= 0 && w.Data.CompareTo(dataZakonczenia) == -1 || w.Data == dataZakonczenia).Select(w => w.IdSamochodu).Distinct().ToList();
+            var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data) >= 0 && w.Data.CompareTo(dataZakonczenia) == -1).Select(w => w.IdSamochodu).Distinct().ToList();
 
             var ListaDostepnychSamochodow = samochody.ToList();
 

@@ -35,40 +35,43 @@ const ZmianaDnia = async () => {
     </div>
     <div class="okno">
       <div class="tytul">Do Wydania</div>
-      <v-list-item v-for="wypozyczenie in listaZakonczen" :key="wypozyczenie.id">
-        <div>
-          <div>
-            Numer Wypożyczenia: [{{ wypozyczenie.id }}] Numer Samochodu:{{
-              wypozyczenie.samochodId
-            }}
-          </div>
+      <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
+        <div class="tekst">
+          NR: {{ wypozyczenie.id }} | {{ wypozyczenie.samochod.marka }}
+          {{ wypozyczenie.samochod.model }} [{{ wypozyczenie.samochod.rejestracja }}]
+
           <RouterLink :to="'/rezerwacja/' + wypozyczenie.id + '/info'" custom v-slot="{ navigate }">
-            <v-btn
-              v-if="!wypozyczenie.czyWydano"
-              @click="navigate"
-              icon="mdi-garage-open-variant"
-            ></v-btn>
+            <v-btn v-if="!wypozyczenie.czyWydano" @click="navigate" icon="mdi-car-side"></v-btn>
             <v-btn
               v-if="wypozyczenie.czyWydano"
               @click="navigate"
               color="black"
-              icon="mdi-garage-lock"
+              icon="mdi-car-side"
             ></v-btn>
           </RouterLink>
-          <div>klient</div>
         </div>
       </v-list-item>
     </div>
     <div class="okno">
       <div class="tytul">Do odbioru</div>
-      <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
-        <div>
-          <div>
-            Numer Wypożyczenia: [{{ wypozyczenie.id }}] Numer Samochodu:{{
-              wypozyczenie.samochodId
-            }}
-          </div>
-          <div>klient</div>
+      <v-list-item v-for="wypozyczenie in listaZakonczen" :key="wypozyczenie.id">
+        <div class="tekst">
+          NR: {{ wypozyczenie.id }} | {{ wypozyczenie.samochod.marka }}
+          {{ wypozyczenie.samochod.model }} [{{ wypozyczenie.samochod.rejestracja }}]
+
+          <RouterLink :to="'/rezerwacja/' + wypozyczenie.id + '/info'" custom v-slot="{ navigate }">
+            <v-btn
+              v-if="!wypozyczenie.czyOddano"
+              @click="navigate"
+              icon="mdi-garage-open-variant"
+            ></v-btn>
+            <v-btn
+              v-if="wypozyczenie.czyOddano"
+              @click="navigate"
+              color="black"
+              icon="mdi-garage-lock"
+            ></v-btn>
+          </RouterLink>
         </div>
       </v-list-item>
     </div>
@@ -102,15 +105,19 @@ const ZmianaDnia = async () => {
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding-top: 10px;
 }
+.tekst {
+  margin: 10px;
+  font-size: 20px;
+}
 .okno {
   float: left;
-  width: 450px;
+  width: 600px;
   border: 1px solid grey;
   border-radius: 15px;
   box-shadow:
     0 8px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 100px 5px 5px 5px;
+  margin: 50px 5px 5px 100px;
 }
 .tytul {
   float: left;

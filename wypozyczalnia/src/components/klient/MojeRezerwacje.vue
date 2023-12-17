@@ -1,7 +1,8 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
-let props
+const data = new Date().toISOString().split('T')[0]
+console.log(data)
 const listaWypozyczen = ref([])
 onBeforeMount(async () => {
   try {
@@ -19,6 +20,14 @@ const usun = async (id) => {
     console.error('Błąd', error)
   }
 }
+
+const przedluz = async (id) => {
+  try {
+    await axiosToken.post(`/Klient/UsunWypozyczenie/${id}/${data}`)
+  } catch (error) {
+    console.error('Błąd', error)
+  }
+}
 let DataBezGodziny = (Data) => {
   let temp = Data.split('T')
   return temp[0]
@@ -27,13 +36,24 @@ let DataBezGodziny = (Data) => {
 <template>
   <br />
   <br />
-  <div activator="{ props }">
-    <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id" v-bind="props">
+  <div>
+    <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
       <div class="MojeRezerwacje">
         <div class="MojeRezerwacjeTytul">
           OD {{ DataBezGodziny(wypozyczenie.data) }} DO
           {{ DataBezGodziny(wypozyczenie.dataZakonczenia) }}
-          <v-btn icon="mdi-delete" color="red" @click="usun(wypozyczenie.id)" />
+          <v-btn
+            icon="mdi-delete"
+            color="red"
+            v-if="wypozyczenie.data > data"
+            @click="usun(wypozyczenie.id)"
+          />
+          <v-btn
+            icon="mdi-arrow-right"
+            color="grey"
+            v-if="wypozyczenie.dataZakonczenia > data"
+            @click="przedluz(wypozyczenie.id, data)"
+          />
         </div>
 
         {{ wypozyczenie.samochod.marka }} {{ wypozyczenie.samochod.model }}

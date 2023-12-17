@@ -21,9 +21,7 @@ onBeforeMount(async () => {
         <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle"> </v-btn>
       </div>
       <v-list-item v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
-        <div>
-          {{ ubezpieczenie.id }}
-        </div>
+        <div>{{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ ubezpieczenie.kwota }} zł</div>
       </v-list-item>
     </div>
   </div>

@@ -273,6 +273,10 @@ namespace webAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Rejestracja")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Rocznik")
                         .HasColumnType("int");
 

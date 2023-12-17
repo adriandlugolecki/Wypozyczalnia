@@ -21,6 +21,8 @@ const submit = async () => {
     uzytkownik.uprawnienia = zapytanie.data.role
     if (localStorage.getItem('uprawnienia') == 'pracownik') {
       router.push('/pracownik')
+    } else if (localStorage.getItem('uprawnienia') == 'admin') {
+      router.push('/pracownik')
     } else {
       router.push('/')
     }

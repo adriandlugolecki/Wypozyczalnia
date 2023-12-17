@@ -12,8 +12,8 @@ using webAPI.Data;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231201160628_ZmienionoUbezpieczenie2")]
-    partial class ZmienionoUbezpieczenie2
+    [Migration("20231212192432_UtworzenieBazyDanych")]
+    partial class UtworzenieBazyDanych
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,6 +276,10 @@ namespace webAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Rejestracja")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Rocznik")
                         .HasColumnType("int");
 
@@ -307,6 +311,9 @@ namespace webAPI.Migrations
                     b.Property<string>("Nazwa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("UdzialWSzkodzie")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("UszkodzenieOpony")
                         .HasColumnType("bit");

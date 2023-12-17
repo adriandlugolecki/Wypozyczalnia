@@ -7,6 +7,7 @@ const dodaj = ref(false)
 
 const Marka = ref()
 const Model = ref()
+const Rejestracja = ref()
 const rocznik = ref()
 const liczbaDrzwi = ref()
 const liczbaMiejsc = ref()
@@ -30,6 +31,7 @@ const submit = async () => {
   var res = await axiosToken.post(`/Admin/DodajSamochod`, {
     marka: Marka.value,
     model: Model.value,
+    Rejestracja: Rejestracja.value,
     rocznik: rocznik.value,
     liczbaMiejsc: liczbaMiejsc.value,
     liczbaDrzwi: liczbaDrzwi.value,
@@ -48,7 +50,8 @@ const submit = async () => {
     <div class="okno">
       <div class="tytul">
         Samochody
-        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = true"> </v-btn>
+        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj">
+        </v-btn>
       </div>
       <div v-if="dodaj" class="formularz">
         <v-form @submit.prevent>
@@ -56,6 +59,7 @@ const submit = async () => {
             <v-file-input v-model="file" />
             <input type="text" v-model="Marka" placeholder="Marka" />
             <input type="text" v-model="Model" placeholder="Model" />
+            <input type="text" v-model="Rejestracja" placeholder="Rejestracja" />
             <input type="numer" v-model="rocznik" placeholder="Rocznik" />
             <input type="numer" v-model="liczbaDrzwi" placeholder="liczbaDrzwi" />
             <input type="numer" v-model="liczbaMiejsc" placeholder="liczbaMiejsc" />
@@ -68,7 +72,7 @@ const submit = async () => {
       </div>
       <v-list-item v-for="samochod in listaSamochodow" :key="samochod.id">
         <div>
-          {{ samochod.id }} {{ samochod.marka }} {{ samochod.model }}
+          {{ samochod.id }} {{ samochod.marka }} {{ samochod.model }} [{{ samochod.rejestracja }}]
           <v-btn elevation="0" icon="mdi-lock-open-outline"></v-btn>
         </div>
       </v-list-item>

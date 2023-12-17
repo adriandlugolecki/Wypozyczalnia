@@ -12,6 +12,9 @@ const Samochod = ref()
 const Ubezpieczenie = ref()
 const Id = JSON.parse(atob(token.split('.')[1])).id.toString()
 const ileDni = Math.ceil(Math.abs(dataZakonczenia - data) / (1000 * 3600 * 24))
+const odbior = ref(false)
+const samochodInfo = ref(false)
+const ubezpieczenieInfo = ref(false)
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Samochod/${auto}`)
@@ -26,7 +29,7 @@ onBeforeMount(async () => {
   }
 })
 const zarezerwuj = async () => {
-  const kwota = ileDni * Ubezpieczenie.value.kwota + Samochod.value.cena
+  const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena)
   console.log(kwota)
   console.log(Id)
   await axiosToken.post(
@@ -42,27 +45,69 @@ const zarezerwuj = async () => {
   )
   router.push('/')
 }
+const pozyskanieDaty = (data) => {
+  return `${data.getDate()}.${data.getMonth() + 1}.${data.getFullYear()}`
+}
 </script>
 
 <template>
   <div class="tlo">
     <div class="PodsumowanieTytul">Podsumowanie</div>
-    <div class="podsumowanieSamochod">
-      O Samochodzie model marka rodzaj skrzyni typ silnika rok ile osob
-      {{ ileDni }}
+    <div class="podsumowanie">
+      <div>
+        odbiór i zwrot
+        <v-btn elevation="0" icon="mdi-book-open" @click="odbior = !odbior"></v-btn>
+      </div>
+      <div v-if="odbior">
+        {{ pozyskanieDaty(data) }} od godziny 12:00 <br />{{ pozyskanieDaty(dataZakonczenia) }} do
+        godziny 10:00
+      </div>
+      <div>
+        Samochod
+        <v-btn icon="mdi-book-open" elevation="0" @click="samochodInfo = !samochodInfo"></v-btn>
+      </div>
+      <div v-if="samochodInfo">
+        O Samochodzie model marka rodzaj skrzyni typ silnika rok ile osob
+        {{ ileDni }}
+      </div>
+
+      <div>
+        Ubezpieczenie
+        <v-btn
+          icon="mdi-book-open"
+          elevation="0"
+          @click="ubezpieczenieInfo = !ubezpieczenieInfo"
+        ></v-btn>
+      </div>
+      <div v-if="ubezpieczenieInfo">ubezpieczenie wariant np premium ile warte</div>
     </div>
-    <div class="podsumowanieKlient">Dane klienta imię nazwisko ulica telefon</div>
     <div class="podsumowanieKwota">
-      <div>samochód: 1000zł</div>
+      Podsumowanie
+      <div>
+        samochód: {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
+        {{ ileDni * (Samochod ? Samochod.cena : '') }} zł
+      </div>
 
-      <div>ubezpieczenie: 500zł</div>
+      <div>
+        ubezpieczenie: {{ ileDni }} x {{ Ubezpieczenie ? Ubezpieczenie.kwota : '' }} =
+        {{ ileDni * (Ubezpieczenie ? Ubezpieczenie.kwota : '') }} zł
+      </div>
 
-      <div>całkowita kwota: 1500zł</div>
+      <div>
+        całkowita kwota:
+        {{
+          ileDni * ((Ubezpieczenie ? Ubezpieczenie.kwota : '') + (Samochod ? Samochod.cena : ''))
+        }}
+        zł
+      </div>
+      <div v-if="ubezpieczenie == 1">Kaucja: 2000zł</div>
+      <div v-if="ubezpieczenie == 2">Kaucja: 500zł</div>
+      <div v-if="ubezpieczenie == 3">Kaucja: 1zł</div>
       <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
         <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj"> zarezerwuj </v-btn>
       </RouterLink>
     </div>
-    <div class="podsumowanieUbezpieczenie">ubezpieczenie wariant np premium ile warte</div>
+
     <!-- <v-card elevation="5">
       samochód
       {{ auto }}
@@ -86,7 +131,7 @@ const zarezerwuj = async () => {
   text-align: center;
   font-size: 26px;
 }
-.podsumowanieSamochod {
+.podsumowanie {
   float: left;
   height: 300px;
   width: 500px;
@@ -97,29 +142,8 @@ const zarezerwuj = async () => {
     0 4px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.podsumowanieKlient {
-  float: left;
-  height: 300px;
-  width: 500px;
-  border: 1px solid black;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+
 .podsumowanieKwota {
-  float: left;
-  height: 300px;
-  width: 500px;
-  border: 1px solid black;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.podsumowanieUbezpieczenie {
   float: left;
   height: 300px;
   width: 500px;
