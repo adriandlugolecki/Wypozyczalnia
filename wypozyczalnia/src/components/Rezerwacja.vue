@@ -43,7 +43,12 @@ const filtruj = () => {
       s.cena >= cenaMin.value && s.cena <= cenaMax.value && s.rodzajSkrzyni == rodzajSkrzyni.value
   )
 }
-
+const wyczysc = () => {
+  cenaMax.value = null
+  cenaMin.value = null
+  rodzajSkrzyni.value = null
+  samochody.value = zapytanie.value
+}
 const typSkrzyni = (skrzynia) => {
   if (skrzynia == 0) {
     return 'Manual'
@@ -62,7 +67,7 @@ const typPaliwa = (paliwo) => {
 <template>
   <v-form @submit.prevent="submit">
     <div class="daty">
-      <v-card elevation="5" width="400" class="datyElementy">
+      <div class="datyElementy">
         <div>
           <input
             class="kalendarz"
@@ -91,7 +96,7 @@ const typPaliwa = (paliwo) => {
             <v-btn class="mt-5 mb-5" type="submit"> szukaj </v-btn>
           </div>
         </div>
-      </v-card>
+      </div>
     </div>
   </v-form>
   <div v-if="!strona">
@@ -100,7 +105,7 @@ const typPaliwa = (paliwo) => {
   </div>
   <div v-if="strona">
     <div class="filtrowanie">
-      <v-card elevation="10" class="ml-10 mr-10">
+      <div class="filtr">
         filtr
         <div>
           Skrzynia biegów
@@ -117,9 +122,9 @@ const typPaliwa = (paliwo) => {
           <div>od <input type="number" v-model="cenaMin" /></div>
           <div>do <input type="number" v-model="cenaMax" /></div>
         </div>
-
+        <v-btn @click="wyczysc"> wyczyść </v-btn>
         <v-btn @click="filtruj"> filtruj </v-btn>
-      </v-card>
+      </div>
     </div>
 
     <div class="listaSamochod">
@@ -175,6 +180,12 @@ const typPaliwa = (paliwo) => {
 }
 .datyElementy {
   margin: auto;
+  width: 400px;
+  border: 1px solid grey;
+  border-radius: 15px;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .filtrowanie {
   margin-top: 10px;
@@ -182,6 +193,15 @@ const typPaliwa = (paliwo) => {
   text-align: center;
   height: 600px;
   float: left;
+}
+.filtr {
+  border: 1px solid grey;
+  margin: 0px 30px;
+  padding: 10px 0px;
+  border-radius: 15px;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .listaSamochod {
   width: 70vw;

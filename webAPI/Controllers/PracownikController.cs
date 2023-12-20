@@ -45,5 +45,39 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok("zaktualizowano");
         }
+        [Authorize(Roles = "pracownik, admin")]
+        [HttpGet("DoPrzedluzenia")]
+        public IActionResult DoPrzedluzenia()
+        {
+            var ListaPrzedluzen = _context.Oczekujace.Where(w => w.Zaakceptowane == false).ToList();
+            return Ok(ListaPrzedluzen);
+        }
+        [HttpDelete("UsunPrzedluzenie/{id}")]
+        public async Task<IActionResult> AnulujPrzedluzenie([FromRoute] int id) {
+            var przedluzenie = await _context.Oczekujace.FindAsync(id);
+            var wypozyczenie = await _context.Wypozyczenia.FindAsync(przedluzenie.WypozyczenieId);
+
+            DateTime data = wypozyczenie.DataZakonczenia;
+            var ileDni = przedluzenie.DoKiedy.Subtract(wypozyczenie.DataZakonczenia).Days;
+            for (int i = 0; i< ileDni; i++)
+            {
+                data = data.AddDays(i);
+                await _context.Kalendarz.Where(k => k.IdWypozyczenia == wypozyczenie.Id && k.Data == data).ExecuteDeleteAsync();
+            }
+            await _context.Oczekujace.Where(o => o.Id == przedluzenie.Id).ExecuteDeleteAsync();
+            return Ok("usunięto");
+        }
+        [HttpPatch("ZaakceptujPrzedluzenie/{id}")]
+        public async Task<IActionResult> ZaakceptujPrzedluzenie([FromRoute] int id)
+        {
+            var przedluzenie = await _context.Oczekujace.FindAsync(id);
+            var wypozyczenie = await _context.Wypozyczenia.FindAsync(przedluzenie.WypozyczenieId);
+            
+            wypozyczenie.DataZakonczenia = przedluzenie.DoKiedy;
+            przedluzenie.Zaakceptowane = true;
+            await _context.SaveChangesAsync();
+
+            return Ok("Zaakceptowano");
+        }
     }
 }

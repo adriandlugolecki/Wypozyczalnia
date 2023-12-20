@@ -1,6 +1,8 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
+import Przedluzenie from './Przedluzenie.vue'
+import { RouterLink } from 'vue-router'
 const data = new Date().toISOString().split('T')[0]
 console.log(data)
 const listaWypozyczen = ref([])
@@ -23,7 +25,8 @@ const usun = async (id) => {
 
 const przedluz = async (id) => {
   try {
-    await axiosToken.post(`/Klient/UsunWypozyczenie/${id}/${data}`)
+    var res = await axiosToken.get(`/Klient/DostepnePrzedluzenia/${id}`)
+    console.log(res.data)
   } catch (error) {
     console.error('Błąd', error)
   }
@@ -48,12 +51,17 @@ let DataBezGodziny = (Data) => {
             v-if="wypozyczenie.data > data"
             @click="usun(wypozyczenie.id)"
           />
-          <v-btn
-            icon="mdi-arrow-right"
-            color="grey"
-            v-if="wypozyczenie.dataZakonczenia > data"
-            @click="przedluz(wypozyczenie.id, data)"
-          />
+          
+          <Przedluzenie :wypozyczenia="wypozyczenie" v-if="wypozyczenie.dataZakonczenia > data"/>
+          <!-- <RouterLink :to="'/przedluzenie/' + wypozyczenie.id" custom v-slot="{ navigate }">
+            <v-btn
+              icon="mdi-arrow-right"
+              color="grey"
+              v-if="wypozyczenie.dataZakonczenia > data"
+              @click="navigate"
+            />
+          </RouterLink> -->
+          
         </div>
 
         {{ wypozyczenie.samochod.marka }} {{ wypozyczenie.samochod.model }}

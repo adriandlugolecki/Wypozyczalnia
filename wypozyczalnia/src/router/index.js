@@ -34,6 +34,12 @@ const router = createRouter({
       meta: { uprawnienia: null }
     },
     {
+      path: '/przedluzenie/:id',
+      name: 'przedluzenie',
+      component: () => import('../components/klient/Przedluzenie.vue'),
+      meta: { uprawnienia: null }
+    },
+    {
       path: '/rezerwacja/:id/ubezpieczenia',
       name: 'rezerwacjaUbezpieczenie',
       component: () => import('../components/RezerwacjaUbezpieczenie.vue'),
@@ -50,6 +56,12 @@ const router = createRouter({
       path: '/pracownik',
       name: 'pracownik',
       component: () => import('../components/pracownik/Pracownik.vue'),
+      meta: { uprawnienia: ['pracownik', 'admin'] }
+    },
+    {
+      path: '/przedluzenia',
+      name: 'przedluzenia',
+      component: () => import('../components/pracownik/Przedluzenia.vue'),
       meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     {

@@ -9,6 +9,7 @@ namespace webAPI.Data
         public DbSet<Klient> Klienci { get; set; }
         public DbSet<Pracownik> Pracownicy { get; set; }
         public DbSet<Samochod> Samochody { get; set; }
+        public DbSet<Oczekujace> Oczekujace { get; set; }
         public DbSet<Ubezpieczenie> Ubezpieczenia { get; set; }
         public DbSet<Wypozyczenie> Wypozyczenia { get; set; }
         public DbSet<Kalendarz> Kalendarz { get; set; }

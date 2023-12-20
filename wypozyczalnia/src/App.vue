@@ -27,10 +27,10 @@ import NavBar from './components/NavBar.vue'
   </header> -->
 </template>
 
-<style scoped>
-#app {
+<style>
+/* #app {
   text-align: center;
-}
+} */
 .tlo {
   height: 100vh;
   width: 100vw;

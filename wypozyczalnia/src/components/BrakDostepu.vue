@@ -32,35 +32,42 @@ const submit = async () => {
 }
 </script>
 <template>
-  <v-card width="100vw" height="100vh" class="d-flex justify-center align-center">
-    <v-container class="d-flex justify-center align-center">
-      <v-card elevation="10" width="400px" height="400px" class="px-6 card">
-        <v-form ref="formularzLogowania" @submit.prevent="submit">
-          <v-row class="justify-center my-6">
-            <v-card-title> Zaloguj się </v-card-title>
-          </v-row>
+  <div class="tlo">
+    <div class="okno">
+      <v-form ref="formularzLogowania" @submit.prevent="submit">
+        <v-row class="justify-center my-6">
+          <v-card-title> Zaloguj się </v-card-title>
+        </v-row>
 
-          <v-text-field label="login" v-model="email" :rules="zasadyLogin" />
-          <v-text-field
-            label="hasło"
-            v-model="haslo"
-            :rules="zasadyHaslo"
-            :type="widocznoscHasla ? 'text' : 'password'"
-            :append-inner-icon="widocznoscHasla ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="() => (widocznoscHasla = !widocznoscHasla)"
-          />
+        <v-text-field label="login" v-model="email" :rules="zasadyLogin" />
+        <v-text-field
+          label="hasło"
+          v-model="haslo"
+          :rules="zasadyHaslo"
+          :type="widocznoscHasla ? 'text' : 'password'"
+          :append-inner-icon="widocznoscHasla ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="() => (widocznoscHasla = !widocznoscHasla)"
+        />
 
-          <v-row class="justify-center mt-5">
-            <v-btn type="submit"> zaloguj </v-btn>
-          </v-row>
-          <v-row class="justify-center">
-            <v-btn size="x-small" variant="plain"> zapomnałem hasła </v-btn>
-          </v-row>
-        </v-form>
-      </v-card>
-    </v-container>
-  </v-card>
+        <v-row class="justify-center mt-5">
+          <v-btn type="submit"> zaloguj </v-btn>
+        </v-row>
+        <v-row class="justify-center">
+          <v-btn size="x-small" variant="plain"> zapomnałem hasła </v-btn>
+        </v-row>
+      </v-form>
+    </div>
+  </div>
 </template>
 <style>
-
+.okno {
+  margin: 200px auto;
+  border: 1px gray solid;
+  width: 400px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow:
+    0 8px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 </style>

@@ -111,7 +111,7 @@ const ZmianaDnia = async () => {
 }
 .okno {
   float: left;
-  width: 600px;
+  width: 40vw;
   border: 1px solid grey;
   border-radius: 15px;
   box-shadow:

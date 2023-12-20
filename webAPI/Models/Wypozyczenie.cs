@@ -15,6 +15,11 @@ namespace webAPI.Models
     [ForeignKey("Klient")]
     public string? KlientId { get; set; }
     public Klient? Klient { get; set; }
+
+    
+    [ForeignKey("Ubezpieczenie")]
+    public int? UbezpieczenieId { get; set; }
+    public Ubezpieczenie? Ubezpieczenie { get; set; }
     [Required]
     public DateTime Data { get; set; }
     [Required]
@@ -23,9 +28,6 @@ namespace webAPI.Models
     public float kwota { get; set; }
     public bool CzyWydano { get; set; } = false;
     public bool CzyOddano { get; set; } = false;
-
-    
-
     }
     
 }

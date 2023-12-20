@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 using webAPI.Data;
 using webAPI.Models;
@@ -66,6 +68,84 @@ namespace webAPI.Controllers
             await _context.Kalendarz.Where(w => w.IdWypozyczenia == id).ExecuteDeleteAsync();
             await _context.SaveChangesAsync();
             return Ok("usunięto");
+        }
+
+        [Authorize(Roles = "klient")]
+        [HttpGet("DostepnePrzedluzenia/{id}")]
+        public async Task<IActionResult> DostepnePrzedluzenia([FromRoute] int id)
+        {
+            var wypozyczenie = await _context.Wypozyczenia.FindAsync(id);
+            DateTime dataPoczatkowa = wypozyczenie.DataZakonczenia;
+
+            var temp = _context.Kalendarz.Where(w => w.Data == dataPoczatkowa
+                                           && w.IdSamochodu == wypozyczenie.SamochodId).ToList();
+            if (temp.Count > 0)
+            {
+                return Ok("brak terminu");
+            }
+
+            for (int i = 1; i< 20; i++)
+            {
+                temp = _context.Kalendarz.Where(w => w.Data == dataPoczatkowa.AddDays(1)
+                                           && w.IdSamochodu == wypozyczenie.SamochodId).ToList();
+                if (temp.Count > 0)
+                {
+                    
+                    return Ok(dataPoczatkowa.AddDays(1));
+                }
+                else { dataPoczatkowa = dataPoczatkowa.AddDays(1); }
+            }
+            return Ok(dataPoczatkowa);
+        }
+
+        [Authorize(Roles = "klient")]
+        [HttpPost("PrzedluzWypozyczenie/{id}/{doKiedy}")]
+        public async Task<IActionResult> PrzedluzWypozyczenie([FromRoute] int id, [FromRoute] DateTime doKiedy)
+        {
+            var wypozyczenie = await _context.Wypozyczenia.FindAsync(id);
+            //DateTime dataPoczatkowa = wypozyczenie.DataZakonczenia;
+
+            //var temp = _context.Kalendarz.Where(w => w.Data == dataPoczatkowa
+            //                               && w.IdSamochodu == wypozyczenie.SamochodId).ToList();
+            //if (temp.Count > 0)
+            //{
+            //    return BadRequest("brak terminu");
+            //}
+
+            //for (int i = 1; i < 20; i++)
+            //{
+            //    temp = _context.Kalendarz.Where(w => w.Data == dataPoczatkowa.AddDays(1)
+            //                               && w.IdSamochodu == wypozyczenie.SamochodId).ToList();
+            //    if (temp.Count > 0)
+            //    {
+
+            //        return BadRequest("brak terminu");
+            //    }
+                
+            //}
+            var ileDni = doKiedy.Subtract(wypozyczenie.DataZakonczenia).Days;
+
+            for (int i = 0; i < ileDni; i++)
+            {
+                await _context.Kalendarz.AddAsync(new Kalendarz
+                {
+                    IdWypozyczenia = wypozyczenie.Id,
+                    IdSamochodu = wypozyczenie.SamochodId,
+                    Data = wypozyczenie.DataZakonczenia.AddDays(i)
+                });
+            }
+            var kwota = wypozyczenie.kwota / wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
+            kwota *= ileDni;
+            await _context.Oczekujace.AddAsync(new Oczekujace
+            {
+                WypozyczenieId = wypozyczenie.Id,
+                DoKiedy = doKiedy,
+                Kwota = kwota,
+                Zaakceptowane = false,
+            });
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
     }
 }

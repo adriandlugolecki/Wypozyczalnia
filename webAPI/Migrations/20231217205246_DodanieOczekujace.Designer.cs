@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webAPI.Data;
 
@@ -11,9 +12,11 @@ using webAPI.Data;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217205246_DodanieOczekujace")]
+    partial class DodanieOczekujace
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,9 +261,6 @@ namespace webAPI.Migrations
 
                     b.Property<DateTime>("DoKiedy")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("Kwota")
-                        .HasColumnType("real");
 
                     b.Property<int>("WypozyczenieId")
                         .HasColumnType("int");
