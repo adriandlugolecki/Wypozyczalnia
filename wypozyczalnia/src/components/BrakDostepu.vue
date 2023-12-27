@@ -59,7 +59,7 @@ const submit = async () => {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .okno {
   margin: 200px auto;
   border: 1px gray solid;

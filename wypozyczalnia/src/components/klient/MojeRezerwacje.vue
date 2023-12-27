@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router'
 const data = new Date().toISOString().split('T')[0]
 console.log(data)
 const listaWypozyczen = ref([])
+const pokaz = ref()
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Klient/WypozyczeniaKlienta`)
@@ -37,9 +38,11 @@ let DataBezGodziny = (Data) => {
 }
 </script>
 <template>
-  <br />
-  <br />
-  <div>
+  <div class="tlo">
+    <div class="MojeRezerwacje" v-if="listaWypozyczen.length == 0">
+      <div class="MojeRezerwacjeTytul">Brak wypożyczeń</div>
+    </div>
+
     <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
       <div class="MojeRezerwacje">
         <div class="MojeRezerwacjeTytul">
@@ -51,8 +54,8 @@ let DataBezGodziny = (Data) => {
             v-if="wypozyczenie.data > data"
             @click="usun(wypozyczenie.id)"
           />
-          
-          <Przedluzenie :wypozyczenia="wypozyczenie" v-if="wypozyczenie.dataZakonczenia > data"/>
+
+          <Przedluzenie :wypozyczenia="wypozyczenie" v-if="wypozyczenie.dataZakonczenia > data" />
           <!-- <RouterLink :to="'/przedluzenie/' + wypozyczenie.id" custom v-slot="{ navigate }">
             <v-btn
               icon="mdi-arrow-right"
@@ -61,7 +64,6 @@ let DataBezGodziny = (Data) => {
               @click="navigate"
             />
           </RouterLink> -->
-          
         </div>
 
         {{ wypozyczenie.samochod.marka }} {{ wypozyczenie.samochod.model }}
@@ -71,12 +73,17 @@ let DataBezGodziny = (Data) => {
 </template>
 <style>
 .MojeRezerwacje {
-  width: 100vw;
-  align-items: center;
+  border-radius: 15px;
+  border: 1px solid gray;
+  margin: 100px auto;
+  width: 600px;
+  text-align: center;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .MojeRezerwacjeTytul {
   font-size: x-large;
-  margin-left: 0;
-  margin-top: 0;
+  margin: 20px;
 }
 </style>

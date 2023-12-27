@@ -1,15 +1,50 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { alert } from './main'
-
+import { watch } from 'vue'
 import NavBar from './components/NavBar.vue'
+var AudioSuccess = new Audio('../src/assets/success.mp3')
+var AudioError = new Audio('../src/assets/error.mp3')
+let timeout = null
+watch(
+  () => alert.show,
+  (from, to) => {
+    if (!from && to) {
+      // z true na false
+      timeout = setTimeout(() => {
+        alert.tekst = ''
+        alert.error = false
+      }, 2000)
+    }
+    if (from && !to) {
+      //z false na true
+
+      if (alert.error) {
+        AudioError.play()
+      } else {
+        AudioSuccess.play()
+      }
+      clearTimeout(timeout)
+    }
+  }
+)
 </script>
 
 <template>
   <v-app>
     <NavBar />
     <RouterView />
+    <v-snackbar
+      location="top"
+      class="mt-2"
+      v-model="alert.show"
+      timeout="5000"
+      :color="alert.error ? 'red' : 'green'"
+    >
+      {{ alert.tekst }}
+    </v-snackbar>
   </v-app>
+
   <!-- <v-snackbar location="top" :viewmodel="alert.show" :color="alert.error ? 'error' : 'success'">
     {{ alert.text }}
   </v-snackbar> -->
@@ -31,6 +66,16 @@ import NavBar from './components/NavBar.vue'
 /* #app {
   text-align: center;
 } */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  /* background-color: rgba(0,0,0,.5); */
+  background-color: grey;
+  color: white;
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
 .tlo {
   height: 100vh;
   width: 100vw;

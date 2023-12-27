@@ -22,6 +22,12 @@ const router = createRouter({
       meta: { uprawnienia: null }
     },
     {
+      path: '/potwierdzenieKonta/:id',
+      name: 'potwierdzenieKonta',
+      component: () => import('../components/PotwierdzenieKonta.vue'),
+      meta: { uprawnienia: null }
+    },
+    {
       path: '/brakDostepu',
       name: 'brakdostepu',
       component: () => import('../components/BrakDostepu.vue'),

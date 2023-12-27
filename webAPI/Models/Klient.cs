@@ -15,6 +15,7 @@ namespace webAPI.Models
         [Required]
         [StringLength(11)]
         public string Pesel { get; set; } = string.Empty;
+        public string? KodWeryfikacyjny { get; set; }
 
     }
 }

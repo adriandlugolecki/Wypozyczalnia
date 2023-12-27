@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webAPI.Data;
 
@@ -11,9 +12,11 @@ using webAPI.Data;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231225202129_modyfikacjaKlienta")]
+    partial class modyfikacjaKlienta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,9 +289,6 @@ namespace webAPI.Migrations
                     b.Property<int>("Cena")
                         .HasColumnType("int");
 
-                    b.Property<bool>("CzyZablokowany")
-                        .HasColumnType("bit");
-
                     b.Property<int>("LiczbaDrzwi")
                         .HasColumnType("int");
 
@@ -380,17 +380,14 @@ namespace webAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Kwota")
-                        .HasColumnType("real");
-
                     b.Property<int>("SamochodId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UbezpieczenieId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Wiek")
-                        .HasColumnType("int");
+                    b.Property<float>("kwota")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

@@ -1,17 +1,19 @@
 <script setup>
 import { onBeforeMount } from 'vue'
-import { axioss } from '../main'
+import { axioss, alert } from '../main'
 import { ref } from 'vue'
+
 const cenaMin = ref(null)
 const cenaMax = ref(null)
+const rodzajPaliwa = ref(null)
 const rodzajSkrzyni = ref(null)
 const data = ref()
 const dataZakonczenia = ref()
 const zapytanie = ref([])
 const samochody = ref([])
-const wiek = ref()
+const wiek = ref(1)
 const strona = ref(false)
-console.log(strona.value)
+
 onBeforeMount(() => {
   try {
     if (localStorage.getItem('data') && localStorage.getItem('dataZakonczenia')) {
@@ -25,6 +27,7 @@ const submit = async () => {
     var res = await axioss.get(`/samochod/wolnesamochody/${data.value}/${dataZakonczenia.value}`)
     localStorage.setItem('data', data.value)
     localStorage.setItem('dataZakonczenia', dataZakonczenia.value)
+    localStorage.setItem('wiek', wiek.value)
     console.log(wiek)
     console.log(res.data)
     zapytanie.value = res.data
@@ -33,20 +36,39 @@ const submit = async () => {
     console.log(strona.value)
     console.log(zapytanie.value)
   } else {
-    console.log('błąd z datą')
+    alert.error = true
+    alert.tekst = 'Data zakończenia nie może być mniejsza od daty rozpoczęcia'
+    alert.show = true
   }
 }
 const filtruj = () => {
-  // if (rodzajSkrzyni.value != null) rodzajSkrzyni.value = parseInt(rodzajSkrzyni.value, 10)
-  samochody.value = zapytanie.value.filter(
-    (s) =>
-      s.cena >= cenaMin.value && s.cena <= cenaMax.value && s.rodzajSkrzyni == rodzajSkrzyni.value
-  )
+  // if (rodzajPaliwa.value != null) rodzajPaliwa.value = parseInt(rodzajPaliwa.value, 10)
+  if (cenaMax.value != null && rodzajSkrzyni.value != null) {
+    samochody.value = zapytanie.value.filter(
+      (s) =>
+        s.cena >= cenaMin.value && s.cena <= cenaMax.value && s.rodzajSkrzyni == rodzajSkrzyni.value
+    )
+  } else if (rodzajPaliwa.value != null && rodzajSkrzyni.value != null) {
+    samochody.value = zapytanie.value.filter(
+      (s) => s.rodzajPaliwa == rodzajPaliwa.value && s.rodzajSkrzyni == rodzajSkrzyni.value
+    )
+  } else if (rodzajPaliwa.value != null) {
+    samochody.value = zapytanie.value.filter((s) => s.rodzajPaliwa == rodzajPaliwa.value)
+  } else if (rodzajSkrzyni.value != null) {
+    samochody.value = zapytanie.value.filter((s) => s.rodzajSkrzyni == rodzajSkrzyni.value)
+  } else if (cenaMin.value != null) {
+    samochody.value = zapytanie.value.filter((s) => s.cena >= cenaMin.value)
+  } else if (cenaMax.value != null) {
+    samochody.value = zapytanie.value.filter((s) => s.cena <= cenaMax.value)
+  } else {
+    samochody.value = zapytanie.value
+  }
 }
 const wyczysc = () => {
   cenaMax.value = null
   cenaMin.value = null
   rodzajSkrzyni.value = null
+  rodzajPaliwa.value = null
   samochody.value = zapytanie.value
 }
 const typSkrzyni = (skrzynia) => {
@@ -88,9 +110,9 @@ const typPaliwa = (paliwo) => {
         <div>
           <div>
             wiek kierowcy
-            <select v-model="wiek">
+            <select v-model="wiek" required>
               <option value="0">25 lat i mniej</option>
-              <option value="1" checked>26 - 69lat</option>
+              <option value="1">26 - 69lat</option>
               <option value="2">70 lat i więcej</option>
             </select>
             <v-btn class="mt-5 mb-5" type="submit"> szukaj </v-btn>
@@ -108,13 +130,23 @@ const typPaliwa = (paliwo) => {
       <div class="filtr">
         filtr
         <div>
+          Rodzaj paliwa
+          <br />
+          <select v-model="rodzajPaliwa" required>
+            <option value="null" selected hidden>Wybierz</option>
+            <option value="0">Benzyna</option>
+            <option value="1">Diesel</option>
+            <option :value="null" checked>Benzyna i Diesel</option>
+          </select>
+        </div>
+        <div>
           Skrzynia biegów
           <br />
           <select v-model="rodzajSkrzyni" required>
             <option value="null" selected hidden>Wybierz</option>
             <option value="0">Manual</option>
             <option value="1">Automat</option>
-            <option value="2" checked>Manual i Automat</option>
+            <option :value="null" checked>Manual i Automat</option>
           </select>
         </div>
         <div>

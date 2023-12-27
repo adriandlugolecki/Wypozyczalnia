@@ -5,6 +5,7 @@ import router from '../../router'
 import { onBeforeMount } from 'vue'
 const auto = localStorage.getItem('auto')
 const ubezpieczenie = localStorage.getItem('ubezpieczenie')
+const wiek = localStorage.getItem('wiek')
 const data = new Date(localStorage.getItem('data'))
 const dataZakonczenia = new Date(localStorage.getItem('dataZakonczenia'))
 const token = localStorage.getItem('token')
@@ -39,6 +40,8 @@ const zarezerwuj = async () => {
       klientId: Id,
       data: data,
       dataZakonczenia: dataZakonczenia,
+      ubezpieczenieId: Ubezpieczenie.value.id,
+      wiek: wiek,
       kwota: kwota
     },
     { Authorization: `Bearer ${token}` }

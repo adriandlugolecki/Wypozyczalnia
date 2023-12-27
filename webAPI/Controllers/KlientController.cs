@@ -134,7 +134,7 @@ namespace webAPI.Controllers
                     Data = wypozyczenie.DataZakonczenia.AddDays(i)
                 });
             }
-            var kwota = wypozyczenie.kwota / wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
+            var kwota = wypozyczenie.Kwota / wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
             kwota *= ileDni;
             await _context.Oczekujace.AddAsync(new Oczekujace
             {

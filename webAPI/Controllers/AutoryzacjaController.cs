@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using webAPI.Data;
 using webAPI.Models;
 using webAPI.Services;
 
@@ -16,12 +17,14 @@ namespace webAPI.Controllers
         private KlientService _klientService;
         private UserManager<Pracownik> _pracownikManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Pracownik> pracownikManager, RoleManager<IdentityRole> roleManager)
+        private readonly AppDbContext _context;
+        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Pracownik> pracownikManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
         {
             _pracownikManager = pracownikManager;
             _pracownikService = pracwonikService;
             _klientService = klientService;
             _roleManager = roleManager;
+            _context = context;
         }
 
         [HttpPost("Rejestracja")]
@@ -38,6 +41,18 @@ namespace webAPI.Controllers
             }
             return BadRequest("niedziala");
 
+        }
+        [HttpPatch("PotwierdzenieKonta/{id}/{kod}")]
+        public async Task<IActionResult> PotwierdzenieKonta([FromRoute] string id, [FromRoute] string kod)
+        {
+            var klient = await _context.Klienci.FindAsync(id);
+            if(klient.KodWeryfikacyjny == kod)
+            {
+               klient.EmailConfirmed = true;
+               _context.SaveChanges();
+                return Ok("Aktywowano Konto");
+            }
+            return BadRequest("Błędny kod");
         }
         //[Authorize(Roles = "admin")]
         [HttpPost("PracownikRejestracja")]
@@ -90,6 +105,18 @@ namespace webAPI.Controllers
 
             return BadRequest("Error");
         }
+        //[HttpPatch("ZmianaHasla")]
+        //public async Task<IActionResult> ZmianaHasla([FromBody] ZmianaHaslaDto dto)
+        //{
+        //    var klient = await _context.Klienci.FindAsync(dto.Id);
+
+        //    if (klient == null) return BadRequest("nie ma takiego klienta");
+        //    if (klient.KodWeryfikacyjny == dto.Kod)
+        //    {
+                
+        //    }
+            
+        //}
 
     }
 }

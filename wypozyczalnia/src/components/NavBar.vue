@@ -44,6 +44,9 @@ const wyloguj = () => {
       <v-btn icon="mdi-logout" link @click="wyloguj" />
     </template>
     <template v-slot:append v-if="!uzytkownik.uprawnienia">
+      <RouterLink to="/rejestracja" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">Zarejestruj się</v-tab>
+      </RouterLink>
       <RouterLink to="/logowanie" custom v-slot="{ navigate }">
         <v-tab @click="navigate">Zaloguj się</v-tab>
       </RouterLink>

@@ -64,6 +64,7 @@ builder.Services.AddIdentityCore<Klient>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+
 builder.Services.AddCors(
    o =>
    {

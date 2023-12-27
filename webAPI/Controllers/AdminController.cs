@@ -55,6 +55,24 @@ namespace webAPI.Controllers
 
             return Ok();
         }
+        [HttpPatch("ZablokujOdblokujSamochod/{id}")]
+        public async Task<IActionResult> ZablokujOdblokujSamochod([FromRoute] int id)
+        {
+            var samochod = await _context.Samochody.FindAsync(id);
+            if (samochod == null)
+            {
+                return BadRequest("Nie znaleziono samochodu");
+            }
+            if (samochod.CzyZablokowany == true)
+            {
+                samochod.CzyZablokowany = false;
+                await _context.SaveChangesAsync();
+                return Ok("Samochod został odblokowany");
+            }
+            samochod.CzyZablokowany = true;
+            await _context.SaveChangesAsync();
+            return Ok("Samochod został zablokowany");
+        }
 
     }
 }

@@ -24,7 +24,7 @@ namespace webAPI.Models
         public RodzajPaliwa RodzajPaliwa { get; set; }
         [Required]
         public int Cena {  get; set; }
-
+        public bool CzyZablokowany { get; set; } = false;
     }
     public enum RodzajSkrzyni
     {

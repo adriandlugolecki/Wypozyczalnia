@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +23,12 @@ namespace webAPI.Services
             {
                 throw new NullReferenceException("Wypełnij wymagane pola");
             }
+            string kod = "";
+            Random losowa = new();
+            for (int j = 0; j < 6; j++)
+            {
+                kod += losowa.Next(0, 9).ToString();
+            }
             var klient = new Klient
             {
                 Email = rejestracja.Email,
@@ -30,17 +37,20 @@ namespace webAPI.Services
                 Nazwisko = rejestracja.Nazwisko,
                 DataUrodzenia = rejestracja.DataUrodzenia,
                 Pesel = rejestracja.Pesel,
-
+                EmailConfirmed = false,
+                KodWeryfikacyjny = kod
             };
             var result = await _klientManager.CreateAsync(klient, rejestracja.Haslo);
 
             if (result.Succeeded)
             {
                 await _klientManager.AddToRoleAsync(klient, "klient");
+                WyslanieMaila(klient,kod);
                 return new ServicesResponse
                 {
                     Wiadomosc = "ok",
-                    Powodzenie = true
+                    Powodzenie = true,
+                    Id = klient.Id,
                 };
             }
             return new ServicesResponse
@@ -60,6 +70,14 @@ namespace webAPI.Services
                     Powodzenie = false
                 };
 
+            }
+            if (klient.EmailConfirmed == false)
+            {
+                return new ServicesResponse
+                {
+                    Wiadomosc = "Konto nie zostało aktywowane",
+                    Powodzenie = false
+                };
             }
             var claims = new[]
             {
@@ -91,6 +109,25 @@ namespace webAPI.Services
 
             };
         }
+        public void WyslanieMaila(Klient klient, string kod)
+        {
+            var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress("Wypozyczalnia", "pracowniadyplomowawypozyczalni@gmail.com"));
+            mimeMessage.To.Add(new MailboxAddress(klient.Email, klient.Email));
+            mimeMessage.Subject = "Kod do potwierdzenia Konta";
+            var tresc = new BodyBuilder
+            {
+                HtmlBody = "Kod " + kod
+            };
+            mimeMessage.Body = tresc.ToMessageBody();
+
+            using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+            smtpClient.Connect("smtp.gmail.com", 587, false);
+            smtpClient.Authenticate("pracowniadyplomowawypozyczalni@gmail.com", "asargzwtgkqpbklq");
+            smtpClient.Send(mimeMessage);
+            smtpClient.Disconnect(true);
+        }
+
 
     }
 }

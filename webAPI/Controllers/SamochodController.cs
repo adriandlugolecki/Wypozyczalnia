@@ -39,13 +39,13 @@ namespace webAPI.Controllers
 
             var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data) >= 0 && w.Data.CompareTo(dataZakonczenia) == -1).Select(w => w.IdSamochodu).Distinct().ToList();
 
-            var ListaDostepnychSamochodow = samochody.ToList();
+            var ListaDostepnychSamochodow = samochody.Where(s=> s.CzyZablokowany == false).ToList();
 
             foreach(var auto in samochody)
             {
                 foreach(var zablokowane in zablokowaneAuta)
                 {
-                    if(auto.Id == zablokowane)
+                    if(auto.Id == zablokowane )
                     {
                         ListaDostepnychSamochodow.Remove(auto);
                     }

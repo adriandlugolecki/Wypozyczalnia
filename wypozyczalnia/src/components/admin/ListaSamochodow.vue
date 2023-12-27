@@ -19,7 +19,7 @@ onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Admin/ListaSamochodow`)
     listaSamochodow.value = res.data
-    console.log(listaSamochodow)
+    console.log(listaSamochodow.value)
   } catch (error) {
     console.error('Błąd', error)
   }
@@ -43,6 +43,9 @@ const submit = async () => {
   formData.append('zdjecie', file.value[0])
   await axiosToken.post(`/Admin/DodajZdjecie/${res.data.id}`, formData)
   location.reload()
+}
+const zablokujOdblokuj = async (id) => {
+  await axiosToken.patch(`/Admin/ZablokujOdblokujSamochod/${id}`)
 }
 </script>
 <template>
@@ -73,7 +76,20 @@ const submit = async () => {
       <v-list-item v-for="samochod in listaSamochodow" :key="samochod.id">
         <div>
           {{ samochod.id }} {{ samochod.marka }} {{ samochod.model }} [{{ samochod.rejestracja }}]
-          <v-btn elevation="0" icon="mdi-lock-open-outline"></v-btn>
+          {{ samochod.czyZablokowany }}
+
+          <v-btn
+            v-if="samochod.czyZablokowany"
+            elevation="0"
+            @click="zablokujOdblokuj(samochod.id)"
+            icon="mdi-lock-open-outline"
+          ></v-btn>
+          <v-btn
+            v-if="!samochod.czyZablokowany"
+            elevation="0"
+            @click="zablokujOdblokuj(samochod.id)"
+            icon="mdi-lock-outline"
+          ></v-btn>
         </div>
       </v-list-item>
     </div>

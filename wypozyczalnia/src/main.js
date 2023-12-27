@@ -29,7 +29,7 @@ axiosToken.interceptors.request.use((config) => {
 
 export const alert = reactive({
   tekst: '',
-  show: true,
+  show: false,
   error: false
 })
 
