@@ -42,6 +42,7 @@ namespace webAPI.Controllers
             var Wypozyczenie = _context.Wypozyczenia.FirstOrDefault(w => w.Id == id);
             Wypozyczenie.CzyWydano=dto.CzyWydano;
             Wypozyczenie.CzyOddano=dto.CzyOddano;
+            Wypozyczenie.Notatka =dto.Notatka;
             await _context.SaveChangesAsync();
             return Ok("zaktualizowano");
         }
@@ -61,8 +62,9 @@ namespace webAPI.Controllers
             var ileDni = przedluzenie.DoKiedy.Subtract(wypozyczenie.DataZakonczenia).Days;
             for (int i = 0; i< ileDni; i++)
             {
-                data = data.AddDays(i);
+                
                 await _context.Kalendarz.Where(k => k.IdWypozyczenia == wypozyczenie.Id && k.Data == data).ExecuteDeleteAsync();
+                data = data.AddDays(1);
             }
             await _context.Oczekujace.Where(o => o.Id == przedluzenie.Id).ExecuteDeleteAsync();
             return Ok("usunięto");

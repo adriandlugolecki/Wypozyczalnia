@@ -8,8 +8,7 @@ namespace webAPI.Models
 
         public bool CzyWydano { get; set; } = false;
         public bool CzyOddano { get; set; } = false;
-
-
+        public string Notatka { get; set; } = string.Empty;
 
     }
 }

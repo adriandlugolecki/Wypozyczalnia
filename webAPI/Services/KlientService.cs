@@ -50,7 +50,7 @@ namespace webAPI.Services
                 {
                     Wiadomosc = "ok",
                     Powodzenie = true,
-                    Id = klient.Id,
+                   
                 };
             }
             return new ServicesResponse
@@ -77,6 +77,17 @@ namespace webAPI.Services
                 {
                     Wiadomosc = "Konto nie zostało aktywowane",
                     Powodzenie = false
+                };
+            }
+
+            var result = await _klientManager.CheckPasswordAsync(klient, login.Password);
+
+            if(!result)
+            {
+                return new ServicesResponse
+                {
+                    Wiadomosc = "Błędne hasło",
+                    Powodzenie = false,
                 };
             }
             var claims = new[]
@@ -114,7 +125,7 @@ namespace webAPI.Services
             var mimeMessage = new MimeMessage();
             mimeMessage.From.Add(new MailboxAddress("Wypozyczalnia", "pracowniadyplomowawypozyczalni@gmail.com"));
             mimeMessage.To.Add(new MailboxAddress(klient.Email, klient.Email));
-            mimeMessage.Subject = "Kod do potwierdzenia Konta";
+            mimeMessage.Subject = "Kod Weryfikacyjny";
             var tresc = new BodyBuilder
             {
                 HtmlBody = "Kod " + kod

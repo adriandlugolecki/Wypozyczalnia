@@ -34,6 +34,12 @@ const router = createRouter({
       meta: { uprawnienia: null }
     },
     {
+      path: '/zmianaHasla',
+      name: 'zmianaHasla',
+      component: () => import('../components/zmianaHasla.vue'),
+      meta: { uprawnienia: null }
+    },
+    {
       path: '/mojeRezerwacje',
       name: 'mojeRezerwacje',
       component: () => import('../components/klient/MojeRezerwacje.vue'),

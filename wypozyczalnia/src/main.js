@@ -12,7 +12,7 @@ import * as directives from 'vuetify/directives'
 import axios from 'axios'
 
 const prefix = 'https://localhost:7122'
-
+export const zdjecie = 'https://localhost:7122/Photos'
 export const axioss = axios.create({
   baseURL: `${prefix}/api`,
   timeout: 5000

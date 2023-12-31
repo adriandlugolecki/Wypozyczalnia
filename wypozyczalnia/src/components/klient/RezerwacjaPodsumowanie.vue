@@ -8,14 +8,13 @@ const ubezpieczenie = localStorage.getItem('ubezpieczenie')
 const wiek = localStorage.getItem('wiek')
 const data = new Date(localStorage.getItem('data'))
 const dataZakonczenia = new Date(localStorage.getItem('dataZakonczenia'))
-const token = localStorage.getItem('token')
 const Samochod = ref()
 const Ubezpieczenie = ref()
-const Id = JSON.parse(atob(token.split('.')[1])).id.toString()
 const ileDni = Math.ceil(Math.abs(dataZakonczenia - data) / (1000 * 3600 * 24))
-const odbior = ref(false)
-const samochodInfo = ref(false)
+const odbior = ref(true)
+const samochodInfo = ref(true)
 const ubezpieczenieInfo = ref(false)
+const zrodlo = ref('')
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Samochod/${auto}`)
@@ -23,6 +22,7 @@ onBeforeMount(async () => {
 
     Samochod.value = res.data
     Ubezpieczenie.value = res2.data
+    zrodlo.value = 'https://localhost:7122/Photos/' + Samochod.value.id + '.png'
     console.log(auto)
     console.log(Samochod.value.id)
   } catch (error) {
@@ -30,99 +30,116 @@ onBeforeMount(async () => {
   }
 })
 const zarezerwuj = async () => {
-  const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena)
+  const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
   console.log(kwota)
   console.log(Id)
-  await axiosToken.post(
-    `/klient/wypozyczeniesamochodu`,
-    {
-      samochodId: Samochod.value.id,
-      klientId: Id,
-      data: data,
-      dataZakonczenia: dataZakonczenia,
-      ubezpieczenieId: Ubezpieczenie.value.id,
-      wiek: wiek,
-      kwota: kwota
-    },
-    { Authorization: `Bearer ${token}` }
-  )
+  await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
+    samochodId: Samochod.value.id,
+    klientId: 'id',
+    data: data,
+    dataZakonczenia: dataZakonczenia,
+    ubezpieczenieId: Ubezpieczenie.value.id,
+    wiek: wiek,
+    kwota: kwota
+  })
   router.push('/')
 }
 const pozyskanieDaty = (data) => {
   return `${data.getDate()}.${data.getMonth() + 1}.${data.getFullYear()}`
 }
+const OplataZaWiek = (wiek) => {
+  if (wiek == 1) return 0
+  else return 20
+}
 </script>
 
 <template>
   <div class="tlo">
-    <div class="PodsumowanieTytul">Podsumowanie</div>
-    <div class="podsumowanie">
-      <div>
-        odbiór i zwrot
-        <v-btn elevation="0" icon="mdi-book-open" @click="odbior = !odbior"></v-btn>
-      </div>
-      <div v-if="odbior">
-        {{ pozyskanieDaty(data) }} od godziny 12:00 <br />{{ pozyskanieDaty(dataZakonczenia) }} do
-        godziny 10:00
-      </div>
-      <div>
-        Samochod
-        <v-btn icon="mdi-book-open" elevation="0" @click="samochodInfo = !samochodInfo"></v-btn>
-      </div>
-      <div v-if="samochodInfo">
-        O Samochodzie model marka rodzaj skrzyni typ silnika rok ile osob
-        {{ ileDni }}
-      </div>
+    <div class="PodsumowanieTytul"><h1>Podsumowanie</h1></div>
+    <div class="okno">
+      <div class="podsumowanie">
+        <div>
+          <h2>
+            odbiór i zwrot
+            <v-btn elevation="0" icon="mdi-book-open" @click="odbior = !odbior"></v-btn>
+          </h2>
+        </div>
+        <div v-if="odbior">
+          <div>
+            <div>Odbiór</div>
+            <div>Słoneczna 54, Olsztyn</div>
+            {{ pozyskanieDaty(data) }} od godziny 12:00
+          </div>
+          <div>
+            <div>Zwrot</div>
+            <div>Słoneczna 54, Olsztyn</div>
+            {{ pozyskanieDaty(dataZakonczenia) }} do godziny 10:00
+          </div>
+        </div>
+        <div>
+          <h2>
+            Samochod<v-btn
+              icon="mdi-book-open"
+              elevation="0"
+              @click="samochodInfo = !samochodInfo"
+            ></v-btn>
+          </h2>
 
-      <div>
-        Ubezpieczenie
-        <v-btn
-          icon="mdi-book-open"
-          elevation="0"
-          @click="ubezpieczenieInfo = !ubezpieczenieInfo"
-        ></v-btn>
+          <div v-if="samochodInfo">
+            <div class="samochodZdjecie">
+              <img width="150" :src="zrodlo" />
+            </div>
+            <div class="samochodOpis">
+              {{ Samochod ? Samochod.marka : '' }} {{ Samochod ? Samochod.model : '' }}
+            </div>
+            <div>O Samochodzie model marka rodzaj skrzyni typ silnika rok ile osob</div>
+            {{ ileDni }}
+          </div>
+        </div>
+
+        <div>
+          Ubezpieczenie {{ Ubezpieczenie ? Ubezpieczenie.nazwa : '' }}
+          <v-btn
+            icon="mdi-book-open"
+            elevation="0"
+            @click="ubezpieczenieInfo = !ubezpieczenieInfo"
+          ></v-btn>
+        </div>
       </div>
-      <div v-if="ubezpieczenieInfo">ubezpieczenie wariant np premium ile warte</div>
+      <div class="podsumowanieKwota">
+        Podsumowanie
+        <div>
+          samochód: {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
+          {{ ileDni * (Samochod ? Samochod.cena : '') }} zł
+        </div>
+
+        <div>
+          ubezpieczenie: {{ ileDni }} x {{ Ubezpieczenie ? Ubezpieczenie.kwota : '' }} =
+          {{ ileDni * (Ubezpieczenie ? Ubezpieczenie.kwota : '') }} zł
+        </div>
+        <div>
+          wiek Kierowcy: {{ ileDni }} x {{ OplataZaWiek(wiek) }} = {{ ileDni * OplataZaWiek(wiek) }}
+        </div>
+        <div>
+          całkowita kwota:
+          {{
+            ileDni *
+            ((Ubezpieczenie ? Ubezpieczenie.kwota : '') +
+              (Samochod ? Samochod.cena : '') +
+              OplataZaWiek(wiek))
+          }}
+          zł
+        </div>
+        <div v-if="ubezpieczenie == 1">Kaucja: 2000 zł</div>
+        <div v-if="ubezpieczenie == 2">Kaucja: 1 zł</div>
+        <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
+          <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj"> zarezerwuj </v-btn>
+        </RouterLink>
+      </div>
     </div>
-    <div class="podsumowanieKwota">
-      Podsumowanie
-      <div>
-        samochód: {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
-        {{ ileDni * (Samochod ? Samochod.cena : '') }} zł
-      </div>
-
-      <div>
-        ubezpieczenie: {{ ileDni }} x {{ Ubezpieczenie ? Ubezpieczenie.kwota : '' }} =
-        {{ ileDni * (Ubezpieczenie ? Ubezpieczenie.kwota : '') }} zł
-      </div>
-
-      <div>
-        całkowita kwota:
-        {{
-          ileDni * ((Ubezpieczenie ? Ubezpieczenie.kwota : '') + (Samochod ? Samochod.cena : ''))
-        }}
-        zł
-      </div>
-      <div v-if="ubezpieczenie == 1">Kaucja: 2000zł</div>
-      <div v-if="ubezpieczenie == 2">Kaucja: 500zł</div>
-      <div v-if="ubezpieczenie == 3">Kaucja: 1zł</div>
-      <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
-        <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj"> zarezerwuj </v-btn>
-      </RouterLink>
-    </div>
-
-    <!-- <v-card elevation="5">
-      samochód
-      {{ auto }}
-      ubezpieczenie
-      {{ ubezpieczenie }}
-      <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
-        <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj"> zarezerwuj </v-btn>
-      </RouterLink>
-    </v-card> -->
   </div>
 </template>
-<style>
+<style scoped>
 .tlo {
   height: 100vh;
   width: 100vw;
@@ -134,10 +151,15 @@ const pozyskanieDaty = (data) => {
   text-align: center;
   font-size: 26px;
 }
+.okno {
+  margin: 0 auto;
+  width: 900px;
+}
 .podsumowanie {
+  margin: auto;
   float: left;
-  height: 300px;
-  width: 500px;
+  min-height: 300px;
+  width: 400px;
   border: 1px solid black;
   padding: 20px;
   border-radius: 15px;
@@ -156,5 +178,14 @@ const pozyskanieDaty = (data) => {
   box-shadow:
     0 4px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.samochodZdjecie {
+  float: left;
+  height: 150px;
+}
+.samochodOpis {
+  float: left;
+  width: 200px;
+  height: 150px;
 }
 </style>

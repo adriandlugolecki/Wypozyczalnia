@@ -15,12 +15,12 @@ namespace webAPI.Controllers
 
         private PracownikService _pracownikService;
         private KlientService _klientService;
-        private UserManager<Pracownik> _pracownikManager;
+        private UserManager<Klient> _klientManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AppDbContext _context;
-        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Pracownik> pracownikManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
+        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Klient> klientManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
         {
-            _pracownikManager = pracownikManager;
+            _klientManager = klientManager;
             _pracownikService = pracwonikService;
             _klientService = klientService;
             _roleManager = roleManager;
@@ -105,18 +105,33 @@ namespace webAPI.Controllers
 
             return BadRequest("Error");
         }
-        //[HttpPatch("ZmianaHasla")]
-        //public async Task<IActionResult> ZmianaHasla([FromBody] ZmianaHaslaDto dto)
-        //{
-        //    var klient = await _context.Klienci.FindAsync(dto.Id);
+        [HttpPatch("ZmianaHasla")]
+        public async Task<IActionResult> ZmianaHasla([FromBody] ZmianaHaslaDto dto)
+        {
+            var klient = await _klientManager.FindByEmailAsync(dto.Email);
 
-        //    if (klient == null) return BadRequest("nie ma takiego klienta");
-        //    if (klient.KodWeryfikacyjny == dto.Kod)
-        //    {
-                
-        //    }
-            
-        //}
+            if (klient == null) return BadRequest("nie ma takiego klienta");
+            if (klient.AccessFailedCount > 10) return BadRequest("Zmiana hasła została zablokowana");
+            if (klient.KodWeryfikacyjny == dto.Kod)
+            {
+                var ResetToken = await _klientManager.GeneratePasswordResetTokenAsync(klient);
+                var result = await _klientManager.ResetPasswordAsync(klient, ResetToken, dto.Haslo);
+                if(result.Succeeded) { return Ok("Hasło Zmienione"); }
+                return BadRequest("Nie udało się zmienić hasła");
+            }
+            klient.AccessFailedCount++;
+            _context.SaveChanges();
+            return BadRequest("Błędny Kod Weryfikujący");
+
+        }
+        [HttpPost("WyslijMaila")]
+        public async Task<IActionResult> WyslijMaila([FromBody] ZmianaHaslaDto dto)
+        {
+            var klient = await _klientManager.FindByEmailAsync(dto.Email);
+            if (klient == null) return BadRequest("nie ma takiego klienta");
+            _klientService.WyslanieMaila(klient,klient.KodWeryfikacyjny);
+            return Ok("Mail został wysłany");
+        }
 
     }
 }

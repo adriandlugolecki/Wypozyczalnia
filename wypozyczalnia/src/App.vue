@@ -18,7 +18,6 @@ watch(
     }
     if (from && !to) {
       //z false na true
-
       if (alert.error) {
         AudioError.play()
       } else {
@@ -79,6 +78,7 @@ watch(
 .tlo {
   height: 100vh;
   width: 100vw;
+  font-size: 16px;
 }
 /* header {
   line-height: 1.5;

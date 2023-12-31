@@ -16,8 +16,8 @@ onBeforeMount(async () => {
   }
 })
 
-const wybierz = () => {
-  localStorage.setItem('ubezpieczenie', strona.value)
+const wybierz = (id) => {
+  localStorage.setItem('ubezpieczenie', id)
   router.push('/podsumowanie')
 }
 </script>
@@ -25,8 +25,100 @@ const wybierz = () => {
 <template>
   <div class="tlo">
     <div class="ubezpieczenieTytul">Wybierz ubezpieczenie</div>
-    <div class="ubezpieczenieOkno">
-      <div class="lewyPrzycisk">
+    <div class="okno">
+      <table>
+        <tr>
+          <th width="300px">Co obejmuje ubezpiecznie</th>
+          <th width="150px">Podstawowe</th>
+          <th width="150px">Rozszerzone</th>
+        </tr>
+        <tr>
+          <td>Standardowa polisa AC</td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Auto Zastępcze na terenie RP</td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Kradzież</td>
+          <td>
+            <v-icon icon="mdi-close"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Uszkodzenie Karoserii</td>
+          <td>
+            <v-icon icon="mdi-close"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Uszkodzenie Szyby</td>
+          <td>
+            <v-icon icon="mdi-close"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Uszkodzenie Opony</td>
+          <td>
+            <v-icon icon="mdi-close"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Opłaty administracyjne i koszt naprawy</td>
+          <td>
+            <v-icon icon="mdi-close"> </v-icon>
+          </td>
+          <td>
+            <v-icon icon="mdi-check"> </v-icon>
+          </td>
+        </tr>
+        <tr>
+          <td>Cena</td>
+          <td v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
+            {{ ubezpieczenie.kwota }} zł
+          </td>
+        </tr>
+        <tr>
+          <td>Kaucja</td>
+          <td>2000 zł</td>
+          <td>1 zł</td>
+        </tr>
+        <tr>
+          <td></td>
+
+          <td>
+            <v-btn @click="wybierz(1)"> wybierz </v-btn>
+          </td>
+          <td>
+            <v-btn @click="wybierz(2)"> wybierz </v-btn>
+          </td>
+        </tr>
+      </table>
+
+      <!-- <div class="lewyPrzycisk">
         <v-btn
           align-self="center"
           class="wysrodkujPionowo"
@@ -36,8 +128,8 @@ const wybierz = () => {
         ></v-btn>
       </div>
       <div class="ubezpieczenia">
-        <v-window v-model="strona" direction="horizontal" :touch="false">
-          <!-- <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
+        <v-window v-model="strona" direction="horizontal" :touch="false"> -->
+      <!-- <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
             <v-window-item :value="ubezpieczenie.id">
               <div class="oknoTytul">Pakiet bez ochrony</div>
               <div class="oknoTytul">{{ ubezpieczenie.nazwa }}</div>
@@ -71,7 +163,7 @@ const wybierz = () => {
             </v-window-item>
           </div> -->
 
-          <v-window-item :value="1">
+      <!-- <v-window-item :value="1">
             <div class="oknoTytul">Pakiet bez ochrony</div>
             <div class="oknoTytul">Podstawowy</div>
 
@@ -134,15 +226,15 @@ const wybierz = () => {
             <div class="oknoZnaczek">0 zł</div>
             cena 90 zł
           </v-window-item>
-        </v-window>
-      </div>
+        </v-window> -->
+      <!-- </div>
       <div class="prawyPrzycisk">
         <v-btn icon="mdi-arrow-right" v-if="strona != 3" @click="strona++" class="wysrodkujPionowo">
         </v-btn>
       </div>
       <div class="przyciskWybierz">
         <v-btn @click="wybierz"> wybierz </v-btn>
-      </div>
+      </div> -->
     </div>
   </div>
   <!-- <v-card height="100vh" width="100vw" class="d-flex justify-center align-center">
@@ -194,11 +286,7 @@ const wybierz = () => {
     </v-window>
   </v-card> -->
 </template>
-<style>
-.tlo {
-  height: 100vh;
-  width: 100vw;
-}
+<style scoped>
 .ubezpieczenieTytul {
   height: 100px;
   width: 100vw;
@@ -206,18 +294,19 @@ const wybierz = () => {
   text-align: center;
   font-size: 26px;
 }
-.ubezpieczenieOkno {
-  height: 500px;
-  width: 400px;
-  margin: 0 auto;
-}
-.lewyPrzycisk {
-  float: left;
-  width: 50px;
+.okno {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid gray;
+  border-radius: 15px;
   height: 400px;
-  margin: auto;
-  vertical-align: middle;
+  width: 600px;
+  margin: 0 auto;
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .ubezpieczenia {
   float: left;
   width: 298px;
@@ -255,7 +344,7 @@ const wybierz = () => {
 .oknoZnaczek {
   margin-top: 5px;
   float: left;
-  width: 60px;
+  width: 100px;
 }
 .wysrodkujPionowo {
   top: 50%;

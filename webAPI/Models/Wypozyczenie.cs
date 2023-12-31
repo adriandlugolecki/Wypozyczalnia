@@ -29,6 +29,7 @@ namespace webAPI.Models
     public float Kwota { get; set; }
     public bool CzyWydano { get; set; } = false;
     public bool CzyOddano { get; set; } = false;
+    public string Notatka { get; set; } = string.Empty;
     }
     
 }

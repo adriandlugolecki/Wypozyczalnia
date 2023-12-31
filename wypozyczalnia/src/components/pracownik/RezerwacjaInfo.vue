@@ -7,19 +7,18 @@ const wypozyczenie = ref()
 const czyWydano = ref(false)
 const czyOddano = ref(false)
 const idWypozyczenia = ref()
-const source = ref("")
-
+const zrodlo = ref('')
+const notatka = ref()
 onBeforeMount(async () => {
   try {
     idWypozyczenia.value = router.currentRoute.value.params['id']
     var res = await axiosToken.get(`/Pracownik/WypozyczenieInfo/${idWypozyczenia.value}`)
     wypozyczenie.value = res.data
-    source.value = "https://localhost:7122/Photos/" + wypozyczenie.value.samochod.id + ".png"
+    zrodlo.value = 'https://localhost:7122/Photos/' + wypozyczenie.value.samochod.id + '.png'
     console.log(wypozyczenie.value)
   } catch (error) {
     console.error('Błąd', error)
   }
-  
 })
 const Wydaj = async (id) => {
   if (wypozyczenie.value.czyWydano == false) {
@@ -41,7 +40,8 @@ const Odbierz = async (id) => {
   }
   await axiosToken.patch(`/Pracownik/ZmianaStatusuWypozyczenia/${id}`, {
     czyWydano: wypozyczenie.czyWydano,
-    czyOddano: czyOddano.value
+    czyOddano: czyOddano.value,
+    Notatka: notatka.value
   })
   router.push('/pracownik')
 }
@@ -66,7 +66,7 @@ let DataBezGodziny = (Data) => {
         }}]
       </div>
       <div>
-        <img width="150" :src="source" />
+        <img width="150" :src="zrodlo" />
       </div>
       <div>
         samochod: Id [{{ wypozyczenie ? wypozyczenie.samochod.id : '' }}]
@@ -76,6 +76,12 @@ let DataBezGodziny = (Data) => {
         }}]
       </div>
       <div>Koszt wypozyczenia : {{ wypozyczenie ? wypozyczenie.kwota : '' }} zł</div>
+      <input
+        type="text"
+        placeholder="Notatka"
+        v-model="notatka"
+        v-if="wypozyczenie && wypozyczenie.czyWydano == true && wypozyczenie.czyOddano == false"
+      />
       <v-btn
         v-if="wypozyczenie && wypozyczenie.czyWydano == false && wypozyczenie.czyOddano == false"
         @click="Wydaj(wypozyczenie.id)"

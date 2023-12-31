@@ -16,10 +16,7 @@ onBeforeMount(async () => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">
-        Ubezpieczenia
-        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle"> </v-btn>
-      </div>
+      <div class="tytul">Ubezpieczenia</div>
       <v-list-item v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
         <div>{{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ ubezpieczenie.kwota }} zł</div>
       </v-list-item>

@@ -26,7 +26,12 @@ const submit = async () => {
     } else {
       router.push('/')
     }
-  } catch (error) {}
+  } catch (error) {
+    alert.error = true
+    alert.tekst = 'Email lub hasło jest źle wpisane'
+    alert.show = true
+    console.log(error)
+  }
 }
 </script>
 <template>
@@ -51,7 +56,9 @@ const submit = async () => {
           <v-btn type="submit"> zaloguj </v-btn>
         </v-row>
         <v-row class="justify-center">
-          <v-btn size="x-small" variant="plain"> zapomnałem hasła </v-btn>
+          <RouterLink to="zmianaHasla" custom v-slot="{ navigate }">
+            <v-btn size="x-small" variant="plain" @click="navigate"> zapomnałem hasła </v-btn>
+          </RouterLink>
         </v-row>
       </v-form>
     </div>

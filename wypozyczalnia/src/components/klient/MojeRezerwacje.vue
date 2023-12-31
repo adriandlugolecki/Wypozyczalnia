@@ -1,7 +1,8 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
-import Przedluzenie from './Przedluzenie.vue'
+
+import ORezerwacji from './ORezerwacji.vue'
 import { RouterLink } from 'vue-router'
 const data = new Date().toISOString().split('T')[0]
 console.log(data)
@@ -16,62 +17,23 @@ onBeforeMount(async () => {
     console.error('Błąd', error)
   }
 })
-const usun = async (id) => {
-  try {
-    await axiosToken.delete(`/Klient/UsunWypozyczenie/${id}`)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
-}
-
-const przedluz = async (id) => {
-  try {
-    var res = await axiosToken.get(`/Klient/DostepnePrzedluzenia/${id}`)
-    console.log(res.data)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
-}
-let DataBezGodziny = (Data) => {
-  let temp = Data.split('T')
-  return temp[0]
-}
 </script>
 <template>
   <div class="tlo">
-    <div class="MojeRezerwacje" v-if="listaWypozyczen.length == 0">
-      <div class="MojeRezerwacjeTytul">Brak wypożyczeń</div>
+    <div class="MojeRezerwacje">
+      <h1>Twoje Rezerwacje</h1>
+      <div class="MojeRezerwacjeTytul" v-if="listaWypozyczen.length == 0">Brak wypożyczeń</div>
+      <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
+        <ORezerwacji :wypozyczenie="wypozyczenie" :data="data" />
+      </v-list-item>
     </div>
-
-    <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
-      <div class="MojeRezerwacje">
-        <div class="MojeRezerwacjeTytul">
-          OD {{ DataBezGodziny(wypozyczenie.data) }} DO
-          {{ DataBezGodziny(wypozyczenie.dataZakonczenia) }}
-          <v-btn
-            icon="mdi-delete"
-            color="red"
-            v-if="wypozyczenie.data > data"
-            @click="usun(wypozyczenie.id)"
-          />
-
-          <Przedluzenie :wypozyczenia="wypozyczenie" v-if="wypozyczenie.dataZakonczenia > data" />
-          <!-- <RouterLink :to="'/przedluzenie/' + wypozyczenie.id" custom v-slot="{ navigate }">
-            <v-btn
-              icon="mdi-arrow-right"
-              color="grey"
-              v-if="wypozyczenie.dataZakonczenia > data"
-              @click="navigate"
-            />
-          </RouterLink> -->
-        </div>
-
-        {{ wypozyczenie.samochod.marka }} {{ wypozyczenie.samochod.model }}
-      </div>
-    </v-list-item>
   </div>
 </template>
 <style>
+.wypozyczenie {
+  border: 1px solid grey;
+  border-radius: 10px;
+}
 .MojeRezerwacje {
   border-radius: 15px;
   border: 1px solid gray;
@@ -84,6 +46,7 @@ let DataBezGodziny = (Data) => {
 }
 .MojeRezerwacjeTytul {
   font-size: x-large;
-  margin: 20px;
+  border-radius: 10px;
+  background-color: gray;
 }
 </style>

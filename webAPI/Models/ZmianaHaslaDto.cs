@@ -2,8 +2,8 @@
 {
     public class ZmianaHaslaDto
     {
-        public required string Id { get; set; }
-        public required string Kod { get; set; } 
-        public required string Haslo { get; set; }
+        public required string Email { get; set; }
+        public string Kod { get; set; } = string.Empty;
+        public string Haslo { get; set; } = string.Empty;
     }
 }

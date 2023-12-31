@@ -61,7 +61,16 @@ namespace webAPI.Services
                 };
 
             }
-            
+            var result = await _pracownikManager.CheckPasswordAsync(pracownik, login.Password);
+
+            if (!result)
+            {
+                return new ServicesResponse
+                {
+                    Wiadomosc = "Błędne hasło",
+                    Powodzenie = false,
+                };
+            }
             string role = pracownik.czyAdmin ? "admin": "pracownik";
             Claim[] claims = new[]
             {
