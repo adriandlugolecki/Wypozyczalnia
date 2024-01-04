@@ -10,6 +10,7 @@ const pesel = ref()
 const email = ref()
 const haslo = ref()
 const czyAdmin = ref(false)
+const telefon = ref()
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Admin/ListaPracownikow`)
@@ -26,7 +27,8 @@ const submit = async () => {
     pesel: pesel.value,
     email: email.value,
     haslo: haslo.value,
-    czyAdmin: czyAdmin.value
+    czyAdmin: czyAdmin.value,
+    numerTelefonu: telefon.value
   })
   location.reload()
 }
@@ -48,30 +50,25 @@ const submit = async () => {
             <input type="text" v-model="pesel" placeholder="Pesel" />
             <input type="text" v-model="email" placeholder="Email" />
             <input type="text" v-model="haslo" placeholder="Hasło" />
+            <input type="text" v-model="telefon" placeholder="Numer Telefonu" />
           </div>
           <v-btn @click="submit()" class="mt-5">Dodaj </v-btn>
         </v-form>
       </div>
       <v-list-item v-for="pracownik in listaPracownikow" :key="pracownik.id">
-        <div>
-          {{ pracownik.imie }}
-        </div>
+        <div>{{ pracownik.imie }} {{ pracownik.nazwisko }} {{ pracownik.phoneNumber }}</div>
       </v-list-item>
     </div>
   </div>
 </template>
 <style scoped>
-.tlo {
-  height: 100vh;
-  width: 100vw;
-}
 .dodanie {
   float: right;
 }
 .okno {
   width: 450px;
   border: 1px solid grey;
-
+  background-color: var(--okno);
   border-radius: 15px;
   box-shadow:
     0 8px 8px 0 rgba(0, 0, 0, 0.2),

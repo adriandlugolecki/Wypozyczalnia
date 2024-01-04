@@ -35,6 +35,7 @@ onBeforeMount(async () => {
   border-radius: 10px;
 }
 .MojeRezerwacje {
+  background-color: var(--okno);
   border-radius: 15px;
   border: 1px solid gray;
   margin: 100px auto;
@@ -47,6 +48,6 @@ onBeforeMount(async () => {
 .MojeRezerwacjeTytul {
   font-size: x-large;
   border-radius: 10px;
-  background-color: gray;
+  background-color: #d3d3d3;
 }
 </style>

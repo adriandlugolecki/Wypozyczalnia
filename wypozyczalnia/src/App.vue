@@ -1,11 +1,24 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { alert } from './main'
+import { RouterView } from 'vue-router'
+import { alert, uzytkownik } from './main'
 import { watch } from 'vue'
 import NavBar from './components/NavBar.vue'
+import { onBeforeMount } from 'vue'
 var AudioSuccess = new Audio('../src/assets/success.mp3')
 var AudioError = new Audio('../src/assets/error.mp3')
 let timeout = null
+
+onBeforeMount(() => {
+  const token = localStorage.getItem('token')
+  if (token != null) {
+    const wygasniecieTokenu = new Date(JSON.parse(atob(token.split('.')[1])).exp * 1000)
+    if (wygasniecieTokenu < Date.now()) {
+      localStorage.clear()
+      uzytkownik.uprawnienia = null
+    }
+  }
+})
+
 watch(
   () => alert.show,
   (from, to) => {
@@ -43,25 +56,12 @@ watch(
       {{ alert.tekst }}
     </v-snackbar>
   </v-app>
-
-  <!-- <v-snackbar location="top" :viewmodel="alert.show" :color="alert.error ? 'error' : 'success'">
-    {{ alert.text }}
-  </v-snackbar> -->
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
 </template>
 
 <style>
+:root {
+  --okno: white;
+}
 /* #app {
   text-align: center;
 } */
@@ -76,9 +76,13 @@ watch(
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 .tlo {
-  height: 100vh;
   width: 100vw;
+  min-height: 100vh;
   font-size: 16px;
+  background-image: url('src/assets/fotor-ai-20240103203456.jpg');
+}
+.gold {
+  color: #ebcc39;
 }
 /* header {
   line-height: 1.5;

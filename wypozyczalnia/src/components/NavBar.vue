@@ -1,5 +1,5 @@
 <script setup>
-import { uzytkownik } from '../main'
+import { telefon, uzytkownik } from '../main'
 import router from '../router'
 const wyloguj = () => {
   localStorage.clear()
@@ -9,7 +9,7 @@ const wyloguj = () => {
 </script>
 
 <template>
-  <v-app-bar :elevaton="5" color="#C0C0C0" height="50">
+  <v-app-bar :elevaton="5" color="#EBCC39" height="50">
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'klient'">
       <RouterLink to="/" custom v-slot="{ navigate }">
         <v-tab @click="navigate">rezerwacje</v-tab>
@@ -41,11 +41,11 @@ const wyloguj = () => {
       </RouterLink>
     </v-tabs>
     <template v-slot:append v-if="uzytkownik.uprawnienia">
-      +48 XXX XXX XXX
+      {{ telefon }}
       <v-btn icon="mdi-logout" color="red" link @click="wyloguj" />
     </template>
     <template v-slot:append v-if="!uzytkownik.uprawnienia">
-      +48 XXX XXX XXX
+      {{ telefon }}
       <RouterLink to="/rejestracja" custom v-slot="{ navigate }">
         <v-tab @click="navigate">Zarejestruj się</v-tab>
       </RouterLink>

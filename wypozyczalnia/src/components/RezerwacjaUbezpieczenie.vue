@@ -30,7 +30,7 @@ const wybierz = (id) => {
         <tr>
           <th width="300px">Co obejmuje ubezpiecznie</th>
           <th width="150px">Podstawowe</th>
-          <th width="150px">Rozszerzone</th>
+          <th width="150px" class="gold">Rozszerzone</th>
         </tr>
         <tr>
           <td>Standardowa polisa AC</td>
@@ -38,7 +38,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-check"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon color="#EBCC39" icon="mdi-check"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-check"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-close"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -65,7 +65,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-close"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -74,7 +74,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-close"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -83,7 +83,7 @@ const wybierz = (id) => {
             <v-icon icon="mdi-close"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
@@ -92,28 +92,29 @@ const wybierz = (id) => {
             <v-icon icon="mdi-close"> </v-icon>
           </td>
           <td>
-            <v-icon icon="mdi-check"> </v-icon>
-          </td>
-        </tr>
-        <tr>
-          <td>Cena</td>
-          <td v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
-            {{ ubezpieczenie.kwota }} zł
+            <v-icon icon="mdi-check" color="#EBCC39"> </v-icon>
           </td>
         </tr>
         <tr>
           <td>Kaucja</td>
           <td>2000 zł</td>
-          <td>1 zł</td>
+          <td class="gold">1 zł</td>
         </tr>
+        <tr>
+          <td>Cena za 1 dzień</td>
+          <td v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
+            {{ ubezpieczenie.kwota }} zł
+          </td>
+        </tr>
+
         <tr>
           <td></td>
 
           <td>
-            <v-btn @click="wybierz(1)"> wybierz </v-btn>
+            <v-btn @click="wybierz(1)" variant="outlined" color="#EBCC39"> wybierz </v-btn>
           </td>
           <td>
-            <v-btn @click="wybierz(2)"> wybierz </v-btn>
+            <v-btn @click="wybierz(2)" color="#EBCC39"> wybierz </v-btn>
           </td>
         </tr>
       </table>

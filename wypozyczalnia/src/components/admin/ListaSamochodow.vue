@@ -58,8 +58,10 @@ const zablokujOdblokuj = async (id) => {
       </div>
       <div v-if="dodaj" class="formularz">
         <v-form @submit.prevent>
+          <v-card width="100%" height="50px" elevation="0">
+            <v-file-input v-model="file" label="dodaj zdjęcie" />
+          </v-card>
           <div>
-            <v-file-input v-model="file" />
             <input type="text" v-model="Marka" placeholder="Marka" />
             <input type="text" v-model="Model" placeholder="Model" />
             <input type="text" v-model="Rejestracja" placeholder="Rejestracja" />
@@ -70,6 +72,7 @@ const zablokujOdblokuj = async (id) => {
             <input v-model="rodzajPaliwa" placeholder="rodzajPaliwa" />
             <input type="numer" v-model="Cena" placeholder="Cena" />
           </div>
+
           <v-btn @click="submit()" class="mt-5">Dodaj </v-btn>
         </v-form>
       </div>
@@ -79,13 +82,13 @@ const zablokujOdblokuj = async (id) => {
           {{ samochod.czyZablokowany }}
 
           <v-btn
-            v-if="samochod.czyZablokowany"
+            v-if="!samochod.czyZablokowany"
             elevation="0"
             @click="zablokujOdblokuj(samochod.id)"
             icon="mdi-lock-open-outline"
           ></v-btn>
           <v-btn
-            v-if="!samochod.czyZablokowany"
+            v-if="samochod.czyZablokowany"
             elevation="0"
             @click="zablokujOdblokuj(samochod.id)"
             icon="mdi-lock-outline"
@@ -104,7 +107,7 @@ const zablokujOdblokuj = async (id) => {
 .okno {
   width: 450px;
   border: 1px solid grey;
-
+  background-color: var(--okno);
   border-radius: 15px;
   box-shadow:
     0 8px 8px 0 rgba(0, 0, 0, 0.2),
@@ -117,6 +120,9 @@ const zablokujOdblokuj = async (id) => {
   width: 100%;
   text-align: center;
   font-size: 26px;
+}
+.zdjecie {
+  position: relative !important;
 }
 .formularz {
   text-align: center;

@@ -35,6 +35,14 @@ namespace webAPI.Controllers
         {
             return await _context.Ubezpieczenia.ToListAsync();
         }
+        [HttpPatch("EdytujUbezpieczenie")]
+        public async Task<IActionResult> EdytujUbezpieczenie([FromBody] Ubezpieczenie dto)
+        {
+            var ubezpieczenie = await _context.Ubezpieczenia.FindAsync(dto.Id);
+            ubezpieczenie.Kwota = dto.Kwota;
+            await _context.SaveChangesAsync();
+            return Ok("kwota została zmieniona");
+        }
         
         [HttpPost("DodajSamochod")]
         public async Task<IActionResult> DodajSamochod([FromBody] Samochod samochod)

@@ -24,6 +24,7 @@ namespace webAPI.Models
     public DateTime Data { get; set; }
     [Required]
     public DateTime DataZakonczenia { get; set; }
+    public int IleDni {  get; set; }
     [Required]
     public int Wiek {  get; set; } = 1;
     public float Kwota { get; set; }

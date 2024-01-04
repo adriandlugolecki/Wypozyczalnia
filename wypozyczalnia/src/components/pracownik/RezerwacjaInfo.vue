@@ -58,22 +58,26 @@ let DataBezGodziny = (Data) => {
         {{ wypozyczenie ? DataBezGodziny(wypozyczenie.data) : '' }} -
         {{ wypozyczenie ? DataBezGodziny(wypozyczenie.dataZakonczenia) : '' }}
       </div>
-
-      <div>
-        klient: {{ wypozyczenie ? wypozyczenie.klient.imie : '' }}
-        {{ wypozyczenie ? wypozyczenie.klient.nazwisko : '' }} Pesel:[{{
-          wypozyczenie ? wypozyczenie.klient.pesel : ''
-        }}]
-      </div>
-      <div>
-        <img width="150" :src="zrodlo" />
-      </div>
-      <div>
-        samochod: Id [{{ wypozyczenie ? wypozyczenie.samochod.id : '' }}]
-        {{ wypozyczenie ? wypozyczenie.samochod.marka : '' }}
-        {{ wypozyczenie ? wypozyczenie.samochod.model : '' }} [{{
-          wypozyczenie ? wypozyczenie.samochod.rejestracja : ''
-        }}]
+      <div class="info">
+        <div>
+          <h3>klient:</h3>
+          {{ wypozyczenie ? wypozyczenie.klient.imie : '' }}
+          {{ wypozyczenie ? wypozyczenie.klient.nazwisko : '' }}<br />
+          <h3>Pesel:</h3>
+          {{ wypozyczenie ? wypozyczenie.klient.pesel : '' }}
+          <h3>Telefon:</h3>
+          {{ wypozyczenie ? wypozyczenie.klient.phoneNumber : '' }}
+        </div>
+        <div>
+          <img width="150" :src="zrodlo" />
+        </div>
+        <div>
+          <h3>samochod:</h3>
+          Id: {{ wypozyczenie ? wypozyczenie.samochod.id : '' }}<br />
+          {{ wypozyczenie ? wypozyczenie.samochod.marka : '' }}
+          {{ wypozyczenie ? wypozyczenie.samochod.model : '' }}<br />
+          [{{ wypozyczenie ? wypozyczenie.samochod.rejestracja : '' }}]
+        </div>
       </div>
       <div>Koszt wypozyczenia : {{ wypozyczenie ? wypozyczenie.kwota : '' }} zł</div>
       <input
@@ -96,11 +100,8 @@ let DataBezGodziny = (Data) => {
   </div>
 </template>
 <style scoped>
-.tlo {
-  height: 100vh;
-  width: 100vw;
-}
 .okno {
+  background-color: var(--okno);
   width: 700px;
   border: 1px solid grey;
   border-radius: 15px;
@@ -120,5 +121,10 @@ let DataBezGodziny = (Data) => {
   width: 100%;
   text-align: center;
   font-size: 26px;
+}
+.info {
+  height: 100%;
+  width: 100%;
+  display: flex;
 }
 </style>

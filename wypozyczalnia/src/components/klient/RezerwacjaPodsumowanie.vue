@@ -1,5 +1,5 @@
 <script setup>
-import { axiosToken } from '../../main'
+import { axiosToken, alert } from '../../main'
 import { ref } from 'vue'
 import router from '../../router'
 import { onBeforeMount } from 'vue'
@@ -32,17 +32,19 @@ onBeforeMount(async () => {
 const zarezerwuj = async () => {
   const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
   console.log(kwota)
-  console.log(Id)
   await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
     samochodId: Samochod.value.id,
     klientId: 'id',
     data: data,
     dataZakonczenia: dataZakonczenia,
+    ileDni: ileDni,
     ubezpieczenieId: Ubezpieczenie.value.id,
     wiek: wiek,
     kwota: kwota
   })
   router.push('/')
+  alert.tekst = 'Samochód został zarezerwowany'
+  alert.show = true
 }
 const pozyskanieDaty = (data) => {
   return `${data.getDate()}.${data.getMonth() + 1}.${data.getFullYear()}`
@@ -107,7 +109,7 @@ const OplataZaWiek = (wiek) => {
         </div>
       </div>
       <div class="podsumowanieKwota">
-        Podsumowanie
+        <h2>Podsumowanie</h2>
         <div>
           samochód: {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
           {{ ileDni * (Samochod ? Samochod.cena : '') }} zł
@@ -133,7 +135,9 @@ const OplataZaWiek = (wiek) => {
         <div v-if="ubezpieczenie == 1">Kaucja: 2000 zł</div>
         <div v-if="ubezpieczenie == 2">Kaucja: 1 zł</div>
         <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
-          <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj"> zarezerwuj </v-btn>
+          <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj" color="yellow">
+            zarezerwuj
+          </v-btn>
         </RouterLink>
       </div>
     </div>
@@ -151,33 +155,44 @@ const OplataZaWiek = (wiek) => {
   text-align: center;
   font-size: 26px;
 }
-.okno {
-  margin: 0 auto;
-  width: 900px;
+@media screen and (max-width: 400px) {
+  .okno {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 15px;
+    box-shadow:
+      0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 1px solid black;
+  }
+}
+@media screen and (min-width: 400px) {
+  .okno {
+    display: flex;
+    margin: 0 auto;
+    width: 900px;
+    height: fit-content;
+    border-radius: 15px;
+    box-shadow:
+      0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 1px solid black;
+  }
 }
 .podsumowanie {
-  margin: auto;
-  float: left;
   min-height: 300px;
   width: 400px;
-  border: 1px solid black;
+
   padding: 20px;
-  border-radius: 15px;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .podsumowanieKwota {
-  float: left;
   height: 300px;
-  width: 500px;
-  border: 1px solid black;
+  width: 350px;
   padding: 20px;
-  border-radius: 15px;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .samochodZdjecie {
   float: left;

@@ -30,6 +30,7 @@ const ZmianaDnia = async () => {
 <template>
   <div class="tlo">
     <div class="data">
+      <h3>Wybierz dzień</h3>
       <input type="date" class="kalendarz" v-model="data" />
       <v-btn @click="ZmianaDnia" elevation="0" icon="mdi-car-search"></v-btn>
     </div>
@@ -78,10 +79,6 @@ const ZmianaDnia = async () => {
   </div>
 </template>
 <style scoped>
-.tlo {
-  height: 100vh;
-  width: 100vw;
-}
 .kalendarz {
   border: 1px solid grey;
   border-radius: 8px;
@@ -92,6 +89,7 @@ const ZmianaDnia = async () => {
     0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .data {
+  background-color: var(--okno);
   margin-top: 100px;
   margin-left: auto;
   margin-right: auto;
@@ -110,7 +108,9 @@ const ZmianaDnia = async () => {
   font-size: 20px;
 }
 .okno {
+  background-color: var(--okno);
   float: left;
+  min-width: 300px;
   width: 40vw;
   border: 1px solid grey;
   border-radius: 15px;

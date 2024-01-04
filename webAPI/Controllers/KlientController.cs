@@ -136,16 +136,34 @@ namespace webAPI.Controllers
             }
             var kwota = wypozyczenie.Kwota / wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
             kwota *= ileDni;
-            await _context.Oczekujace.AddAsync(new Oczekujace
+            var przedluzenie = new Oczekujace
             {
                 WypozyczenieId = wypozyczenie.Id,
                 DoKiedy = doKiedy,
                 Kwota = kwota,
                 Zaakceptowane = false,
-            });
+            };
+            await _context.Oczekujace.AddAsync(przedluzenie);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(przedluzenie);
 
+        }
+        [HttpDelete("AnulujPrzedluzenie/{id}")]
+        public async Task<IActionResult> AnulujPrzedluzenie([FromRoute] int id)
+        {
+            var przedluzenie = await _context.Oczekujace.FindAsync(id);
+            var wypozyczenie = await _context.Wypozyczenia.FindAsync(przedluzenie.WypozyczenieId);
+
+            DateTime data = wypozyczenie.DataZakonczenia;
+            var ileDni = przedluzenie.DoKiedy.Subtract(wypozyczenie.DataZakonczenia).Days;
+            for (int i = 0; i < ileDni; i++)
+            {
+
+                await _context.Kalendarz.Where(k => k.IdWypozyczenia == wypozyczenie.Id && k.Data == data).ExecuteDeleteAsync();
+                data = data.AddDays(1);
+            }
+            await _context.Oczekujace.Where(o => o.Id == przedluzenie.Id).ExecuteDeleteAsync();
+            return Ok("usunięto");
         }
     }
 }

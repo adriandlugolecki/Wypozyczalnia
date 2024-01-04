@@ -1,6 +1,6 @@
 ﻿namespace webAPI.Models
 {
-    public class ServicesResponse
+    public class ServicesKomunikat
     {
         public string Wiadomosc { get; set; } = string.Empty;
         public bool Powodzenie { get; set; } = false;

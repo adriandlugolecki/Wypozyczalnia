@@ -17,7 +17,7 @@ namespace webAPI.Services
             _pracownikManager = pracownikManager;
             _konfiguracja = konfiguracja;
         }
-        public async Task<ServicesResponse> RejestracjaPacownikAsync(RejestracjaPracownikDto rejestracja)
+        public async Task<ServicesKomunikat> RejestracjaPacownikAsync(RejestracjaPracownikDto rejestracja)
         {
             if (rejestracja == null)
             {
@@ -31,41 +31,42 @@ namespace webAPI.Services
                 Nazwisko = rejestracja.Nazwisko,
                 DataUrodzenia = rejestracja.DataUrodzenia,
                 Pesel = rejestracja.Pesel,
-                czyAdmin = rejestracja.czyAdmin
+                czyAdmin = rejestracja.czyAdmin,
+                PhoneNumber = rejestracja.NumerTelefonu
             };
-            var result = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo!);
+            var wynik = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo!);
 
-            if (result.Succeeded)
+            if (wynik.Succeeded)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "ok",
                     Powodzenie = true
                 };
             }
-            return new ServicesResponse
+            return new ServicesKomunikat
             {
                 Wiadomosc = "Nie utworzono",
                 Powodzenie = false
             };
         }
-        public async Task<ServicesResponse> LoginAsync(LoginDto login)
+        public async Task<ServicesKomunikat> LoginAsync(LoginDto login)
         {
             var pracownik = await _pracownikManager.FindByEmailAsync(login.Email);
             if (pracownik == null)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "Brak takiego Pracownika",
                     Powodzenie = false
                 };
 
             }
-            var result = await _pracownikManager.CheckPasswordAsync(pracownik, login.Password);
+            var wynik = await _pracownikManager.CheckPasswordAsync(pracownik, login.Password);
 
-            if (!result)
+            if (!wynik)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "Błędne hasło",
                     Powodzenie = false,
@@ -91,7 +92,7 @@ namespace webAPI.Services
                 signingCredentials: credentials
                 );
 
-            return new ServicesResponse
+            return new ServicesKomunikat
             {
                 Wiadomosc = "Zalogowano",
                 Powodzenie = true,

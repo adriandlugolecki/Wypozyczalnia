@@ -42,7 +42,7 @@ const submit = async () => {
           <v-card-title> Zaloguj się </v-card-title>
         </v-row>
 
-        <v-text-field label="login" v-model="email" :rules="zasadyLogin" />
+        <v-text-field label="email" v-model="email" :rules="zasadyLogin" />
         <v-text-field
           label="hasło"
           v-model="haslo"
@@ -66,6 +66,7 @@ const submit = async () => {
 </template>
 <style>
 .okno {
+  background-color: var(--okno);
   margin: 200px auto;
   border: 1px gray solid;
   width: 400px;

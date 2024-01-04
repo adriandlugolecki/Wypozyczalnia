@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
+import Ubezpieczenie from './Ubezpieczenie.vue'
 const listaUbezpieczen = ref([])
 
 onBeforeMount(async () => {
@@ -18,7 +19,7 @@ onBeforeMount(async () => {
     <div class="okno">
       <div class="tytul">Ubezpieczenia</div>
       <v-list-item v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
-        <div>{{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ ubezpieczenie.kwota }} zł</div>
+        <Ubezpieczenie :ubezpieczenie="ubezpieczenie" />
       </v-list-item>
     </div>
   </div>
@@ -31,7 +32,7 @@ onBeforeMount(async () => {
 .okno {
   width: 450px;
   border: 1px solid grey;
-
+  background-color: var(--okno);
   border-radius: 15px;
   box-shadow:
     0 8px 8px 0 rgba(0, 0, 0, 0.2),

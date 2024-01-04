@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { zasadyHaslo, zasadyLogin } from '../zasady'
+import { zasadyHaslo, zasadyImie, zasadyLogin, zasadyNumer, zasadyPesel } from '../zasady'
 import { alert, axioss } from '../main'
 import router from '../router'
 
@@ -10,6 +10,7 @@ const dataUrodzenia = ref()
 const pesel = ref()
 const email = ref()
 const haslo = ref()
+const telefon = ref()
 const widocznoscHasla = ref(false)
 const submit = async () => {
   try {
@@ -18,6 +19,7 @@ const submit = async () => {
       nazwisko: nazwisko.value,
       dataUrodzenia: dataUrodzenia.value,
       pesel: pesel.value,
+      numerTelefonu: telefon.value,
       email: email.value,
       haslo: haslo.value
     })
@@ -38,15 +40,15 @@ const submit = async () => {
         <v-row class="justify-center my-6">
           <v-card-title> Zarejestruj się </v-card-title>
         </v-row>
-        <v-text-field label="Imię" v-model="imie" :rules="zasadyLogin" />
-        <v-text-field label="Nazwisko" v-model="nazwisko" :rules="zasadyLogin" />
+        <v-text-field label="Imię" v-model="imie" :rules="zasadyImie" />
+        <v-text-field label="Nazwisko" v-model="nazwisko" :rules="zasadyImie" />
 
         <v-text-field type="Date" label="Data urodzenia" v-model="dataUrodzenia" />
-        <v-text-field label="Pesel" v-model="pesel" :rules="zasadyLogin" />
-
-        <v-text-field label="login" v-model="email" :rules="zasadyLogin" />
+        <v-text-field label="Pesel" v-model="pesel" :rules="zasadyPesel" />
+        <v-text-field label="Numer Telefonu" v-model="telefon" :rules="zasadyNumer" />
+        <v-text-field label="Email" v-model="email" :rules="zasadyLogin" />
         <v-text-field
-          label="hasło"
+          label="Hasło"
           v-model="haslo"
           :rules="zasadyHaslo"
           :type="widocznoscHasla ? 'text' : 'password'"

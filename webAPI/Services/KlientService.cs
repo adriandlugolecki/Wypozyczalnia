@@ -17,7 +17,7 @@ namespace webAPI.Services
             _klientManager = klientManager;
             _konfiguracja = konfiguracja;
         }
-        public async Task<ServicesResponse> RejestracjaAsync(RejestracjaDto rejestracja)
+        public async Task<ServicesKomunikat> RejestracjaAsync(RejestracjaDto rejestracja)
         {
             if (rejestracja == null)
             {
@@ -38,33 +38,34 @@ namespace webAPI.Services
                 DataUrodzenia = rejestracja.DataUrodzenia,
                 Pesel = rejestracja.Pesel,
                 EmailConfirmed = false,
-                KodWeryfikacyjny = kod
+                KodWeryfikacyjny = kod,
+                PhoneNumber = rejestracja.NumerTelefonu
             };
-            var result = await _klientManager.CreateAsync(klient, rejestracja.Haslo);
+            var wynik = await _klientManager.CreateAsync(klient, rejestracja.Haslo);
 
-            if (result.Succeeded)
+            if (wynik.Succeeded)
             {
                 await _klientManager.AddToRoleAsync(klient, "klient");
                 WyslanieMaila(klient,kod);
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "ok",
                     Powodzenie = true,
                    
                 };
             }
-            return new ServicesResponse
+            return new ServicesKomunikat
             {
                 Wiadomosc = "Nie utworzono",
                 Powodzenie = false
             };
         }
-        public async Task<ServicesResponse> LoginAsync(LoginDto login)
+        public async Task<ServicesKomunikat> LoginAsync(LoginDto login)
         {
             var klient = await _klientManager.FindByEmailAsync(login.Email);
             if (klient == null)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "Brak takiego Klienta",
                     Powodzenie = false
@@ -73,18 +74,18 @@ namespace webAPI.Services
             }
             if (klient.EmailConfirmed == false)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "Konto nie zostało aktywowane",
                     Powodzenie = false
                 };
             }
 
-            var result = await _klientManager.CheckPasswordAsync(klient, login.Password);
+            var wynik = await _klientManager.CheckPasswordAsync(klient, login.Password);
 
-            if(!result)
+            if(!wynik)
             {
-                return new ServicesResponse
+                return new ServicesKomunikat
                 {
                     Wiadomosc = "Błędne hasło",
                     Powodzenie = false,
@@ -110,7 +111,7 @@ namespace webAPI.Services
                 signingCredentials: credentials
                 );
 
-            return new ServicesResponse
+            return new ServicesKomunikat
             {
 
                 Wiadomosc = "Zalogowano jako klient",
