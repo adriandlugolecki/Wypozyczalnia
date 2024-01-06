@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Data;
 using webAPI.Models;
@@ -25,13 +24,7 @@ namespace webAPI.Controllers
             var Samochod = await _context.Samochody.FindAsync(id);
             return Samochod == null ? NotFound("Brak takiego samochodu") : Ok(Samochod);
         }
-        [HttpPost]
-        public async Task<IActionResult> DodajSamochod(Samochod samochod)
-        {
-            await _context.Samochody.AddAsync(samochod);
-            await _context.SaveChangesAsync();
-            return Ok(samochod);
-        }
+        
         [HttpGet("wolneSamochody/{data}/{dataZakonczenia}")]
         public IActionResult WolneAuta([FromRoute] DateTime data,[FromRoute] DateTime dataZakonczenia)
         {
@@ -51,10 +44,7 @@ namespace webAPI.Controllers
                     }
                 }
             }
-            
-
             return Ok(ListaDostepnychSamochodow);
-            
         }
     }
 }

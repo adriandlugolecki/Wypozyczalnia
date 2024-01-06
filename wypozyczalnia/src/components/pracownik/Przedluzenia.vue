@@ -18,13 +18,16 @@ const odrzuc = async (id) => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">Oczekujące przedłużenia</div>
-      <div v-if="listaPrzedluzen.value == null" class="tytul">Lista jest pusta</div>
+      <h1 class="tytul">Oczekujące przedłużenia</h1>
+      <div v-if="listaPrzedluzen == null" class="tytul">Lista jest pusta</div>
       <v-list-item v-for="przedluzenie in listaPrzedluzen" :key="listaPrzedluzen.id">
-        <div>
-          {{ przedluzenie.id }}|{{ przedluzenie.kwota }}zł
-          <v-btn icon="mdi-check" color="green" @click="zatwierdz(przedluzenie.id)" />
-          <v-btn icon="mdi-delete" color="red" @click="odrzuc(przedluzenie.id)" />
+        <div class="element">
+          <div class="info">{{ przedluzenie.id }}|{{ przedluzenie.kwota }}zł</div>
+
+          <div class="przyciski">
+            <v-btn icon="mdi-check" color="green" @click="zatwierdz(przedluzenie.id)" />
+            <v-btn icon="mdi-delete" color="red" @click="odrzuc(przedluzenie.id)" />
+          </div>
         </div>
       </v-list-item>
     </div>
@@ -32,6 +35,7 @@ const odrzuc = async (id) => {
 </template>
 <style scoped>
 .okno {
+  background-color: var(--okno);
   width: 450px;
   border: 1px solid grey;
   min-height: 100px;
@@ -42,9 +46,30 @@ const odrzuc = async (id) => {
   margin: 100px auto;
 }
 .tytul {
+  margin-top: 20px;
   height: 100px;
   width: 100%;
   text-align: center;
   font-size: 26px;
+}
+.element {
+  display: flex;
+  border: 1px solid grey;
+  border-radius: 15px;
+  background-color: #d3d3d3;
+  text-align: center;
+  height: 60px;
+}
+.info {
+  align-self: center;
+  width: 60%;
+  float: left;
+  margin: 0;
+}
+.przyciski {
+  align-self: center;
+  width: 30%;
+  float: left;
+  text-align: right;
 }
 </style>

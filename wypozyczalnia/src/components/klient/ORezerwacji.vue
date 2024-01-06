@@ -40,7 +40,7 @@ const przedluz = async (id) => {
       <v-btn
         icon="mdi-delete"
         color="red"
-        v-if="wypozyczenie.data > data"
+        v-if="wypozyczenie.data > props.data"
         @click="usun(wypozyczenie.id)"
       />
 

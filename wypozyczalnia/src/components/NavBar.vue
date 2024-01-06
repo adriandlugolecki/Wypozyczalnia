@@ -10,6 +10,10 @@ const wyloguj = () => {
 
 <template>
   <v-app-bar :elevaton="5" color="#EBCC39" height="50">
+    <RouterLink to="/" custom v-slot="{ navigate }" v-if="!uzytkownik.uprawnienia">
+      <v-btn @click="navigate" icon="mdi-home" />
+    </RouterLink>
+
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'klient'">
       <RouterLink to="/" custom v-slot="{ navigate }">
         <v-tab @click="navigate">rezerwacje</v-tab>
@@ -29,6 +33,9 @@ const wyloguj = () => {
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'admin'">
       <RouterLink to="/pracownik" custom v-slot="{ navigate }">
         <v-tab @click="navigate">rezerwacje</v-tab>
+      </RouterLink>
+      <RouterLink to="/przedluzenia" custom v-slot="{ navigate }">
+        <v-tab @click="navigate">przedłużenia</v-tab>
       </RouterLink>
       <RouterLink to="/listaPracownikow" custom v-slot="{ navigate }">
         <v-tab @click="navigate">Pracownicy</v-tab>

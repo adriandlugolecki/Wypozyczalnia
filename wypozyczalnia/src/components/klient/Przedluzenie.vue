@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken, telefon } from '../../main'
+import { axiosToken, telefon, alert } from '../../main'
 const props = defineProps({
   wypozyczenia: Object
 })
@@ -36,9 +36,13 @@ const anuluj = async () => {
   console.log(przedluzenie.value.id)
   try {
     var res = await axiosToken.delete(`/Klient/AnulujPrzedluzenie/${przedluzenie.value.id}`)
-    console.log(res.data)
+    alert.tekst = res.data
+    alert.show = true
+    location.reload()
   } catch (error) {
-    console.log(error)
+    alert.tekst = error
+    alert.error = true
+    alert.show = true
   }
 }
 const przedluz = async () => {
@@ -53,7 +57,7 @@ const przedluz = async () => {
 <template>
   <div v-if="dataMaksymalna != 'brak terminu' && konto == false">
     Możliwe przedłużenie wypożyczenia
-    <v-btn icon="mdi-arrow-right" color="grey" @click="wyborDaty = !wyborDaty" />
+    <v-btn icon="mdi-calendar-month" color="grey" @click="wyborDaty = !wyborDaty" />
     <div v-if="wyborDaty">
       <div>Kiedy chcesz oddać?</div>
       <input
@@ -79,8 +83,8 @@ const przedluz = async () => {
     <div>Data zwrotu zmieni się po zaakceptowaniu przez pracownika</div>
 
     <div>
-      <v-btn color="red" @click="anuluj()">Anuluj</v-btn>
-      <v-btn color="green" @click="konto = false">Opłacone</v-btn>
+      <v-btn color="red" @click="konto = false && anuluj()">Anuluj</v-btn>
+      <v-btn color="green" @click="konto = false && location.reload()">Opłacone</v-btn>
     </div>
   </div>
 </template>

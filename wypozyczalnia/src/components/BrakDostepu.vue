@@ -36,7 +36,7 @@ const submit = async () => {
     <div class="okno">
       <v-form ref="formularzLogowania" @submit.prevent="submit">
         <v-row class="justify-center my-6">
-          <v-card-title> Zaloguj się </v-card-title>
+          <h1>Zaloguj się</h1>
         </v-row>
 
         <v-text-field label="login" v-model="email" :rules="zasadyLogin" />
@@ -50,10 +50,12 @@ const submit = async () => {
         />
 
         <v-row class="justify-center mt-5">
-          <v-btn type="submit"> zaloguj </v-btn>
+          <v-btn type="submit" color="#ebcc39"> zaloguj </v-btn>
         </v-row>
-        <v-row class="justify-center">
-          <v-btn size="x-small" variant="plain"> zapomnałem hasła </v-btn>
+        <v-row class="justify-center mt-5" s>
+          <RouterLink to="zmianaHasla" custom v-slot="{ navigate }">
+            <v-btn size="x-small" variant="plain" @click="navigate"> zapomnałem hasła </v-btn>
+          </RouterLink>
         </v-row>
       </v-form>
     </div>
@@ -61,6 +63,7 @@ const submit = async () => {
 </template>
 <style scoped>
 .okno {
+  background-color: var(--okno);
   margin: 200px auto;
   border: 1px gray solid;
   width: 400px;

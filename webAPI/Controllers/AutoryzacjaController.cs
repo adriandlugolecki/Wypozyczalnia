@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 using webAPI.Data;
 using webAPI.Models;
 using webAPI.Services;
@@ -15,11 +15,13 @@ namespace webAPI.Controllers
 
         private PracownikService _pracownikService;
         private KlientService _klientService;
+        private UserManager<Pracownik> _pracownikManager;
         private UserManager<Klient> _klientManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AppDbContext _context;
-        public AutoryzacjaController( PracownikService pracwonikService,KlientService klientService, UserManager<Klient> klientManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
+        public AutoryzacjaController( UserManager<Pracownik> pracownikManager,PracownikService pracwonikService,KlientService klientService, UserManager<Klient> klientManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
         {
+            _pracownikManager = pracownikManager;
             _klientManager = klientManager;
             _pracownikService = pracwonikService;
             _klientService = klientService;
@@ -32,20 +34,22 @@ namespace webAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _klientService.RejestracjaAsync(rejestracja);
-                if (result.Powodzenie)
+                var wynik = await _klientService.RejestracjaAsync(rejestracja);
+                if (wynik.Powodzenie)
                 {
-                    return Ok(result);
+                    return Ok(wynik);
                 }
-                return BadRequest(result);
+                return BadRequest(wynik);
             }
-            return BadRequest("niedziala");
+            return BadRequest("Błąd");
 
         }
+
         [HttpPatch("PotwierdzenieKonta/{id}/{kod}")]
         public async Task<IActionResult> PotwierdzenieKonta([FromRoute] string id, [FromRoute] string kod)
         {
             var klient = await _context.Klienci.FindAsync(id);
+            if (klient == null) return NotFound("Nie ma takiego konta");
             if(klient.KodWeryfikacyjny == kod)
             {
                klient.EmailConfirmed = true;
@@ -54,44 +58,41 @@ namespace webAPI.Controllers
             }
             return BadRequest("Błędny kod");
         }
-        //[Authorize(Roles = "admin")]
+
         [HttpPost("PracownikRejestracja")]
         public async Task<IActionResult> RejestracjaPracownikAsync([FromBody] RejestracjaPracownikDto rejestracja)
         {
             if (ModelState.IsValid)
             {
-                var result = await _pracownikService.RejestracjaPacownikAsync(rejestracja);
-                if (result.Powodzenie)
+                var wynik = await _pracownikService.RejestracjaPacownikAsync(rejestracja);
+                if (wynik.Powodzenie)
                 {
-                    return Ok(result);
+                    return Ok(wynik);
                 }
-                return BadRequest(result);
+                return BadRequest(wynik);
             }
-            return BadRequest("niedziala");
-            
+            return BadRequest("niedziala"); 
         }
         
         [HttpPost("Logowanie")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto login)
         {
-            
-            var result = await _pracownikService.LoginAsync(login);
-            if (result.Powodzenie)
+            var wynik = await _pracownikService.LoginAsync(login);
+            if (wynik.Powodzenie)
             {
-                return Ok(result);
+                return Ok(wynik);
 
-            }else if (!result.Powodzenie)
+            }else if (!wynik.Powodzenie)
             {
-                result = await _klientService.LoginAsync(login);
-                if (result.Powodzenie)
+                wynik = await _klientService.LoginAsync(login);
+                if (wynik.Powodzenie)
                 {
-                    return Ok(result);
+                    return Ok(wynik);
                 }
             }
-
-            
-            return BadRequest(result);
+            return BadRequest(wynik);
         }
+
         [HttpPost("DodanieRoli")]
         public async Task<IActionResult> DodanieRoliAsync([FromBody] string nazwa)
         {
@@ -105,6 +106,7 @@ namespace webAPI.Controllers
 
             return BadRequest("Error");
         }
+
         [HttpPatch("ZmianaHasla")]
         public async Task<IActionResult> ZmianaHasla([FromBody] ZmianaHaslaDto dto)
         {
@@ -115,8 +117,8 @@ namespace webAPI.Controllers
             if (klient.KodWeryfikacyjny == dto.Kod)
             {
                 var ResetToken = await _klientManager.GeneratePasswordResetTokenAsync(klient);
-                var result = await _klientManager.ResetPasswordAsync(klient, ResetToken, dto.Haslo);
-                if(result.Succeeded) { return Ok("Hasło Zmienione"); }
+                var wynik = await _klientManager.ResetPasswordAsync(klient, ResetToken, dto.Haslo);
+                if(wynik.Succeeded) { return Ok("Hasło Zmienione"); }
                 return BadRequest("Nie udało się zmienić hasła");
             }
             klient.AccessFailedCount++;
@@ -124,13 +126,28 @@ namespace webAPI.Controllers
             return BadRequest("Błędny Kod Weryfikujący");
 
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPatch("ZmianaHaslaPracownik")]
+        public async Task<IActionResult> ZmianaHaslaPracownika([FromBody] ZmianaHaslaDto dto)
+        {
+            var pracownik = await _pracownikManager.FindByEmailAsync(dto.Email);
+            if (pracownik == null) return BadRequest("nie ma takiego pracownika");
+            pracownik.PasswordHash = new PasswordHasher<Pracownik>().HashPassword(pracownik, dto.Haslo);
+            await _context.SaveChangesAsync();
+            return Ok("Hasło Zmienione"); 
+        }
+
         [HttpPost("WyslijMaila")]
         public async Task<IActionResult> WyslijMaila([FromBody] ZmianaHaslaDto dto)
         {
+            
             var klient = await _klientManager.FindByEmailAsync(dto.Email);
-            if (klient == null) return BadRequest("nie ma takiego klienta");
-            _klientService.WyslanieMaila(klient,klient.KodWeryfikacyjny);
+            if (klient == null) return BadRequest("Nie ma takiego klienta");
+            _klientService.WyslanieMaila(klient, klient.KodWeryfikacyjny);
             return Ok("Mail został wysłany");
+           
+            
         }
 
     }

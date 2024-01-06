@@ -43,7 +43,7 @@ const submit = async () => {
     )
   } else {
     alert.error = true
-    alert.tekst = 'Data zakończenia nie może być mniejsza od daty rozpoczęcia'
+    alert.tekst = 'Data zwrotu nie może być mniejsza od daty odbioru'
     alert.show = true
   }
 }
@@ -169,9 +169,8 @@ const typPaliwa = (paliwo) => {
       </div>
     </v-form>
     <div v-if="!strona" class="o">
+      <div class="oNasTytul"><h1>Co nas wyróżnia</h1></div>
       <div class="oNas">
-        <div class="oNasTytul"><h1>Co nas wyróżnia</h1></div>
-
         <div class="oNasLewo">
           <div>
             <div class="oNasTytul"><h2>Samochody</h2></div>
@@ -199,12 +198,13 @@ const typPaliwa = (paliwo) => {
       </div>
     </div>
 
-    <div class="oNas" v-if="!strona">
-      <div class="oNasTytul2">
+    <div class="o" v-if="!strona">
+      <div class="oNasTytul">
         <h1>Nasze auta</h1>
       </div>
-      <div v-for="samochod in listaSamochodow" :key="samochod.id">
-        <div class="oNasSamochody">
+      <div class="oNas">
+        <div></div>
+        <div class="oNasSamochody" v-for="samochod in listaSamochodow" :key="samochod.id">
           <img width="150" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
           <div>{{ samochod.marka }} {{ samochod.model }}</div>
         </div>
@@ -257,7 +257,11 @@ const typPaliwa = (paliwo) => {
 
               <div class="infoSamochod">
                 <div class="zdjecieSamochodu">
-                  <img width="150" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
+                  <img
+                    width="150"
+                    style="border-radius: 10px"
+                    :src="'https://localhost:7122/Photos/' + samochod.id + '.png'"
+                  />
                 </div>
                 <div class="oSamochodzie" style="float: left">
                   rocznik: {{ samochod.rocznik }}<br />
@@ -289,52 +293,58 @@ const typPaliwa = (paliwo) => {
 <style>
 .o {
   width: 100vw;
-  
+  background-color: transparent;
 }
-.oNas {
-  text-align: center;
-  width: 700px;
-  float: center;
-  margin: 0 auto;
-  
+@media screen and (max-width: 500px) {
+  .oNas {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 400px;
+    flex-direction: column;
+    float: center;
+    margin: 0 auto;
+    justify-content: center;
+  }
 }
+@media screen and (min-width: 501px) {
+  .oNas {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 700px;
+    float: center;
+    margin: 0 auto;
+  }
+}
+
 .oNasTytul {
-  
   color: #e3b60b;
   margin-top: 30px;
+  text-align: center;
 }
-.oNasTytul2 {
-  
-  color: #e3b60b;
-  width: 700px;
-  margin: 30px auto;
-}
+
 .oNasLewo {
-  
   width: 350px;
-  float: left;
+
   height: 250px;
 }
 .oNasPrawo {
   width: 350px;
-  float: left;
+
   height: 250px;
 }
 .oNasSamochody {
-  
   width: 230px;
   height: 200px;
-  float: left;
 }
 .daty {
-  
   width: 100vw;
   height: 300px;
   text-align: center;
   padding-top: 100px;
 }
 .kalendarz {
-  
   border: 1px solid grey;
   border-radius: 8px;
   padding: 5px;
@@ -355,7 +365,7 @@ const typPaliwa = (paliwo) => {
     0 1px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .datyElementy {
-  background-color: #f8f8f8;
+  background-color: var(--okno);
   margin: auto;
   width: 400px;
   border: 1px solid grey;
@@ -372,6 +382,7 @@ const typPaliwa = (paliwo) => {
   float: left;
 }
 .filtr {
+  background-color: var(--okno);
   border: 1px solid grey;
   margin: 0px 30px;
   padding: 10px 0px;
@@ -386,6 +397,7 @@ const typPaliwa = (paliwo) => {
   float: left;
 }
 .samochod {
+  background-color: var(--okno);
   font-size: larger;
   width: 90%;
   height: 200px;

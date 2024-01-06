@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using webAPI.Data;
 using webAPI.Models;
 
@@ -19,31 +18,40 @@ namespace webAPI.Controllers
             _environment = environment;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("ListaPracownikow")]
         public async Task<IEnumerable<Pracownik>> ListaPracownikow()
         {
             var lista = await _context.Pracownicy.OrderBy(p => p.czyAdmin).Reverse().ToListAsync();
             return lista;
         }
+
+        [Authorize(Roles = "admin")]
         [HttpGet("ListaSamochodow")]
         public async Task<IEnumerable<Samochod>> ListaSamochodow()
         {
             return await _context.Samochody.ToListAsync();
         }
+
+        [Authorize(Roles = "admin")]
         [HttpGet("ListaUbezpieczen")]
         public async Task<IEnumerable<Ubezpieczenie>> ListaUbezpieczen()
         {
             return await _context.Ubezpieczenia.ToListAsync();
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPatch("EdytujUbezpieczenie")]
         public async Task<IActionResult> EdytujUbezpieczenie([FromBody] Ubezpieczenie dto)
         {
             var ubezpieczenie = await _context.Ubezpieczenia.FindAsync(dto.Id);
+            if (ubezpieczenie == null) return NotFound("Nie znaleziono Ubezpieczenia");
             ubezpieczenie.Kwota = dto.Kwota;
             await _context.SaveChangesAsync();
             return Ok("kwota została zmieniona");
         }
-        
+
+        [Authorize(Roles = "admin")]
         [HttpPost("DodajSamochod")]
         public async Task<IActionResult> DodajSamochod([FromBody] Samochod samochod)
         {
@@ -51,6 +59,8 @@ namespace webAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(samochod);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("DodajZdjecie/{nazwa}")]
         public async Task<IActionResult> DodajZdjecie([FromRoute] string nazwa, [FromForm] IFormFile zdjecie)
         {
@@ -63,13 +73,14 @@ namespace webAPI.Controllers
 
             return Ok();
         }
+        [Authorize(Roles = "admin")]
         [HttpPatch("ZablokujOdblokujSamochod/{id}")]
         public async Task<IActionResult> ZablokujOdblokujSamochod([FromRoute] int id)
         {
             var samochod = await _context.Samochody.FindAsync(id);
             if (samochod == null)
             {
-                return BadRequest("Nie znaleziono samochodu");
+                return NotFound("Nie znaleziono samochodu");
             }
             if (samochod.CzyZablokowany == true)
             {

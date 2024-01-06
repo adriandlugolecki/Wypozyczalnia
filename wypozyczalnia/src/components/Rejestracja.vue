@@ -27,7 +27,7 @@ const submit = async () => {
     alert.show = true
     router.push(`/potwierdzenieKonta/${res.data.Id}`)
   } catch (error) {
-    alert.tekst = error
+    alert.tekst = 'Wypełnij pola'
     alert.error = true
     alert.show = true
   }
@@ -38,7 +38,7 @@ const submit = async () => {
     <div class="okno">
       <v-form ref="formularzLogowania" @submit.prevent="submit">
         <v-row class="justify-center my-6">
-          <v-card-title> Zarejestruj się </v-card-title>
+          <h1 class="gold">Zarejestruj się</h1>
         </v-row>
         <v-text-field label="Imię" v-model="imie" :rules="zasadyImie" />
         <v-text-field label="Nazwisko" v-model="nazwisko" :rules="zasadyImie" />
@@ -56,24 +56,37 @@ const submit = async () => {
           @click:append-inner="() => (widocznoscHasla = !widocznoscHasla)"
         />
         <v-row class="justify-center mt-5 mb-5">
-          <v-btn type="submit">Zarejestruj się</v-btn>
-        </v-row>
-        <v-row class="justify-center mt-5 mb-5">
-          <v-btn>powrót</v-btn>
+          <v-btn type="submit" color="#ebcc39">Zarejestruj</v-btn>
         </v-row>
       </v-form>
     </div>
   </div>
 </template>
 <style>
-.okno {
-  margin: 100px auto;
-  border: 1px gray solid;
-  width: 400px;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width: 400px) {
+  .okno {
+    background-color: var(--okno);
+    margin: 100px auto;
+    border: 1px gray solid;
+    width: 350px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+@media screen and (min-width: 401px) {
+  .okno {
+    background-color: var(--okno);
+    margin: 100px auto;
+    border: 1px gray solid;
+    width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 }
 </style>

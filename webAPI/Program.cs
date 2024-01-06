@@ -13,9 +13,6 @@ using webAPI.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
 builder.Services.AddAuthentication(o =>
     {
         o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,7 +35,6 @@ builder.Services.AddAuthentication(o =>
 
 builder.Services.AddAuthorization();
 
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -54,7 +50,7 @@ var getConnectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(getConnectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentityCore<Pracownik>()
     .AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
@@ -64,7 +60,14 @@ builder.Services.AddIdentityCore<Klient>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-
+builder.Services.Configure<IdentityOptions>(o =>
+{
+    o.Password.RequireDigit = true;
+    o.Password.RequireLowercase = true;
+    o.Password.RequireNonAlphanumeric = true;
+    o.Password.RequireUppercase = true;
+    o.Password.RequiredLength = 8;
+});
 builder.Services.AddCors(
    o =>
    {

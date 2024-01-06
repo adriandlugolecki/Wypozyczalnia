@@ -8,7 +8,7 @@ const listaUbezpieczen = ref()
 onBeforeMount(async () => {
   try {
     localStorage.setItem('auto', router.currentRoute.value.params['id'])
-    var res = await axiosToken.get(`/Admin/ListaUbezpieczen`)
+    var res = await axiosToken.get(`/Ubezpieczenie/ListaUbezpieczen`)
     listaUbezpieczen.value = res.data
     console.log(listaUbezpieczen.value)
   } catch (error) {
@@ -118,174 +118,8 @@ const wybierz = (id) => {
           </td>
         </tr>
       </table>
-
-      <!-- <div class="lewyPrzycisk">
-        <v-btn
-          align-self="center"
-          class="wysrodkujPionowo"
-          icon="mdi-arrow-left"
-          v-if="strona != 1"
-          @click="strona--"
-        ></v-btn>
-      </div>
-      <div class="ubezpieczenia">
-        <v-window v-model="strona" direction="horizontal" :touch="false"> -->
-      <!-- <div v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
-            <v-window-item :value="ubezpieczenie.id">
-              <div class="oknoTytul">Pakiet bez ochrony</div>
-              <div class="oknoTytul">{{ ubezpieczenie.nazwa }}</div>
-
-              <div class="oknoTresc">Kradzież</div>
-              <div class="oknoZnaczek">
-                <v-icon v-if="!ubezpieczenie.Kradzież" icon="mdi-close"></v-icon>
-                <v-icon v-if="ubezpieczenie.Kradzież" icon="mdi-check"> </v-icon>
-              </div>
-              <div class="oknoTresc">Uszkodzenie pojazdu</div>
-              <div class="oknoZnaczek">
-                <v-icon v-if="!ubezpieczenie.UszkodzeniePojazdu" icon="mdi-close"></v-icon>
-                <v-icon v-if="ubezpieczenie.UszkodzeniePojazdu" icon="mdi-check"> </v-icon>
-              </div>
-              <div class="oknoTresc">Uszkodzenie Szyby</div>
-              <div class="oknoZnaczek">
-                <v-icon v-if="!ubezpieczenie.UszkodzenieSzyby" icon="mdi-close"></v-icon>
-                <v-icon v-if="ubezpieczenie.UszkodzenieSzyby" icon="mdi-check"> </v-icon>
-              </div>
-              <div class="oknoTresc">Uszkodzenie Opony</div>
-              <div class="oknoZnaczek">
-                <v-icon v-if="!ubezpieczenie.UszkodzenieOpony" icon="mdi-close"></v-icon>
-                <v-icon v-if="ubezpieczenie.UszkodzenieOpony" icon="mdi-check"> </v-icon>
-              </div>
-              <div class="oknoTresc">Auto zastępcze</div>
-              <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-              <div class="oknoTresc">Kaucja</div>
-              <div class="oknoZnaczek">2000 zł</div>
-              <div class="oknoTresc">Udział własny w szkodzie</div>
-              <div class="oknoZnaczek">2000 zł</div>
-            </v-window-item>
-          </div> -->
-
-      <!-- <v-window-item :value="1">
-            <div class="oknoTytul">Pakiet bez ochrony</div>
-            <div class="oknoTytul">Podstawowy</div>
-
-            <div class="oknoTresc">kradzież</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-close"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie pojazdu</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-close"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Szyby</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-close"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Opony</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-close"></v-icon></div>
-            <div class="oknoTresc">Auto zastępcze</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Kaucja</div>
-            <div class="oknoZnaczek">2000 zł</div>
-            <div class="oknoTresc">Udział własny w szkodzie</div>
-            <div class="oknoZnaczek">2000 zł</div>
-
-            cena 0 zł
-          </v-window-item>
-
-          <v-window-item :value="2">
-            <div class="oknoTytul">Pakiet z ochroną</div>
-            <div class="oknoTytul">Komfort</div>
-
-            <div class="oknoTresc">kradzież</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie pojazdu</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Szyby</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Opony</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Auto zastępcze</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Kaucja</div>
-            <div class="oknoZnaczek">500 zł</div>
-            <div class="oknoTresc">Udział własny w szkodzie</div>
-            <div class="oknoZnaczek">0 zł</div>
-            cena 60 zł
-          </v-window-item>
-          <v-window-item :value="3">
-            <div class="oknoTytul">Pakiet z ochroną</div>
-            <div class="oknoTytul">Premium</div>
-
-            <div class="oknoTresc">kradzież</div>
-
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie pojazdu</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Szyby</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Uszkodzenie Opony</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Auto zastępcze</div>
-            <div class="oknoZnaczek"><v-icon icon="mdi-check"></v-icon></div>
-            <div class="oknoTresc">Kaucja</div>
-            <div class="oknoZnaczek">1 zł</div>
-            <div class="oknoTresc">Udział własny w szkodzie</div>
-            <div class="oknoZnaczek">0 zł</div>
-            cena 90 zł
-          </v-window-item>
-        </v-window> -->
-      <!-- </div>
-      <div class="prawyPrzycisk">
-        <v-btn icon="mdi-arrow-right" v-if="strona != 3" @click="strona++" class="wysrodkujPionowo">
-        </v-btn>
-      </div>
-      <div class="przyciskWybierz">
-        <v-btn @click="wybierz"> wybierz </v-btn>
-      </div> -->
     </div>
   </div>
-  <!-- <v-card height="100vh" width="100vw" class="d-flex justify-center align-center">
-    <v-window v-model="strona" direction="horizontal" :touch="false">
-      <v-card-title class="mb-10"> Wybierz ubezpieczenie </v-card-title>
-
-      <v-window-item :value="1">
-        <v-row>
-            <v-col>
-                <v-card class="d-flex justify-center align-center">
-            <v-container class="d-flex justify-center align-center">
-              Podstawowe
-              <br />kradzież Nie
-            </v-container>
-          </v-card>
-            </v-col>
-          <v-col>
-            <v-btn icon="mdi-arrow-right" @click="strona++"> </v-btn>
-          </v-col>
-
-          
-        </v-row>
-      </v-window-item>
-      <v-window-item :value="2">
-        <v-row>
-          <v-col>
-            <v-btn align-self="center" icon="mdi-arrow-left" @click="strona--"></v-btn>
-          </v-col>
-          <v-col>
-            <v-card class="d-flex justify-center align-center"> Komfort </v-card>
-          </v-col>
-          <v-col>
-            <v-btn align-self="center" icon="mdi-arrow-right" @click="strona++"></v-btn>
-          </v-col>
-        </v-row>
-      </v-window-item>
-      <v-window-item :value="3">
-        <v-row
-          ><v-col>
-            <v-btn align-self="center" icon="mdi-arrow-left" @click="strona--"></v-btn>
-          </v-col>
-          <v-col>
-            <v-card class="d-flex justify-center align-center"> Premium </v-card>
-          </v-col>
-          <v-col></v-col>
-        </v-row>
-      </v-window-item>
-      <v-btn class="mt-5 mb-5 ml-5 mr-5" @click="wybierz"> wybierz </v-btn>
-    </v-window>
-  </v-card> -->
 </template>
 <style scoped>
 .ubezpieczenieTytul {
@@ -295,19 +129,39 @@ const wybierz = (id) => {
   text-align: center;
   font-size: 26px;
 }
-.okno {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid gray;
-  border-radius: 15px;
-  height: 400px;
-  width: 600px;
-  margin: 0 auto;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+@media screen and (max-width: 500px) {
+  .okno {
+    
+    background-color: var(--okno);
+    padding: 10px;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 15px;
+    height: 600px;
+    width: 350px;
+    margin: 0 auto;
 
+    box-shadow:
+      0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+@media screen and (min-width: 501px) {
+  .okno {
+    background-color: var(--okno);
+    padding: 10px;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 15px;
+    height: 400px;
+    width: 700px;
+    margin: 0 auto;
+
+    box-shadow:
+      0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
 .ubezpieczenia {
   float: left;
   width: 298px;

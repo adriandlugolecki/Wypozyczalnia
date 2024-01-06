@@ -20,9 +20,15 @@ const zmienKwote = async () => {
   <div>
     {{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ ubezpieczenie.kwota }} zł
     <v-btn icon="mdi-pencil" elevation="0" @click="rozwin = !rozwin" />
-    <div v-if="rozwin">
-      Zmień Kwotę na<input v-model="kwota" />zł <v-btn @click="zmienKwote">zmień</v-btn>
+    <div v-if="rozwin" class="kwota">
+      <h2>Zmień Kwotę</h2>
+      <input v-model="kwota" class="wybor" />zł
+      <div><v-btn @click="zmienKwote" color="#ebcc39">zmień</v-btn></div>
     </div>
   </div>
 </template>
-<style></style>
+<style scoped>
+.kwota {
+  text-align: center;
+}
+</style>

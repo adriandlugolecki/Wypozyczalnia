@@ -4,8 +4,8 @@ import { alert, uzytkownik } from './main'
 import { watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import { onBeforeMount } from 'vue'
-var AudioSuccess = new Audio('../src/assets/success.mp3')
-var AudioError = new Audio('../src/assets/error.mp3')
+var AudioSuccess = new Audio('/../src/assets/success.mp3')
+var AudioError = new Audio('/../src/assets/error.mp3')
 let timeout = null
 
 onBeforeMount(() => {
@@ -43,9 +43,10 @@ watch(
 </script>
 
 <template>
-  <v-app>
+  <v-app style="background-color: transparent">
     <NavBar />
     <RouterView />
+
     <v-snackbar
       location="top"
       class="mt-2"
@@ -60,7 +61,8 @@ watch(
 
 <style>
 :root {
-  --okno: white;
+  --okno: #fffafa;
+  --color: #ebcc39;
 }
 /* #app {
   text-align: center;
@@ -71,18 +73,36 @@ watch(
 ::-webkit-scrollbar-thumb {
   border-radius: 15px;
   /* background-color: rgba(0,0,0,.5); */
-  background-color: grey;
+  background-color: #262626;
   color: white;
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
+body {
+  background-size: 100vw 100vh;
+  background-image: url('/src/assets/fotor-ai-20240103203456.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 .tlo {
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   font-size: 16px;
-  background-image: url('src/assets/fotor-ai-20240103203456.jpg');
+  background-color: transparent;
 }
 .gold {
-  color: #ebcc39;
+  color: black;
+}
+.wybor {
+  border: 1px solid gray;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 150px;
+  max-width: 100px;
+  margin: 0px 5px 5px 5px;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 1px 20px 0 rgba(0, 0, 0, 0.19);
 }
 /* header {
   line-height: 1.5;

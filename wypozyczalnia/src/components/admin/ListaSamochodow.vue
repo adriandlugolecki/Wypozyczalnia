@@ -51,29 +51,26 @@ const zablokujOdblokuj = async (id) => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">
-        Samochody
-        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj">
-        </v-btn>
-      </div>
+      <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj"> </v-btn>
+      <h1 class="tytul">Samochody</h1>
       <div v-if="dodaj" class="formularz">
         <v-form @submit.prevent>
           <v-card width="100%" height="50px" elevation="0">
             <v-file-input v-model="file" label="dodaj zdjęcie" />
           </v-card>
           <div>
-            <input type="text" v-model="Marka" placeholder="Marka" />
-            <input type="text" v-model="Model" placeholder="Model" />
-            <input type="text" v-model="Rejestracja" placeholder="Rejestracja" />
-            <input type="numer" v-model="rocznik" placeholder="Rocznik" />
-            <input type="numer" v-model="liczbaDrzwi" placeholder="liczbaDrzwi" />
-            <input type="numer" v-model="liczbaMiejsc" placeholder="liczbaMiejsc" />
-            <input v-model="rodzajSkrzyni" placeholder="rodzajSkrzyni" />
-            <input v-model="rodzajPaliwa" placeholder="rodzajPaliwa" />
-            <input type="numer" v-model="Cena" placeholder="Cena" />
+            <input type="text" v-model="Marka" placeholder="Marka" class="wybor" />
+            <input type="text" v-model="Model" placeholder="Model" class="wybor" />
+            <input type="text" v-model="Rejestracja" placeholder="Rejestracja" class="wybor" />
+            <input type="numer" v-model="rocznik" placeholder="Rocznik" class="wybor" />
+            <input type="numer" v-model="liczbaDrzwi" placeholder="liczbaDrzwi" class="wybor" />
+            <input type="numer" v-model="liczbaMiejsc" placeholder="liczbaMiejsc" class="wybor" />
+            <input v-model="rodzajSkrzyni" placeholder="rodzajSkrzyni" class="wybor" />
+            <input v-model="rodzajPaliwa" placeholder="rodzajPaliwa" class="wybor" />
+            <input type="numer" v-model="Cena" placeholder="Cena" class="wybor" />
           </div>
 
-          <v-btn @click="submit()" class="mt-5">Dodaj </v-btn>
+          <v-btn @click="submit()" class="mt-5" color="#ebcc39">Dodaj </v-btn>
         </v-form>
       </div>
       <v-list-item v-for="samochod in listaSamochodow" :key="samochod.id">
@@ -119,7 +116,6 @@ const zablokujOdblokuj = async (id) => {
   height: 100px;
   width: 100%;
   text-align: center;
-  font-size: 26px;
 }
 .zdjecie {
   position: relative !important;

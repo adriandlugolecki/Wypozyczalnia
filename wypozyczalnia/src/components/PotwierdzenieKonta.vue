@@ -23,18 +23,19 @@ const sprawdz = async () => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">Wpisz kod</div>
+      <h1 class="tytul">Wpisz kod</h1>
       <div>
         <input class="poleKod" v-model="kod" placeholder="Wpisz kod" />
       </div>
       <div>kod został wysłany na maila</div>
 
-      <v-btn @click="sprawdz"> sprawdz</v-btn>
+      <v-btn @click="sprawdz" color="#ebcc39"> sprawdź</v-btn>
     </div>
   </div>
 </template>
 <style scoped>
 .okno {
+  background-color: var(--okno);
   text-align: center;
   margin: 100px auto;
   border: 1px gray solid;

@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
+import Pracownik from './Pracownik.vue'
 const listaPracownikow = ref([])
 const dodaj = ref(false)
 const imie = ref()
@@ -36,27 +37,24 @@ const submit = async () => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">
-        Pracownicy
-        <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj">
-        </v-btn>
-      </div>
+      <v-btn elevation="0" class="dodanie" icon="mdi-plus-circle" @click="dodaj = !dodaj"> </v-btn>
+      <h1 class="tytul">Pracownicy</h1>
       <div v-if="dodaj" class="formularz">
         <v-form @submit.prevent>
           <div>
-            <input type="text" v-model="imie" placeholder="Imię" />
-            <input type="text" v-model="nazwisko" placeholder="Nazwisko" />
-            <input type="text" v-model="dataUrodzenia" placeholder="DataUrodzenia" />
-            <input type="text" v-model="pesel" placeholder="Pesel" />
-            <input type="text" v-model="email" placeholder="Email" />
-            <input type="text" v-model="haslo" placeholder="Hasło" />
-            <input type="text" v-model="telefon" placeholder="Numer Telefonu" />
+            <input type="text" v-model="imie" placeholder="Imię" class="wybor" />
+            <input type="text" v-model="nazwisko" placeholder="Nazwisko" class="wybor" />
+            <input type="date" v-model="dataUrodzenia" placeholder="DataUrodzenia" class="wybor" />
+            <input type="number" v-model="pesel" placeholder="Pesel" class="wybor" />
+            <input type="email" v-model="email" placeholder="Email" class="wybor" />
+            <input type="text" v-model="haslo" placeholder="Hasło" class="wybor" />
+            <input type="tel" v-model="telefon" placeholder="Numer Telefonu" class="wybor" />
           </div>
-          <v-btn @click="submit()" class="mt-5">Dodaj </v-btn>
+          <v-btn @click="submit()" class="mt-5" color="#ebcc39">Dodaj </v-btn>
         </v-form>
       </div>
       <v-list-item v-for="pracownik in listaPracownikow" :key="pracownik.id">
-        <div>{{ pracownik.imie }} {{ pracownik.nazwisko }} {{ pracownik.phoneNumber }}</div>
+        <Pracownik :pracownik="pracownik" />
       </v-list-item>
     </div>
   </div>
@@ -80,7 +78,6 @@ const submit = async () => {
   height: 100px;
   width: 100%;
   text-align: center;
-  font-size: 26px;
 }
 .formularz {
   text-align: center;

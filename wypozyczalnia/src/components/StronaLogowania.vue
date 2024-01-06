@@ -39,7 +39,7 @@ const submit = async () => {
     <div class="okno">
       <v-form ref="formularzLogowania" @submit.prevent="submit">
         <v-row class="justify-center my-6">
-          <v-card-title> Zaloguj się </v-card-title>
+          <h1 class="gold">Zaloguj się</h1>
         </v-row>
 
         <v-text-field label="email" v-model="email" :rules="zasadyLogin" />
@@ -53,7 +53,7 @@ const submit = async () => {
         />
 
         <v-row class="justify-center mt-5">
-          <v-btn type="submit"> zaloguj </v-btn>
+          <v-btn type="submit" color="#ebcc39"> zaloguj </v-btn>
         </v-row>
         <v-row class="justify-center">
           <RouterLink to="zmianaHasla" custom v-slot="{ navigate }">
@@ -64,16 +64,31 @@ const submit = async () => {
     </div>
   </div>
 </template>
-<style>
-.okno {
-  background-color: var(--okno);
-  margin: 200px auto;
-  border: 1px gray solid;
-  width: 400px;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+<style scoped>
+@media screen and (max-width: 400px) {
+  .okno {
+    background-color: var(--okno);
+    margin: 200px auto;
+    border: 1px gray solid;
+    width: 350px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+@media screen and (min-width: 401px) {
+  .okno {
+    background-color: var(--okno);
+    margin: 200px auto;
+    border: 1px gray solid;
+    width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 }
 </style>

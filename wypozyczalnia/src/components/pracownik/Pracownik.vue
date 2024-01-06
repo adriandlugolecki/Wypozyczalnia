@@ -1,8 +1,8 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
-const listaWypozyczen = ref([])
-const listaZakonczen = ref([])
+const listaWypozyczen = ref()
+const listaZakonczen = ref()
 const data = ref()
 onBeforeMount(async () => {
   try {
@@ -30,12 +30,12 @@ const ZmianaDnia = async () => {
 <template>
   <div class="tlo">
     <div class="data">
-      <h3>Wybierz dzień</h3>
+      <h2>Wybierz dzień</h2>
       <input type="date" class="kalendarz" v-model="data" />
       <v-btn @click="ZmianaDnia" elevation="0" icon="mdi-car-search"></v-btn>
     </div>
     <div class="okno">
-      <div class="tytul">Do Wydania</div>
+      <h1 class="tytul">Do Wydania</h1>
       <v-list-item v-for="wypozyczenie in listaWypozyczen" :key="wypozyczenie.id">
         <div class="tekst">
           NR: {{ wypozyczenie.id }} | {{ wypozyczenie.samochod.marka }}
@@ -54,7 +54,8 @@ const ZmianaDnia = async () => {
       </v-list-item>
     </div>
     <div class="okno">
-      <div class="tytul">Do odbioru</div>
+      <h1 class="tytul">Do odbioru</h1>
+      <div v-if="listaZakonczen == null">lista pusta</div>
       <v-list-item v-for="wypozyczenie in listaZakonczen" :key="wypozyczenie.id">
         <div class="tekst">
           NR: {{ wypozyczenie.id }} | {{ wypozyczenie.samochod.marka }}
@@ -118,10 +119,12 @@ const ZmianaDnia = async () => {
     0 8px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin: 50px 5px 5px 100px;
+  text-align: center;
 }
 .tytul {
   float: left;
-  height: 100px;
+  height: 50px;
+  margin-top: 10px;
   width: 100%;
   text-align: center;
   font-size: 26px;

@@ -17,7 +17,7 @@ onBeforeMount(async () => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <div class="tytul">Ubezpieczenia</div>
+      <h1 class="tytul">Ubezpieczenia</h1>
       <v-list-item v-for="ubezpieczenie in listaUbezpieczen" :key="ubezpieczenie.id">
         <Ubezpieczenie :ubezpieczenie="ubezpieczenie" />
       </v-list-item>

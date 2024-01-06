@@ -30,21 +30,27 @@ onBeforeMount(async () => {
   }
 })
 const zarezerwuj = async () => {
-  const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
-  console.log(kwota)
-  await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
-    samochodId: Samochod.value.id,
-    klientId: 'id',
-    data: data,
-    dataZakonczenia: dataZakonczenia,
-    ileDni: ileDni,
-    ubezpieczenieId: Ubezpieczenie.value.id,
-    wiek: wiek,
-    kwota: kwota
-  })
-  router.push('/')
-  alert.tekst = 'Samochód został zarezerwowany'
-  alert.show = true
+  try {
+    const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
+    console.log(kwota)
+    await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
+      samochodId: Samochod.value.id,
+      klientId: 'id',
+      data: data,
+      dataZakonczenia: dataZakonczenia,
+      ileDni: ileDni,
+      ubezpieczenieId: Ubezpieczenie.value.id,
+      wiek: wiek,
+      kwota: kwota
+    })
+    router.push('/')
+    alert.tekst = 'Samochód został zarezerwowany'
+    alert.show = true
+  } catch (error) {
+    alert.tekst = error.response.data
+    alert.error = true
+    alert.show = true
+  }
 }
 const pozyskanieDaty = (data) => {
   return `${data.getDate()}.${data.getMonth() + 1}.${data.getFullYear()}`
@@ -157,6 +163,7 @@ const OplataZaWiek = (wiek) => {
 }
 @media screen and (max-width: 400px) {
   .okno {
+    background-color: var(--okno);
     display: flex;
     flex-direction: column;
     margin: 0 auto;
@@ -171,6 +178,7 @@ const OplataZaWiek = (wiek) => {
 }
 @media screen and (min-width: 400px) {
   .okno {
+    background-color: var(--okno);
     display: flex;
     margin: 0 auto;
     width: 900px;
