@@ -2,35 +2,37 @@
 import { ref, onBeforeMount } from 'vue'
 import { zasadyHaslo, zasadyLogin } from '../zasady'
 import { axioss, uzytkownik, alert } from '../main'
-import { useRoute } from 'vue-router'
 import router from '../router'
 const widocznoscHasla = ref(false)
 const email = ref()
 const haslo = ref()
-const route = useRoute()
+const formularzLogowania = ref()
+const submit = async (event) => {
+  await event
+  const dane = await formularzLogowania.value?.validate()
+  if (dane && dane.valid) {
+    try {
+      var zapytanie = await axioss.post('/autoryzacja/logowanie', {
+        email: email.value,
+        password: haslo.value
+      })
 
-const submit = async () => {
-  try {
-    var zapytanie = await axioss.post('/autoryzacja/logowanie', {
-      email: email.value,
-      password: haslo.value
-    })
-
-    localStorage.setItem('token', zapytanie.data.token)
-    localStorage.setItem('uprawnienia', zapytanie.data.role)
-    uzytkownik.uprawnienia = zapytanie.data.role
-    if (localStorage.getItem('uprawnienia') == 'pracownik') {
-      router.push('/pracownik')
-    } else if (localStorage.getItem('uprawnienia') == 'admin') {
-      router.push('/pracownik')
-    } else {
-      router.push('/')
+      localStorage.setItem('token', zapytanie.data.token)
+      localStorage.setItem('uprawnienia', zapytanie.data.role)
+      uzytkownik.uprawnienia = zapytanie.data.role
+      if (localStorage.getItem('uprawnienia') == 'pracownik') {
+        router.push('/pracownik')
+      } else if (localStorage.getItem('uprawnienia') == 'admin') {
+        router.push('/pracownik')
+      } else {
+        router.push('/')
+      }
+    } catch (error) {
+      alert.error = true
+      alert.tekst = 'Email lub hasło jest źle wpisane'
+      alert.show = true
+      console.log(error)
     }
-  } catch (error) {
-    alert.error = true
-    alert.tekst = 'Email lub hasło jest źle wpisane'
-    alert.show = true
-    console.log(error)
   }
 }
 </script>
@@ -68,7 +70,7 @@ const submit = async () => {
 @media screen and (max-width: 400px) {
   .okno {
     background-color: var(--okno);
-    margin: 200px auto;
+    margin: 100px auto;
     border: 1px gray solid;
     width: 350px;
     padding: 30px;
@@ -81,7 +83,7 @@ const submit = async () => {
 @media screen and (min-width: 401px) {
   .okno {
     background-color: var(--okno);
-    margin: 200px auto;
+    margin: 100px auto;
     border: 1px gray solid;
     width: 400px;
     padding: 30px;

@@ -80,47 +80,88 @@ const ZmianaDnia = async () => {
   </div>
 </template>
 <style scoped>
+@media screen and (max-width: 500px) {
+  .data {
+    background-color: var(--okno);
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    width: 350px;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding-top: 10px;
+  }
+}
+
+@media screen and (min-width: 501px) {
+  .data {
+    background-color: var(--okno);
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    width: 400px;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding-top: 10px;
+  }
+}
 .kalendarz {
   border: 1px solid grey;
   border-radius: 8px;
   padding: 5px;
+  background-color: white;
   margin: 5px;
   box-shadow:
     0 2px 8px 0 rgba(0, 0, 0, 0.2),
     0 2px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.data {
-  background-color: var(--okno);
-  margin-top: 100px;
-  margin-left: auto;
-  margin-right: auto;
-  height: 100px;
-  width: 400px;
-  text-align: center;
-  border: 1px solid grey;
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding-top: 10px;
-}
+
 .tekst {
   margin: 10px;
   font-size: 20px;
 }
-.okno {
-  background-color: var(--okno);
-  float: left;
-  min-width: 300px;
-  width: 40vw;
-  border: 1px solid grey;
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 50px 5px 5px 100px;
-  text-align: center;
+
+@media screen and (max-width: 500px) {
+  .okno {
+    background-color: var(--okno);
+    float: left;
+    min-width: 300px;
+    width: 40vw;
+    border: 1px solid grey;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 5px 5px 5px 50px;
+    text-align: center;
+  }
 }
+@media screen and (min-width: 501px) {
+  .okno {
+    background-color: var(--okno);
+    float: left;
+    min-width: 300px;
+    width: 40vw;
+    border: 1px solid grey;
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 50px 5px 5px 100px;
+    text-align: center;
+  }
+}
+
 .tytul {
   float: left;
   height: 50px;

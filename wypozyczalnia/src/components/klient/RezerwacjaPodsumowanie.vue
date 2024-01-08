@@ -3,6 +3,7 @@ import { axiosToken, alert } from '../../main'
 import { ref } from 'vue'
 import router from '../../router'
 import { onBeforeMount } from 'vue'
+import { zasadyImie, zasadyNumer, zasadyWymagane } from '../../zasady'
 const auto = localStorage.getItem('auto')
 const ubezpieczenie = localStorage.getItem('ubezpieczenie')
 const wiek = localStorage.getItem('wiek')
@@ -13,8 +14,14 @@ const Ubezpieczenie = ref()
 const ileDni = Math.ceil(Math.abs(dataZakonczenia - data) / (1000 * 3600 * 24))
 const odbior = ref(true)
 const samochodInfo = ref(true)
-const ubezpieczenieInfo = ref(false)
 const zrodlo = ref('')
+const imie = ref()
+const nazwisko = ref()
+const telefon = ref()
+const adres = ref()
+const miejscowosc = ref()
+const kod = ref()
+const formularz = ref()
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Samochod/${auto}`)
@@ -29,27 +36,37 @@ onBeforeMount(async () => {
     console.error('Błąd', error)
   }
 })
-const zarezerwuj = async () => {
-  try {
-    const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
-    console.log(kwota)
-    await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
-      samochodId: Samochod.value.id,
-      klientId: 'id',
-      data: data,
-      dataZakonczenia: dataZakonczenia,
-      ileDni: ileDni,
-      ubezpieczenieId: Ubezpieczenie.value.id,
-      wiek: wiek,
-      kwota: kwota
-    })
-    router.push('/')
-    alert.tekst = 'Samochód został zarezerwowany'
-    alert.show = true
-  } catch (error) {
-    alert.tekst = error.response.data
-    alert.error = true
-    alert.show = true
+const submit = async (event) => {
+  await event
+  const dane = await formularz.value?.validate()
+  if (dane && dane.valid) {
+    try {
+      const kwota = ileDni * (Ubezpieczenie.value.kwota + Samochod.value.cena + OplataZaWiek(wiek))
+      console.log(kwota)
+      await axiosToken.post(`/klient/wypozyczeniesamochodu`, {
+        samochodId: Samochod.value.id,
+        klientId: 'id',
+        data: data,
+        dataZakonczenia: dataZakonczenia,
+        ileDni: ileDni,
+        ubezpieczenieId: Ubezpieczenie.value.id,
+        wiek: wiek,
+        kwota: kwota,
+        imie: imie.value,
+        nazwisko: nazwisko.value,
+        telefon: telefon.value,
+        adres: adres.value,
+        miejscowosc: miejscowosc.value,
+        kodPocztowy: kod.value
+      })
+      router.push('/')
+      alert.tekst = 'Samochód został zarezerwowany'
+      alert.show = true
+    } catch (error) {
+      alert.tekst = error.response.data
+      alert.error = true
+      alert.show = true
+    }
   }
 }
 const pozyskanieDaty = (data) => {
@@ -100,36 +117,34 @@ const OplataZaWiek = (wiek) => {
             <div class="samochodOpis">
               {{ Samochod ? Samochod.marka : '' }} {{ Samochod ? Samochod.model : '' }}
             </div>
-            <div>O Samochodzie model marka rodzaj skrzyni typ silnika rok ile osob</div>
-            {{ ileDni }}
           </div>
         </div>
 
         <div>
-          Ubezpieczenie {{ Ubezpieczenie ? Ubezpieczenie.nazwa : '' }}
-          <v-btn
-            icon="mdi-book-open"
-            elevation="0"
-            @click="ubezpieczenieInfo = !ubezpieczenieInfo"
-          ></v-btn>
+          <h2>Ubezpieczenie</h2>
+          {{ Ubezpieczenie ? Ubezpieczenie.nazwa : '' }}
         </div>
       </div>
+
       <div class="podsumowanieKwota">
-        <h2>Podsumowanie</h2>
+        <h2>Kosztorys</h2>
         <div>
-          samochód: {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
+          <span class="gold2">Samochód </span>
+          {{ ileDni }} x {{ Samochod ? Samochod.cena : '' }} =
           {{ ileDni * (Samochod ? Samochod.cena : '') }} zł
         </div>
 
         <div>
-          ubezpieczenie: {{ ileDni }} x {{ Ubezpieczenie ? Ubezpieczenie.kwota : '' }} =
+          <span class="gold2">Ubezpieczenie</span>
+          {{ ileDni }} x {{ Ubezpieczenie ? Ubezpieczenie.kwota : '' }} =
           {{ ileDni * (Ubezpieczenie ? Ubezpieczenie.kwota : '') }} zł
         </div>
         <div>
-          wiek Kierowcy: {{ ileDni }} x {{ OplataZaWiek(wiek) }} = {{ ileDni * OplataZaWiek(wiek) }}
+          <span class="gold2">Wiek Kierowcy</span>
+          {{ ileDni }} x {{ OplataZaWiek(wiek) }} = {{ ileDni * OplataZaWiek(wiek) }} zł
         </div>
         <div>
-          całkowita kwota:
+          <span class="gold2">Całkowita kwota</span>
           {{
             ileDni *
             ((Ubezpieczenie ? Ubezpieczenie.kwota : '') +
@@ -140,11 +155,26 @@ const OplataZaWiek = (wiek) => {
         </div>
         <div v-if="ubezpieczenie == 1">Kaucja: 2000 zł</div>
         <div v-if="ubezpieczenie == 2">Kaucja: 1 zł</div>
-        <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
-          <v-btn class="mt-5 mb-5" type="submit" @click="zarezerwuj" color="yellow">
-            zarezerwuj
-          </v-btn>
-        </RouterLink>
+        <img
+          src="/src/assets/fotor-ai-20240107215829.jpg"
+          height="200"
+          style="border-radius: 30px; margin-top: 50px"
+        />
+      </div>
+      <div class="podsumowanieKierowca">
+        <v-form ref="formularz" @submit.prevent="submit">
+          <h2>Dane kierowcy</h2>
+          <v-text-field label="Imie" v-model="imie" :rules="zasadyImie" />
+          <v-text-field label="Nazwisko" v-model="nazwisko" :rules="zasadyImie" />
+          <v-text-field label="Numer telefonu" v-model="telefon" :rules="zasadyNumer" />
+          <v-text-field label="Adres" v-model="adres" :rules="zasadyWymagane" />
+          <v-text-field label="Miejscowość" v-model="miejscowosc" :rules="zasadyImie" />
+          <v-text-field label="Kod pocztowy" v-model="kod" :rules="zasadyWymagane" />
+
+          <RouterLink to="/podsumowanie" custom v-slot="{ navigate }">
+            <v-btn class="mt-5 mb-5" type="submit" color="yellow"> zarezerwuj </v-btn>
+          </RouterLink>
+        </v-form>
       </div>
     </div>
   </div>
@@ -157,11 +187,11 @@ const OplataZaWiek = (wiek) => {
 .PodsumowanieTytul {
   height: 100px;
   width: 100vw;
-  margin-top: 100px;
   text-align: center;
   font-size: 26px;
+  text-shadow: 3px 3px black;
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
   .okno {
     background-color: var(--okno);
     display: flex;
@@ -176,7 +206,7 @@ const OplataZaWiek = (wiek) => {
     border: 1px solid black;
   }
 }
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 450px) {
   .okno {
     background-color: var(--okno);
     display: flex;
@@ -192,23 +222,24 @@ const OplataZaWiek = (wiek) => {
 }
 .podsumowanie {
   min-height: 300px;
-  width: 400px;
-
+  width: 300px;
   padding: 20px;
 }
-
+.podsumowanieKierowca {
+  text-align: center;
+  width: 350px;
+  padding: 20px;
+}
 .podsumowanieKwota {
-  height: 300px;
+  height: 450px;
   width: 350px;
   padding: 20px;
 }
 .samochodZdjecie {
-  float: left;
   height: 150px;
 }
 .samochodOpis {
-  float: left;
-  width: 200px;
-  height: 150px;
+  width: 150px;
+  height: 50px;
 }
 </style>

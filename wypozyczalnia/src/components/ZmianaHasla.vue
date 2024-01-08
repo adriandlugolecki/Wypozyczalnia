@@ -1,11 +1,13 @@
 <script setup>
 import { axioss, alert } from '../main'
+import router from '../router'
 import { zasadyHaslo, zasadyLogin } from '../zasady'
 import { ref } from 'vue'
 const email = ref()
 const haslo = ref()
 const kod = ref()
 const widocznoscHasla = ref(false)
+const formularzHasla = ref()
 const wyslij = async () => {
   if (email.value == null) {
     alert.tekst = 'Wypełnij pole email'
@@ -26,32 +28,31 @@ const wyslij = async () => {
     alert.show = true
   }
 }
-const submit = async () => {
-  if (email.value == null || kod.value == null || haslo.value == null) {
-    alert.tekst = 'Wypełnij pola'
-    alert.error = true
-    alert.show = true
-    return
-  }
-  try {
-    var res = await axioss.patch('/autoryzacja/ZmianaHasla', {
-      Email: email.value,
-      Kod: kod.value,
-      Haslo: haslo.value
-    })
-    alert.tekst = res.data
-    alert.show = true
-  } catch (error) {
-    alert.tekst = error.response.data
-    alert.error = true
-    alert.show = true
+const submit = async (event) => {
+  await event
+  const dane = await formularzHasla.value?.validate()
+  if (dane && dane.valid) {
+    try {
+      var res = await axioss.patch('/autoryzacja/ZmianaHasla', {
+        Email: email.value,
+        Kod: kod.value,
+        Haslo: haslo.value
+      })
+      alert.tekst = res.data
+      alert.show = true
+      router.push('/logowanie')
+    } catch (error) {
+      alert.tekst = error.response.data
+      alert.error = true
+      alert.show = true
+    }
   }
 }
 </script>
 <template>
   <div class="tlo">
     <div class="okno">
-      <v-form ref="formularzLogowania" @submit.prevent="submit">
+      <v-form ref="formularzHasla" @submit.prevent="submit">
         <h1 class="gold">Zmiana Hasła</h1>
         <br />
         <v-text-field type="email" label="Email" v-model="email" :rules="zasadyLogin" />
@@ -84,7 +85,7 @@ const submit = async () => {
 <style scoped>
 .okno {
   background-color: var(--okno);
-  margin: 200px auto;
+  margin: 0px auto;
   border: 1px gray solid;
   width: 400px;
   height: 500px;

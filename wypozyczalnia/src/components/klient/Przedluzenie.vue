@@ -33,14 +33,13 @@ const ileDni = () => {
   return roznica
 }
 const anuluj = async () => {
-  console.log(przedluzenie.value.id)
   try {
     var res = await axiosToken.delete(`/Klient/AnulujPrzedluzenie/${przedluzenie.value.id}`)
     alert.tekst = res.data
     alert.show = true
     location.reload()
   } catch (error) {
-    alert.tekst = error
+    alert.tekst = error.response.data
     alert.error = true
     alert.show = true
   }
@@ -51,16 +50,19 @@ const przedluz = async () => {
   )
   przedluzenie.value = res.data
   wyborDaty.value = false
-  console.log(res.data)
+}
+const oplacono = () => {
+  location.reload()
 }
 </script>
 <template>
   <div v-if="dataMaksymalna != 'brak terminu' && konto == false">
-    Możliwe przedłużenie wypożyczenia
+    <span style="color: brown">!! Możliwe przedłużenie wypożyczenia !! &#10140; </span>
     <v-btn icon="mdi-calendar-month" color="grey" @click="wyborDaty = !wyborDaty" />
     <div v-if="wyborDaty">
       <div>Kiedy chcesz oddać?</div>
       <input
+        class="wybor"
         type="date"
         v-model="dataPrzedluzenia"
         :min="new Date(dataMinimalna.getTime() + 172800000).toJSON().slice(0, 10)"
@@ -83,9 +85,21 @@ const przedluz = async () => {
     <div>Data zwrotu zmieni się po zaakceptowaniu przez pracownika</div>
 
     <div>
-      <v-btn color="red" @click="konto = false && anuluj()">Anuluj</v-btn>
-      <v-btn color="green" @click="konto = false && location.reload()">Opłacone</v-btn>
+      <v-btn color="red" @click="anuluj()">Anuluj</v-btn>
+      <v-btn color="green" @click="oplacono()">Opłacone</v-btn>
     </div>
   </div>
 </template>
-<style></style>
+<style scoped>
+.wybor {
+  border: 1px solid gray;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+
+  margin: 0px 5px 5px 5px;
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.2),
+    0 1px 20px 0 rgba(0, 0, 0, 0.19);
+}
+</style>

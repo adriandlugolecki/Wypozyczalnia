@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken } from '../../main'
+import { axiosToken, alert } from '../../main'
 import router from '../../router'
 
 const wypozyczenie = ref()
@@ -15,10 +15,7 @@ onBeforeMount(async () => {
     var res = await axiosToken.get(`/Pracownik/WypozyczenieInfo/${idWypozyczenia.value}`)
     wypozyczenie.value = res.data
     zrodlo.value = 'https://localhost:7122/Photos/' + wypozyczenie.value.samochod.id + '.png'
-    console.log(wypozyczenie.value)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
+  } catch (error) {}
 })
 const Wydaj = async (id) => {
   if (wypozyczenie.value.czyWydano == false) {
@@ -30,6 +27,8 @@ const Wydaj = async (id) => {
     czyWydano: czyWydano.value,
     czyOddano: wypozyczenie.czyOddano
   })
+  alert.tekst = 'wydano'
+  alert.show = true
   router.push('/pracownik')
 }
 const Odbierz = async (id) => {
@@ -43,6 +42,8 @@ const Odbierz = async (id) => {
     czyOddano: czyOddano.value,
     Notatka: notatka.value
   })
+  alert.tekst = 'Odebrano'
+  alert.show = true
   router.push('/pracownik')
 }
 let DataBezGodziny = (Data) => {
@@ -78,24 +79,40 @@ let DataBezGodziny = (Data) => {
           {{ wypozyczenie ? wypozyczenie.samochod.model : '' }}<br />
           [{{ wypozyczenie ? wypozyczenie.samochod.rejestracja : '' }}]
         </div>
+        <div>
+          <h3>Dane Kierowcy</h3>
+          <div>
+            {{ wypozyczenie ? wypozyczenie.imie : '' }}<br />
+            {{ wypozyczenie ? wypozyczenie.nazwisko : '' }}
+          </div>
+          <div>telefon: {{ wypozyczenie ? wypozyczenie.telefon : '' }}</div>
+        </div>
       </div>
+
       <div>Koszt wypozyczenia : {{ wypozyczenie ? wypozyczenie.kwota : '' }} zł</div>
-      <input
+      <textarea
+        style="background-color: white; border-radius: 30px; padding: 10px"
+        cols="50"
+        rows="5"
         type="text"
         placeholder="Notatka"
         v-model="notatka"
         v-if="wypozyczenie && wypozyczenie.czyWydano == true && wypozyczenie.czyOddano == false"
-      />
-      <v-btn
-        v-if="wypozyczenie && wypozyczenie.czyWydano == false && wypozyczenie.czyOddano == false"
-        @click="Wydaj(wypozyczenie.id)"
-        >Wydaj
-      </v-btn>
-      <v-btn
-        v-if="wypozyczenie && wypozyczenie.czyWydano == true && wypozyczenie.czyOddano == false"
-        @click="Odbierz(wypozyczenie.id)"
-        >Odbierz
-      </v-btn>
+      ></textarea>
+      <div>
+        <v-btn
+          v-if="wypozyczenie && wypozyczenie.czyWydano == false && wypozyczenie.czyOddano == false"
+          @click="Wydaj(wypozyczenie.id)"
+          color="#ebcc39"
+          >Wydaj
+        </v-btn>
+        <v-btn
+          v-if="wypozyczenie && wypozyczenie.czyWydano == true && wypozyczenie.czyOddano == false"
+          @click="Odbierz(wypozyczenie.id)"
+          color="#ebcc39"
+          >Odbierz
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -116,15 +133,15 @@ let DataBezGodziny = (Data) => {
   font-size: 20px;
 }
 .tytul {
-  float: left;
   height: 60px;
   width: 100%;
   text-align: center;
   font-size: 26px;
 }
 .info {
+  display: flex;
   height: 100%;
   width: 100%;
-  display: flex;
+  text-align: center;
 }
 </style>

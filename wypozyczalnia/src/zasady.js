@@ -1,3 +1,9 @@
+const zasadyWymagane = [
+  (wartosc) => {
+    if (wartosc) return true
+    else return 'Pole jest wymagane'
+  }
+]
 const zasadyHaslo = [
   (wartosc) => {
     if (wartosc) return true
@@ -60,4 +66,4 @@ const zasadyNumer = [
     else return 'Numer telefonu musi składać się z 9 cyfr'
   }
 ]
-export { zasadyHaslo, zasadyLogin, zasadyImie, zasadyNumer, zasadyPesel }
+export { zasadyHaslo, zasadyLogin, zasadyImie, zasadyNumer, zasadyPesel, zasadyWymagane }

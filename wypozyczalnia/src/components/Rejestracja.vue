@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { zasadyHaslo, zasadyImie, zasadyLogin, zasadyNumer, zasadyPesel } from '../zasady'
+import {
+  zasadyHaslo,
+  zasadyImie,
+  zasadyLogin,
+  zasadyNumer,
+  zasadyPesel,
+  zasadyWymagane
+} from '../zasady'
 import { alert, axioss } from '../main'
 import router from '../router'
 
@@ -12,38 +19,50 @@ const email = ref()
 const haslo = ref()
 const telefon = ref()
 const widocznoscHasla = ref(false)
-const submit = async () => {
-  try {
-    var res = await axioss.post('/autoryzacja/rejestracja', {
-      imie: imie.value,
-      nazwisko: nazwisko.value,
-      dataUrodzenia: dataUrodzenia.value,
-      pesel: pesel.value,
-      numerTelefonu: telefon.value,
-      email: email.value,
-      haslo: haslo.value
-    })
-    alert.tekst = 'konto zostało utworzone'
-    alert.show = true
-    router.push(`/potwierdzenieKonta/${res.data.Id}`)
-  } catch (error) {
-    alert.tekst = 'Wypełnij pola'
-    alert.error = true
-    alert.show = true
+const formularzRejestracji = ref()
+const submit = async (event) => {
+  await event
+  const dane = await formularzRejestracji.value?.validate()
+  if (dane && dane.valid) {
+    try {
+      var res = await axioss.post('/autoryzacja/rejestracja', {
+        imie: imie.value,
+        nazwisko: nazwisko.value,
+        dataUrodzenia: dataUrodzenia.value,
+        pesel: pesel.value,
+        numerTelefonu: telefon.value,
+        email: email.value,
+        haslo: haslo.value
+      })
+      alert.tekst = 'konto zostało utworzone'
+      alert.show = true
+      router.push(`/potwierdzenieKonta/${res.data.Id}`)
+    } catch (error) {
+      alert.tekst = 'Wypełnij pola'
+      alert.error = true
+      alert.show = true
+    }
   }
 }
 </script>
 <template>
   <div class="tlo">
     <div class="okno">
-      <v-form ref="formularzLogowania" @submit.prevent="submit">
+      <v-form ref="formularzRejstracji" @submit.prevent="submit">
         <v-row class="justify-center my-6">
           <h1 class="gold">Zarejestruj się</h1>
         </v-row>
         <v-text-field label="Imię" v-model="imie" :rules="zasadyImie" />
         <v-text-field label="Nazwisko" v-model="nazwisko" :rules="zasadyImie" />
 
-        <v-text-field type="Date" label="Data urodzenia" v-model="dataUrodzenia" />
+        <v-text-field
+          type="Date"
+          label="Data urodzenia"
+          v-model="dataUrodzenia"
+          :max="new Date(Date.now() - 568036800000).toJSON().slice(0, 10)"
+          :rules="zasadyWymagane"
+          onkeydown="return false"
+        />
         <v-text-field label="Pesel" v-model="pesel" :rules="zasadyPesel" />
         <v-text-field label="Numer Telefonu" v-model="telefon" :rules="zasadyNumer" />
         <v-text-field label="Email" v-model="email" :rules="zasadyLogin" />
@@ -66,7 +85,7 @@ const submit = async () => {
 @media screen and (max-width: 400px) {
   .okno {
     background-color: var(--okno);
-    margin: 100px auto;
+    margin: 0 auto;
     border: 1px gray solid;
     width: 350px;
     padding: 30px;
@@ -79,7 +98,7 @@ const submit = async () => {
 @media screen and (min-width: 401px) {
   .okno {
     background-color: var(--okno);
-    margin: 100px auto;
+    margin: 0 auto;
     border: 1px gray solid;
     width: 400px;
     padding: 30px;

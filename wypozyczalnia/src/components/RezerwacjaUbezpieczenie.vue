@@ -3,7 +3,6 @@ import { axiosToken } from '../main'
 import { ref } from 'vue'
 import router from '../router'
 import { onBeforeMount } from 'vue'
-const strona = ref(1)
 const listaUbezpieczen = ref()
 onBeforeMount(async () => {
   try {
@@ -24,13 +23,13 @@ const wybierz = (id) => {
 
 <template>
   <div class="tlo">
-    <div class="ubezpieczenieTytul">Wybierz ubezpieczenie</div>
     <div class="okno">
+      <h1>Wybierz ubezpieczenie</h1>
       <table>
         <tr>
           <th width="300px">Co obejmuje ubezpiecznie</th>
           <th width="150px">Podstawowe</th>
-          <th width="150px" class="gold">Rozszerzone</th>
+          <th width="150px" class="gold2">Rozszerzone</th>
         </tr>
         <tr>
           <td>Standardowa polisa AC</td>
@@ -131,13 +130,12 @@ const wybierz = (id) => {
 }
 @media screen and (max-width: 500px) {
   .okno {
-    
     background-color: var(--okno);
     padding: 10px;
     text-align: center;
     border: 1px solid gray;
     border-radius: 15px;
-    height: 600px;
+    height: 650px;
     width: 350px;
     margin: 0 auto;
 

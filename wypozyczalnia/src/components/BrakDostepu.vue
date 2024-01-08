@@ -9,26 +9,30 @@ const email = ref()
 const haslo = ref()
 const route = useRoute()
 let redirectParam = null
-
+const formularzLogowania = ref()
 onBeforeMount(() => {
   redirectParam = route.query.redirect
 })
 
-const submit = async () => {
-  try {
-    var zapytanie = await axioss.post('/autoryzacja/logowanie', {
-      email: email.value,
-      password: haslo.value
-    })
-    localStorage.setItem('token', zapytanie.data.token)
-    localStorage.setItem('uprawnienia', zapytanie.data.role)
-    uzytkownik.uprawnienia = zapytanie.data.role
-    if (redirectParam) {
-      router.push(`${redirectParam}`)
-    } else {
-      router.push('/')
-    }
-  } catch (error) {}
+const submit = async (event) => {
+  await event
+  const dane = await formularzLogowania.value?.validate()
+  if (dane && dane.valid) {
+    try {
+      var zapytanie = await axioss.post('/autoryzacja/logowanie', {
+        email: email.value,
+        password: haslo.value
+      })
+      localStorage.setItem('token', zapytanie.data.token)
+      localStorage.setItem('uprawnienia', zapytanie.data.role)
+      uzytkownik.uprawnienia = zapytanie.data.role
+      if (redirectParam) {
+        router.push(`${redirectParam}`)
+      } else {
+        router.push('/')
+      }
+    } catch (error) {}
+  }
 }
 </script>
 <template>

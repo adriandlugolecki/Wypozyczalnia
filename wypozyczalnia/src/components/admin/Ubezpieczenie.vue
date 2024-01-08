@@ -13,7 +13,14 @@ const zmienKwote = async () => {
       nazwa: props.ubezpieczenie.nazwa,
       kwota: kwota.value
     })
-  } catch (error) {}
+    alert.tekst = res.data
+    alert.show = true
+    location.reload()
+  } catch (error) {
+    alert.text = 'Wpisz liczbę'
+    alert.error = true
+    alert.show = true
+  }
 }
 </script>
 <template>
@@ -22,7 +29,7 @@ const zmienKwote = async () => {
     <v-btn icon="mdi-pencil" elevation="0" @click="rozwin = !rozwin" />
     <div v-if="rozwin" class="kwota">
       <h2>Zmień Kwotę</h2>
-      <input v-model="kwota" class="wybor" />zł
+      <input type="number" v-model="kwota" class="wybor" />zł
       <div><v-btn @click="zmienKwote" color="#ebcc39">zmień</v-btn></div>
     </div>
   </div>

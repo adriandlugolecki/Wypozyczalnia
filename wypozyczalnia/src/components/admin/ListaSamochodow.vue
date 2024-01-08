@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import { axiosToken } from '../../main'
+import { axiosToken, alert } from '../../main'
 const listaSamochodow = ref([])
 const file = ref([])
 const dodaj = ref(false)
@@ -11,38 +11,45 @@ const Rejestracja = ref()
 const rocznik = ref()
 const liczbaDrzwi = ref()
 const liczbaMiejsc = ref()
-const rodzajSkrzyni = ref()
-const rodzajPaliwa = ref()
+const rodzajSkrzyni = ref(0)
+const rodzajPaliwa = ref(0)
 const Cena = ref()
 
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Admin/ListaSamochodow`)
     listaSamochodow.value = res.data
-    console.log(listaSamochodow.value)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
+  } catch (error) {}
 })
 
 const submit = async () => {
-  rodzajSkrzyni.value = parseInt(rodzajSkrzyni.value)
-  rodzajPaliwa.value = parseInt(rodzajPaliwa.value)
-  var res = await axiosToken.post(`/Admin/DodajSamochod`, {
-    marka: Marka.value,
-    model: Model.value,
-    Rejestracja: Rejestracja.value,
-    rocznik: rocznik.value,
-    liczbaMiejsc: liczbaMiejsc.value,
-    liczbaDrzwi: liczbaDrzwi.value,
-    rodzajSkrzyni: rodzajSkrzyni.value,
-    rodzajPaliwa: rodzajPaliwa.value,
-    cena: Cena.value
-  })
-  let formData = new FormData()
-  formData.append('zdjecie', file.value[0])
-  await axiosToken.post(`/Admin/DodajZdjecie/${res.data.id}`, formData)
-  location.reload()
+  try {
+    rodzajSkrzyni.value = parseInt(rodzajSkrzyni.value)
+    rodzajPaliwa.value = parseInt(rodzajPaliwa.value)
+    var res = await axiosToken.post(`/Admin/DodajSamochod`, {
+      marka: Marka.value,
+      model: Model.value,
+      Rejestracja: Rejestracja.value,
+      rocznik: rocznik.value,
+      liczbaMiejsc: liczbaMiejsc.value,
+      liczbaDrzwi: liczbaDrzwi.value,
+      rodzajSkrzyni: rodzajSkrzyni.value,
+      rodzajPaliwa: rodzajPaliwa.value,
+      cena: Cena.value
+    })
+    let formData = new FormData()
+    formData.append('zdjecie', file.value[0])
+    await axiosToken.post(`/Admin/DodajZdjecie/${res.data.id}`, formData)
+
+    alert.tekst = 'Dodano samochód'
+    alert.show = true
+    location.reload()
+  } catch (error) {
+    alert.tekst = 'Błąd'
+    alert.error = true
+    alert.show = true
+    location.reload()
+  }
 }
 const zablokujOdblokuj = async (id) => {
   await axiosToken.patch(`/Admin/ZablokujOdblokujSamochod/${id}`)
@@ -55,7 +62,7 @@ const zablokujOdblokuj = async (id) => {
       <h1 class="tytul">Samochody</h1>
       <div v-if="dodaj" class="formularz">
         <v-form @submit.prevent>
-          <v-card width="100%" height="50px" elevation="0">
+          <v-card width="80%" height="50px" elevation="0" class="center mr-10 ml-10 mb-10">
             <v-file-input v-model="file" label="dodaj zdjęcie" />
           </v-card>
           <div>
@@ -65,8 +72,17 @@ const zablokujOdblokuj = async (id) => {
             <input type="numer" v-model="rocznik" placeholder="Rocznik" class="wybor" />
             <input type="numer" v-model="liczbaDrzwi" placeholder="liczbaDrzwi" class="wybor" />
             <input type="numer" v-model="liczbaMiejsc" placeholder="liczbaMiejsc" class="wybor" />
-            <input v-model="rodzajSkrzyni" placeholder="rodzajSkrzyni" class="wybor" />
-            <input v-model="rodzajPaliwa" placeholder="rodzajPaliwa" class="wybor" />
+            <select v-model="rodzajPaliwa" required class="wybor">
+              <option value="null" selected hidden>Wybierz</option>
+              <option value="0">Benzyna</option>
+              <option value="1">Diesel</option>
+            </select>
+            <select v-model="rodzajSkrzyni" required class="wybor">
+              <option value="null" selected hidden>Wybierz</option>
+              <option value="0">Manual</option>
+              <option value="1">Automat</option>
+            </select>
+
             <input type="numer" v-model="Cena" placeholder="Cena" class="wybor" />
           </div>
 
@@ -76,7 +92,6 @@ const zablokujOdblokuj = async (id) => {
       <v-list-item v-for="samochod in listaSamochodow" :key="samochod.id">
         <div>
           {{ samochod.id }} {{ samochod.marka }} {{ samochod.model }} [{{ samochod.rejestracja }}]
-          {{ samochod.czyZablokowany }}
 
           <v-btn
             v-if="!samochod.czyZablokowany"
@@ -100,17 +115,34 @@ const zablokujOdblokuj = async (id) => {
   height: 100vh;
   width: 100vw;
 }
-
-.okno {
-  width: 450px;
-  border: 1px solid grey;
-  background-color: var(--okno);
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 100px auto;
+@media screen and (max-width: 500px) {
+  .okno {
+    text-align: center;
+    width: 380px;
+    border: 1px solid grey;
+    background-color: var(--okno);
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 auto;
+  }
 }
+
+@media screen and (min-width: 501px) {
+  .okno {
+    text-align: center;
+    width: 450px;
+    border: 1px solid grey;
+    background-color: var(--okno);
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 auto;
+  }
+}
+
 .tytul {
   float: left;
   height: 100px;

@@ -13,10 +13,10 @@ const zmien = async () => {
     haslo.value.length >= 8 &&
     haslo.value != ''
   ) {
-    // var res = await axiosToken.patch(`Autoryzacja/ZmianaHaslaPracownik`, {
-    //   email: props.pracownik.email,
-    //   haslo: haslo.value
-    // })
+    var res = await axiosToken.patch(`Autoryzacja/ZmianaHaslaPracownik`, {
+      email: props.pracownik.email,
+      haslo: haslo.value
+    })
     alert.tekst = res.data
     alert.show = true
   } else {

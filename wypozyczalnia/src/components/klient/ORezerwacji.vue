@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { alert, axiosToken } from '../../main'
 import Przedluzenie from './Przedluzenie.vue'
 const props = defineProps({
   wypozyczenie: Object,
@@ -12,18 +13,14 @@ let DataBezGodziny = (Data) => {
 }
 const usun = async (id) => {
   try {
-    await axiosToken.delete(`/Klient/UsunWypozyczenie/${id}`)
+    var res = await axiosToken.delete(`/Klient/UsunWypozyczenie/${id}`)
+    alert.tekst = res.data
+    alert.show = true
+    location.reload()
   } catch (error) {
-    console.error('Błąd', error)
-  }
-}
-
-const przedluz = async (id) => {
-  try {
-    var res = await axiosToken.get(`/Klient/DostepnePrzedluzenia/${id}`)
-    console.log(res.data)
-  } catch (error) {
-    console.error('Błąd', error)
+    alert.tekst = "Błąd"
+    alert.error = true
+    alert.show = true
   }
 }
 </script>
@@ -82,5 +79,6 @@ const przedluz = async (id) => {
 }
 .oRezerwacji {
   display: flex;
+  color: white;
 }
 </style>

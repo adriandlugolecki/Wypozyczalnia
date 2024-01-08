@@ -31,6 +31,13 @@ namespace webAPI.Models
     public bool CzyWydano { get; set; } = false;
     public bool CzyOddano { get; set; } = false;
     public string Notatka { get; set; } = string.Empty;
+
+    public string? Imie { get; set; }
+    public string? Nazwisko { get; set; }
+    public string? Telefon { get; set; }
+    public string? Adres { get; set; }
+    public string? Miejscowosc { get; set; }
+    public string? KodPocztowy { get; set; }
     }
     
 }

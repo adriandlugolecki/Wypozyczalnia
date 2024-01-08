@@ -3,19 +3,13 @@ import { onBeforeMount, ref } from 'vue'
 import { axiosToken } from '../../main'
 
 import ORezerwacji from './ORezerwacji.vue'
-import { RouterLink } from 'vue-router'
-const data = new Date().toISOString().split('T')[0]
-console.log(data)
+const data = new Date(new Date().getTime() + 172800000).toISOString().split('T')[0]
 const listaWypozyczen = ref([])
-const pokaz = ref()
 onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Klient/WypozyczeniaKlienta`)
     listaWypozyczen.value = res.data
-    console.log(listaWypozyczen.value)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
+  } catch (error) {}
 })
 </script>
 <template>
@@ -33,12 +27,13 @@ onBeforeMount(async () => {
 .wypozyczenie {
   border: 1px solid grey;
   border-radius: 10px;
+  color: black;
 }
 .MojeRezerwacje {
   background-color: var(--okno);
   border-radius: 15px;
   border: 1px solid gray;
-  margin: 100px auto;
+  margin: 0 auto;
   width: 600px;
   text-align: center;
   box-shadow:

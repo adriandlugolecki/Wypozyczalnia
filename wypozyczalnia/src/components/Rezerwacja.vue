@@ -139,7 +139,11 @@ const typPaliwa = (paliwo) => {
               class="kalendarz"
               type="date"
               v-model="data"
-              :min="new Date().toJSON().slice(0, 10)"
+              :min="
+                new Date().getHours() > 10
+                  ? new Date(new Date().getTime() + 86400000).toJSON().slice(0, 10)
+                  : new Date().toJSON().slice(0, 10)
+              "
               :max="new Date(Date.now() + 2592000000).toJSON().slice(0, 10)"
               onkeydown="return false"
             />
@@ -149,7 +153,6 @@ const typPaliwa = (paliwo) => {
               type="date"
               v-model="dataZakonczenia"
               :min="new Date().toJSON().slice(0, 10)"
-              :max="new Date(Date.now() + 2800000000).toJSON().slice(0, 10)"
               onkeydown="return false"
             />
           </div>
@@ -159,7 +162,7 @@ const typPaliwa = (paliwo) => {
               wiek kierowcy
               <select v-model="wiek" required class="wybor">
                 <option value="0">25 lat i mniej</option>
-                <option value="1">26 - 69lat</option>
+                <option value="1">26 - 69 lat</option>
                 <option value="2">70 lat i więcej</option>
               </select>
               <v-btn class="mt-5 mb-5" type="submit" color="#EBCC39"> szukaj </v-btn>
@@ -205,7 +208,11 @@ const typPaliwa = (paliwo) => {
       <div class="oNas">
         <div></div>
         <div class="oNasSamochody" v-for="samochod in listaSamochodow" :key="samochod.id">
-          <img width="150" :src="'https://localhost:7122/Photos/' + samochod.id + '.png'" />
+          <img
+            style="border-radius: 30px"
+            width="150"
+            :src="'https://localhost:7122/Photos/' + samochod.id + '.png'"
+          />
           <div>{{ samochod.marka }} {{ samochod.model }}</div>
         </div>
       </div>
@@ -248,6 +255,9 @@ const typPaliwa = (paliwo) => {
       </div>
 
       <div class="listaSamochod">
+        <div class="samochod" v-if="samochody.length == 0">
+          <h2 class="nazwaSamochodu">Brak wolnych samochodów</h2>
+        </div>
         <v-list-item v-for="samochod in samochody" :key="samochod.id">
           <div>
             <div class="samochod">
@@ -259,21 +269,23 @@ const typPaliwa = (paliwo) => {
                 <div class="zdjecieSamochodu">
                   <img
                     width="150"
-                    style="border-radius: 10px"
+                    style="border-radius: 100px"
                     :src="'https://localhost:7122/Photos/' + samochod.id + '.png'"
                   />
                 </div>
                 <div class="oSamochodzie" style="float: left">
-                  rocznik: {{ samochod.rocznik }}<br />
-                  rodzaj paliwa: {{ typPaliwa(samochod.rodzajPaliwa) }}<br />
-                  rodzaj skrzyni: {{ typSkrzyni(samochod.rodzajSkrzyni) }}<br />
-                  liczba drzwi: {{ samochod.liczbaDrzwi }}<br />
-                  liczba miejsc: {{ samochod.liczbaMiejsc }}
+                  <span class="gold2">Rocznik:</span> {{ samochod.rocznik }}<br />
+                  <span class="gold2">Rodzaj paliwa:</span> {{ typPaliwa(samochod.rodzajPaliwa)
+                  }}<br />
+                  <span class="gold2">Rodzaj skrzyni:</span> {{ typSkrzyni(samochod.rodzajSkrzyni)
+                  }}<br />
+                  <span class="gold2">Liczba drzwi:</span> {{ samochod.liczbaDrzwi }}<br />
+                  <span class="gold2">Liczba miejsc:</span> {{ samochod.liczbaMiejsc }}
                 </div>
 
                 <div class="cenaSamochodu">
                   {{ samochod.cena }} zł za dzień<br />
-                  {{ samochod.cena * ileDni }} zł za {{ ileDni }}dni<br />
+                  {{ samochod.cena * ileDni }} zł za {{ ileDni }} dni<br />
                   <RouterLink
                     :to="'/rezerwacja/' + samochod.id + '/ubezpieczenia'"
                     custom
@@ -294,17 +306,21 @@ const typPaliwa = (paliwo) => {
 .o {
   width: 100vw;
   background-color: transparent;
+  color: white;
+  font-size: 20px;
 }
 @media screen and (max-width: 500px) {
   .oNas {
     display: flex;
     flex-wrap: wrap;
     text-align: center;
-    width: 400px;
+    width: 390px;
     flex-direction: column;
     float: center;
     margin: 0 auto;
     justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 45px;
   }
 }
 @media screen and (min-width: 501px) {
@@ -312,9 +328,11 @@ const typPaliwa = (paliwo) => {
     display: flex;
     flex-wrap: wrap;
     text-align: center;
-    width: 700px;
+    width: 800px;
     float: center;
     margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 45px;
   }
 }
 
@@ -322,32 +340,33 @@ const typPaliwa = (paliwo) => {
   color: #e3b60b;
   margin-top: 30px;
   text-align: center;
+  text-shadow: 3px 3px black;
 }
 
 .oNasLewo {
-  width: 350px;
+  width: 400px;
 
   height: 250px;
 }
 .oNasPrawo {
-  width: 350px;
-
+  width: 400px;
   height: 250px;
 }
 .oNasSamochody {
-  width: 230px;
+  width: 200px;
   height: 200px;
+  margin-top: 20px;
 }
 .daty {
   width: 100vw;
-  height: 300px;
+  height: 200px;
   text-align: center;
-  padding-top: 100px;
 }
 .kalendarz {
   border: 1px solid grey;
   border-radius: 8px;
   padding: 5px;
+  background-color: white;
   margin: 5px;
   box-shadow:
     0 2px 8px 0 rgba(0, 0, 0, 0.2),
@@ -396,21 +415,41 @@ const typPaliwa = (paliwo) => {
   width: 70vw;
   float: left;
 }
-.samochod {
-  background-color: var(--okno);
-  font-size: larger;
-  width: 90%;
-  height: 200px;
-  padding: 10px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: auto;
-  margin-bottom: 20px;
-  margin-top: 10px;
-  border: 1px solid gray;
-  border-radius: 15px;
+@media screen and (max-width: 500px) {
+  .samochod {
+    background-color: var(--okno);
+    font-size: larger;
+    width: 90%;
+    height: 400px;
+    padding: 10px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    border: 1px solid gray;
+    border-radius: 15px;
+  }
 }
+@media screen and (min-width: 501px) {
+  .samochod {
+    background-color: var(--okno);
+    font-size: larger;
+    width: 90%;
+    height: 200px;
+    padding: 10px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    border: 1px solid gray;
+    border-radius: 15px;
+  }
+}
+
 .nazwaSamochodu {
   text-align: center;
 }
@@ -423,7 +462,7 @@ const typPaliwa = (paliwo) => {
   float: left;
 }
 .oSamochodzie {
-  width: 200px;
+  width: 250px;
 }
 .cenaSamochodu {
   text-align: right;

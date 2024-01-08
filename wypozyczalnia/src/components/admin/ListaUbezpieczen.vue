@@ -8,10 +8,7 @@ onBeforeMount(async () => {
   try {
     var res = await axiosToken.get(`/Admin/ListaUbezpieczen`)
     listaUbezpieczen.value = res.data
-    console.log(listaUbezpieczen)
-  } catch (error) {
-    console.error('Błąd', error)
-  }
+  } catch (error) {}
 })
 </script>
 <template>
@@ -29,22 +26,41 @@ onBeforeMount(async () => {
   height: 100vh;
   width: 100vw;
 }
-.okno {
-  width: 450px;
-  border: 1px solid grey;
-  background-color: var(--okno);
-  border-radius: 15px;
-  box-shadow:
-    0 8px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 100px auto;
+@media screen and (max-width: 500px) {
+  .okno {
+    text-align: center;
+    padding-top: 40px;
+    width: 350px;
+    border: 1px solid grey;
+    background-color: var(--okno);
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 auto;
+  }
 }
+
+@media screen and (min-width: 500px) {
+  .okno {
+    text-align: center;
+    padding-top: 40px;
+    width: 450px;
+    border: 1px solid grey;
+    background-color: var(--okno);
+    border-radius: 15px;
+    box-shadow:
+      0 8px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 auto;
+  }
+}
+
 .tytul {
   float: left;
   height: 100px;
   width: 100%;
   text-align: center;
-  font-size: 26px;
 }
 .dodanie {
   float: right;

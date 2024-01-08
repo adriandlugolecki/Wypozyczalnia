@@ -1,35 +1,56 @@
-/* @import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+:root {
+    --okno: rgba(0, 0, 0, 0.75);
+    --color: #ebcc39;
   }
-}
-
-@media (min-width: 1024px) {
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background-color: #262626;
+    color: white;
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
   body {
-    display: flex;
-    place-items: center;
+    background-size: 100vw 100vh;
+    background-image: url('/src/assets/fotor-ai-20240103203456.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  .tlo {
+    width: 100vw;
+    height: 100vh;
+    font-size: 16px;
+    background-color: transparent;
+    color: white;
+    padding-top: 100px;
   }
-} */
+  .gold {
+    color: white;
+  }
+  .gold2 {
+    color: #ebcc39;
+  }
+  .wybor {
+    border: 1px solid gray;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 150px;
+    max-width: 100px;
+    margin: 0px 5px 5px 5px;
+    background-color: white;
+    box-shadow:
+      0 2px 8px 0 rgba(0, 0, 0, 0.2),
+      0 1px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  h1 {
+    color: #ebcc39;
+  }
+  h2 {
+    color: #ebcc39;
+  }
+  h3 {
+    color: #ebcc39;
+  }
