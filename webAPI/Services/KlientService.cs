@@ -51,6 +51,7 @@ namespace webAPI.Services
                 {
                     Wiadomosc = "ok",
                     Powodzenie = true,
+                    Id = klient.Id
                    
                 };
             }

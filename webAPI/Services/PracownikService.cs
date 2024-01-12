@@ -31,13 +31,15 @@ namespace webAPI.Services
                 Nazwisko = rejestracja.Nazwisko,
                 DataUrodzenia = rejestracja.DataUrodzenia,
                 Pesel = rejestracja.Pesel,
-                czyAdmin = rejestracja.czyAdmin,
+                czyAdmin = rejestracja.CzyAdmin,
                 PhoneNumber = rejestracja.NumerTelefonu
             };
             var wynik = await _pracownikManager.CreateAsync(pracownik, rejestracja.Haslo!);
 
             if (wynik.Succeeded)
             {
+
+                await _pracownikManager.AddToRoleAsync(pracownik, "pracownik");
                 return new ServicesKomunikat
                 {
                     Wiadomosc = "ok",

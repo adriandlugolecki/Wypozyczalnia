@@ -64,7 +64,7 @@ builder.Services.Configure<IdentityOptions>(o =>
 {
     o.Password.RequireDigit = true;
     o.Password.RequireLowercase = true;
-    o.Password.RequireNonAlphanumeric = true;
+    o.Password.RequireNonAlphanumeric = false;
     o.Password.RequireUppercase = true;
     o.Password.RequiredLength = 8;
 });

@@ -8,7 +8,7 @@
         public string? Pesel {  get; set; }
         public string? Email { get; set; } 
         public string? Haslo {  get; set; }
-        public bool czyAdmin { get; set; }
+        public bool CzyAdmin { get; set; }
         public string? NumerTelefonu { get; set;}
 
     }

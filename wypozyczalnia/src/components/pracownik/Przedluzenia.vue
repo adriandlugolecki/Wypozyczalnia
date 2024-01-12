@@ -34,7 +34,7 @@ const odrzuc = async (id) => {
       <div v-if="listaPrzedluzen == null" class="tytul">Lista jest pusta</div>
       <v-list-item v-for="przedluzenie in listaPrzedluzen" :key="listaPrzedluzen.id">
         <div class="element">
-          <div class="info">{{ przedluzenie.id }}|{{ przedluzenie.kwota }}zł</div>
+          <div class="info">{{ przedluzenie.wypozyczenieId }}|{{ przedluzenie.kwota }}zł</div>
 
           <div class="przyciski">
             <v-btn icon="mdi-check" color="green" @click="zatwierdz(przedluzenie.id)" />

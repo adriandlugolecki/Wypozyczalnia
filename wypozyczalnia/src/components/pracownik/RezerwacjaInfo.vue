@@ -38,7 +38,7 @@ const Odbierz = async (id) => {
     czyOddano.value = false
   }
   await axiosToken.patch(`/Pracownik/ZmianaStatusuWypozyczenia/${id}`, {
-    czyWydano: wypozyczenie.czyWydano,
+    czyWydano: true,
     czyOddano: czyOddano.value,
     Notatka: notatka.value
   })
@@ -49,6 +49,12 @@ const Odbierz = async (id) => {
 let DataBezGodziny = (Data) => {
   let temp = Data.split('T')
   return temp[0]
+}
+let kaucjaKwota = () => {
+  if (wypozyczenie.value.ubezpieczenieId == 1) {
+    return 2000
+  }
+  return 1
 }
 </script>
 <template>
@@ -89,7 +95,8 @@ let DataBezGodziny = (Data) => {
         </div>
       </div>
 
-      <div>Koszt wypozyczenia : {{ wypozyczenie ? wypozyczenie.kwota : '' }} zł</div>
+      <div>Koszt wypożyczenia : {{ wypozyczenie ? wypozyczenie.kwota : '' }} zł</div>
+      <div>kaucja : {{ wypozyczenie ? kaucjaKwota() : '' }} zł</div>
       <textarea
         style="background-color: white; border-radius: 30px; padding: 10px"
         cols="50"
@@ -125,7 +132,6 @@ let DataBezGodziny = (Data) => {
   box-shadow:
     0 8px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-top: 100px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;

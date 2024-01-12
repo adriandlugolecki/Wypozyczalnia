@@ -36,7 +36,7 @@ const submit = async (event) => {
       })
       alert.tekst = 'konto zostało utworzone'
       alert.show = true
-      router.push(`/potwierdzenieKonta/${res.data.Id}`)
+      router.push(`/potwierdzenieKonta/${res.data.id}`)
     } catch (error) {
       alert.tekst = 'Wypełnij pola'
       alert.error = true
@@ -48,7 +48,7 @@ const submit = async (event) => {
 <template>
   <div class="tlo">
     <div class="okno">
-      <v-form ref="formularzRejstracji" @submit.prevent="submit">
+      <v-form ref="formularzRejestracji" @submit.prevent="submit">
         <v-row class="justify-center my-6">
           <h1 class="gold">Zarejestruj się</h1>
         </v-row>

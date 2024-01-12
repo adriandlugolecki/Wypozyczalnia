@@ -30,8 +30,6 @@ onBeforeMount(async () => {
     Samochod.value = res.data
     Ubezpieczenie.value = res2.data
     zrodlo.value = 'https://localhost:7122/Photos/' + Samochod.value.id + '.png'
-    console.log(auto)
-    console.log(Samochod.value.id)
   } catch (error) {
     console.error('Błąd', error)
   }

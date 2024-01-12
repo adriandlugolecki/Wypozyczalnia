@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Metrics;
 using webAPI.Data;
 using webAPI.Models;
 using webAPI.Services;
@@ -32,17 +31,14 @@ namespace webAPI.Controllers
         [HttpPost("Rejestracja")]
         public async Task<IActionResult> RejestracjaAsync([FromBody] RejestracjaDto rejestracja)
         {
-            if (ModelState.IsValid)
+            
+            var wynik = await _klientService.RejestracjaAsync(rejestracja);
+            if (wynik.Powodzenie)
             {
-                var wynik = await _klientService.RejestracjaAsync(rejestracja);
-                if (wynik.Powodzenie)
-                {
-                    return Ok(wynik);
-                }
-                return BadRequest(wynik);
+                return Ok(wynik);
             }
-            return BadRequest("Błąd");
-
+            return BadRequest(wynik);
+            
         }
 
         [HttpPatch("PotwierdzenieKonta/{id}/{kod}")]
@@ -62,16 +58,12 @@ namespace webAPI.Controllers
         [HttpPost("PracownikRejestracja")]
         public async Task<IActionResult> RejestracjaPracownikAsync([FromBody] RejestracjaPracownikDto rejestracja)
         {
-            if (ModelState.IsValid)
+            var wynik = await _pracownikService.RejestracjaPacownikAsync(rejestracja);
+            if (wynik.Powodzenie)
             {
-                var wynik = await _pracownikService.RejestracjaPacownikAsync(rejestracja);
-                if (wynik.Powodzenie)
-                {
-                    return Ok(wynik);
-                }
-                return BadRequest(wynik);
+                return Ok(wynik);
             }
-            return BadRequest("niedziala"); 
+            return BadRequest(wynik);
         }
         
         [HttpPost("Logowanie")]

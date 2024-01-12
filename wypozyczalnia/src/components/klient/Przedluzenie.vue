@@ -75,7 +75,7 @@ const oplacono = () => {
     </div>
   </div>
   <div v-if="konto">
-    <div>Wypozyczenie zostało wstępnie wydłużone</div>
+    <div>Wypożyczenie zostało wstępnie wydłużone</div>
     Wykonaj przelew na konto <br />
     53 1240 3767 3168 3276 4028 0639 <br />lub na numer telefonu <br />{{ telefon }}<br />
     o tytule przelewu: {{ props.wypozyczenia.id }}|{{ props.wypozyczenia.samochod.marka

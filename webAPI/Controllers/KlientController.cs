@@ -29,31 +29,31 @@ namespace webAPI.Controllers
         
         [Authorize(Roles = "klient")]
         [HttpPost("WypozyczenieSamochodu")]
-        public async Task<IActionResult> WypozyczenieSamochodu(Wypozyczenie wypozyczenie)
+        public async Task<IActionResult> WypozyczenieSamochodu([FromBody] Wypozyczenie wypozyczenie)
         {
-            if (ModelState.IsValid){
-                var czyDostepne = _context.Kalendarz.Where(w => w.Data == wypozyczenie.Data && w.IdSamochodu == wypozyczenie.SamochodId || w.Data.CompareTo(wypozyczenie.Data) >= 0 && w.Data.CompareTo(wypozyczenie.DataZakonczenia) == -1 && w.IdSamochodu == wypozyczenie.SamochodId).Select(w => w.IdSamochodu).Distinct().ToList();
-                if (czyDostepne.Count > 0) return BadRequest("Ten Samochód jest już zarezerwowany");
+            var czyDostepne = _context.Kalendarz.Where(w => w.Data == wypozyczenie.Data && w.IdSamochodu == wypozyczenie.SamochodId 
+                                                        || w.Data.CompareTo(wypozyczenie.Data) >= 0 
+                                                        && w.Data.CompareTo(wypozyczenie.DataZakonczenia) == -1 
+                                                        && w.IdSamochodu == wypozyczenie.SamochodId).Select(w => w.IdSamochodu).Distinct().ToList();
+            if (czyDostepne.Count > 0) return BadRequest("Ten Samochód jest już zarezerwowany");
                 
-                string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-                wypozyczenie.KlientId = id;
-                await _context.Wypozyczenia.AddAsync(wypozyczenie);
-                await _context.SaveChangesAsync();
-                var ileDni = wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
+            string id = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            wypozyczenie.KlientId = id;
+            await _context.Wypozyczenia.AddAsync(wypozyczenie);
+            await _context.SaveChangesAsync();
+            var ileDni = wypozyczenie.DataZakonczenia.Subtract(wypozyczenie.Data).Days;
 
-                for (int i = 0; i < ileDni; i++)
+            for (int i = 0; i < ileDni; i++)
+            {
+                await _context.Kalendarz.AddAsync(new Kalendarz
                 {
-                    await _context.Kalendarz.AddAsync(new Kalendarz
-                    {
-                        IdWypozyczenia = wypozyczenie.Id,
-                        IdSamochodu = wypozyczenie.SamochodId,
-                        Data = wypozyczenie.Data.AddDays(i)
-                    });  
-                }
-                await _context.SaveChangesAsync();
-                return Ok(wypozyczenie);
+                    IdWypozyczenia = wypozyczenie.Id,
+                    IdSamochodu = wypozyczenie.SamochodId,
+                    Data = wypozyczenie.Data.AddDays(i)
+                });  
             }
-            return BadRequest("Błąd");
+            await _context.SaveChangesAsync();
+            return Ok(wypozyczenie); 
         }
 
         [Authorize(Roles = "klient")]
@@ -109,7 +109,7 @@ namespace webAPI.Controllers
         public async Task<IActionResult> PrzedluzWypozyczenie([FromRoute] int id, [FromRoute] DateTime doKiedy)
         {
             var wypozyczenie = await _context.Wypozyczenia.FindAsync(id);
-            if (wypozyczenie == null) return NotFound("Nie odnaleziono takiego ");
+            if (wypozyczenie == null) return NotFound("Nie odnaleziono takiego wypożyczenia");
             
             var ileDni = doKiedy.Subtract(wypozyczenie.DataZakonczenia).Days;
 

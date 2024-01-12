@@ -16,7 +16,7 @@ const wyloguj = () => {
 
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'klient'">
       <RouterLink to="/" custom v-slot="{ navigate }">
-        <v-tab @click="navigate">rezerwacje</v-tab>
+        <v-btn @click="navigate" icon="mdi-home" />
       </RouterLink>
       <RouterLink to="/mojeRezerwacje" custom v-slot="{ navigate }">
         <v-tab @click="navigate">moje rezerwacje</v-tab>
@@ -24,7 +24,7 @@ const wyloguj = () => {
     </v-tabs>
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'pracownik'">
       <RouterLink to="/pracownik" custom v-slot="{ navigate }">
-        <v-tab @click="navigate">rezerwacje</v-tab>
+        <v-btn @click="navigate" icon="mdi-home"></v-btn>
       </RouterLink>
       <RouterLink to="/przedluzenia" custom v-slot="{ navigate }">
         <v-tab @click="navigate">przedłużenia</v-tab>
@@ -32,7 +32,7 @@ const wyloguj = () => {
     </v-tabs>
     <v-tabs :mandatory="false" v-if="uzytkownik.uprawnienia === 'admin'">
       <RouterLink to="/pracownik" custom v-slot="{ navigate }">
-        <v-tab @click="navigate">rezerwacje</v-tab>
+        <v-btn @click="navigate" icon="mdi-home"></v-btn>
       </RouterLink>
       <RouterLink to="/przedluzenia" custom v-slot="{ navigate }">
         <v-tab @click="navigate">przedłużenia</v-tab>

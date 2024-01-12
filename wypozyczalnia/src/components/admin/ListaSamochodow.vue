@@ -53,6 +53,7 @@ const submit = async () => {
 }
 const zablokujOdblokuj = async (id) => {
   await axiosToken.patch(`/Admin/ZablokujOdblokujSamochod/${id}`)
+  location.reload()
 }
 </script>
 <template>

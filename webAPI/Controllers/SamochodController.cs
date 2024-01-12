@@ -26,22 +26,20 @@ namespace webAPI.Controllers
         }
         
         [HttpGet("wolneSamochody/{data}/{dataZakonczenia}")]
-        public IActionResult WolneAuta([FromRoute] DateTime data,[FromRoute] DateTime dataZakonczenia)
+        public IActionResult WolneSamochody([FromRoute] DateTime data,[FromRoute] DateTime dataZakonczenia)
         {
             var samochody = _context.Samochody.ToList();
 
-            var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data) >= 0 && w.Data.CompareTo(dataZakonczenia) == -1).Select(w => w.IdSamochodu).Distinct().ToList();
+            var zablokowaneAuta = _context.Kalendarz.Where(w => w.Data == data || w.Data.CompareTo(data) >= 0 
+                                    && w.Data.CompareTo(dataZakonczenia) == -1).Select(w => w.IdSamochodu).Distinct().ToList();
 
             var ListaDostepnychSamochodow = samochody.Where(s=> s.CzyZablokowany == false).ToList();
 
             foreach(var auto in samochody)
             {
-                foreach(var zablokowane in zablokowaneAuta)
+                if (zablokowaneAuta.Contains(auto.Id))
                 {
-                    if(auto.Id == zablokowane )
-                    {
-                        ListaDostepnychSamochodow.Remove(auto);
-                    }
+                    ListaDostepnychSamochodow.Remove(auto);
                 }
             }
             return Ok(ListaDostepnychSamochodow);

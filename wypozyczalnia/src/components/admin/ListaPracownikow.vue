@@ -31,7 +31,7 @@ const submit = async () => {
       numerTelefonu: telefon.value
     })
 
-    alert.tekst = 'Dodano użytkownika'
+    alert.tekst = 'Dodano pracownika'
     alert.show = true
     location.reload()
   } catch (error) {

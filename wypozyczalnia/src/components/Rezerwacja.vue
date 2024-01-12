@@ -31,13 +31,9 @@ const submit = async () => {
     localStorage.setItem('data', data.value)
     localStorage.setItem('dataZakonczenia', dataZakonczenia.value)
     localStorage.setItem('wiek', wiek.value)
-    console.log(new Date(dataZakonczenia.value))
-    console.log(res.data)
     zapytanie.value = res.data
     samochody.value = [...zapytanie.value]
     strona.value = true
-    console.log(strona.value)
-    console.log(zapytanie.value)
     ileDni.value = Math.ceil(
       Math.abs(new Date(dataZakonczenia.value) - new Date(data.value)) / (1000 * 3600 * 24)
     )
@@ -141,7 +137,7 @@ const typPaliwa = (paliwo) => {
               v-model="data"
               :min="
                 new Date().getHours() > 10
-                  ? new Date(new Date().getTime() + 86400000).toJSON().slice(0, 10)
+                  ? new Date(Date.now() + 86400000).toJSON().slice(0, 10)
                   : new Date().toJSON().slice(0, 10)
               "
               :max="new Date(Date.now() + 2592000000).toJSON().slice(0, 10)"
