@@ -94,7 +94,7 @@ const odrzuc = async (id) => {
 }
 .przyciski {
   align-self: center;
-  width: 30%;
+  width: 40%;
   float: left;
   text-align: right;
 }

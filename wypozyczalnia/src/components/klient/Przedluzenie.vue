@@ -68,9 +68,11 @@ const oplacono = () => {
         :min="new Date(dataMinimalna.getTime() + 172800000).toJSON().slice(0, 10)"
         :max="new Date(dataMaksymalna.getTime() + 86400000).toJSON().slice(0, 10)"
       />
-      kwota: {{ ileDni() * kwota }} zł
+      {{ dataPrzedluzenia ? 'kwota:' + ileDni() * kwota + 'zł' : '' }}
       <div>
-        <v-btn color="grey" @click="konto = true && przedluz()">Przedluż</v-btn>
+        <v-btn color="grey" :disabled="!dataPrzedluzenia" @click="konto = true && przedluz()"
+          >Przedluż</v-btn
+        >
       </div>
     </div>
   </div>
