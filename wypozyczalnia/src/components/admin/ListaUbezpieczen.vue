@@ -47,6 +47,7 @@ onBeforeMount(async () => {
     padding-top: 40px;
     width: 450px;
     border: 1px solid grey;
+    min-height: 200px;
     background-color: var(--okno);
     border-radius: 15px;
     box-shadow:

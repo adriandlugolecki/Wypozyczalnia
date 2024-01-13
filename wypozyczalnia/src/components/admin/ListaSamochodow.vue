@@ -135,6 +135,7 @@ const zablokujOdblokuj = async (id) => {
     text-align: center;
     width: 450px;
     border: 1px solid grey;
+    min-height: 300px;
     background-color: var(--okno);
     border-radius: 15px;
     box-shadow:
