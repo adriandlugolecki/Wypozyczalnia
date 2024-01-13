@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import router from '../../router'
 import { onBeforeMount } from 'vue'
 import { zasadyImie, zasadyNumer, zasadyWymagane } from '../../zasady'
+import { zdjecieAdres } from '../../main'
 const auto = localStorage.getItem('auto')
 const ubezpieczenie = localStorage.getItem('ubezpieczenie')
 const wiek = localStorage.getItem('wiek')
@@ -29,7 +30,7 @@ onBeforeMount(async () => {
 
     Samochod.value = res.data
     Ubezpieczenie.value = res2.data
-    zrodlo.value = 'https://localhost:7122/Photos/' + Samochod.value.id + '.png'
+    zrodlo.value = zdjecieAdres + Samochod.value.id + '.png'
   } catch (error) {
     console.error('Błąd', error)
   }

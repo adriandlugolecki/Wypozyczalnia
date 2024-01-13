@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { alert, axiosToken } from '../../main'
+import { zdjecieAdres } from '../../main'
 import Przedluzenie from './Przedluzenie.vue'
 const props = defineProps({
   wypozyczenie: Object,
@@ -18,7 +19,7 @@ const usun = async (id) => {
     alert.show = true
     location.reload()
   } catch (error) {
-    alert.tekst = "Błąd"
+    alert.tekst = 'Błąd'
     alert.error = true
     alert.show = true
   }
@@ -57,10 +58,7 @@ const usun = async (id) => {
       <div class="samochod2">
         <h3>{{ wypozyczenie.samochod.marka }} {{ wypozyczenie.samochod.model }}</h3>
 
-        <img
-          width="150"
-          :src="'https://localhost:7122/Photos/' + wypozyczenie.samochod.id + '.png'"
-        />
+        <img width="150" :src="zdjecieAdres + wypozyczenie.samochod.id + '.png'" />
       </div>
     </div>
   </div>

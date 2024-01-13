@@ -2,6 +2,7 @@
 import { onBeforeMount } from 'vue'
 import { axioss, alert } from '../main'
 import { ref } from 'vue'
+import { zdjecieAdres } from '../main';
 
 const listaSamochodow = ref()
 const cenaMin = ref(null)
@@ -207,7 +208,7 @@ const typPaliwa = (paliwo) => {
           <img
             style="border-radius: 30px"
             width="150"
-            :src="'https://localhost:7122/Photos/' + samochod.id + '.png'"
+            :src="zdjecieAdres + samochod.id + '.png'"
           />
           <div>{{ samochod.marka }} {{ samochod.model }}</div>
         </div>
