@@ -16,8 +16,7 @@ const zmienKwote = async () => {
     })
     alert.tekst = res.data
     alert.show = true
-    router.push('/listaUbezpieczen')
-    // location.reload()
+    location.reload()
   } catch (error) {
     alert.text = 'Wpisz liczbę'
     alert.error = true
