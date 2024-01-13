@@ -20,7 +20,6 @@ const wyslij = async () => {
       Email: email.value
     })
     alert.tekst = res.data
-    alert.error = true
     alert.show = true
   } catch (error) {
     alert.tekst = error.response.data
