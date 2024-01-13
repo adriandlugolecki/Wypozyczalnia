@@ -11,8 +11,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import axios from 'axios'
 
-const prefix = 'https://localhost:7122'
-export const zdjecieAdres = 'https://localhost:7122/Photos/'
+const prefix = 'https://webapi-wypozyczalnia.azurewebsites.net' //'https://localhost:7122'
+export const zdjecieAdres = 'https://webapi-wypozyczalnia.azurewebsites.net/Photos/' //'https://localhost:7122/Photos/'
 export const telefon = '+48 970594620'
 export const axioss = axios.create({
   baseURL: `${prefix}/api`,

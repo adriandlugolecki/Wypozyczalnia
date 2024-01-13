@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { axiosToken } from '../../main'
+import router from '../../router'
 const props = defineProps({
   ubezpieczenie: Object
 })
@@ -15,7 +16,8 @@ const zmienKwote = async () => {
     })
     alert.tekst = res.data
     alert.show = true
-    location.reload()
+    router.push('/listaUbezpieczen')
+    // location.reload()
   } catch (error) {
     alert.text = 'Wpisz liczbę'
     alert.error = true
@@ -25,7 +27,7 @@ const zmienKwote = async () => {
 </script>
 <template>
   <div>
-    {{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ ubezpieczenie.kwota }} zł
+    {{ ubezpieczenie.id }} {{ ubezpieczenie.nazwa }} {{ kwota }} zł
     <v-btn icon="mdi-currency-usd" elevation="0" @click="rozwin = !rozwin" />
     <div v-if="rozwin" class="kwota">
       <h2>Zmień Kwotę</h2>

@@ -1,0 +1,7 @@
+export { default as BrakDostepu } from './BrakDostepu.vue'
+export { default as StronaLogowania } from './StronaLogowania.vue'
+export { default as PotwierdzenieKonta } from './PotwierdzenieKonta.vue'
+export { default as Rejestracja } from './Rejestracja.vue'
+export { default as Rezerwacja } from './Rezerwacja.vue'
+export { default as RezerwacjaUbezpieczenie } from './RezerwacjaUbezpieczenie.vue'
+export { default as zmianaHasla } from './ZmianaHasla.vue'

@@ -1,85 +1,99 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { uzytkownik } from '../main'
+
+import {
+  BrakDostepu,
+  zmianaHasla,
+  StronaLogowania,
+  Rezerwacja,
+  Rejestracja,
+  PotwierdzenieKonta,
+  RezerwacjaUbezpieczenie
+} from '../components'
+
+import { Pracownik, Przedluzenia, RezerwacjaInfo } from '../components/pracownik'
+import { MojeRezerwacje, Przedluzenie, RezerwacjaPodsumowanie } from '../components/klient'
+import { ListaPracownikow, ListaSamochodow, ListaUbezpieczen } from '../components/admin'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'rezerwacja',
-      component: () => import('../components/Rezerwacja.vue'),
+      component: Rezerwacja,
       meta: { uprawnienia: null }
     },
     {
       path: '/logowanie',
       name: 'logowanie',
-      component: () => import('../components/StronaLogowania.vue'),
+      component: StronaLogowania,
       meta: { uprawnienia: null }
     },
     {
       path: '/rejestracja',
       name: 'rejestracja',
-      component: () => import('../components/Rejestracja.vue'),
+      component: Rejestracja,
       meta: { uprawnienia: null }
     },
     {
       path: '/potwierdzenieKonta/:id',
       name: 'potwierdzenieKonta',
-      component: () => import('../components/PotwierdzenieKonta.vue'),
+      component: PotwierdzenieKonta,
       meta: { uprawnienia: null }
     },
     {
       path: '/brakDostepu',
       name: 'brakdostepu',
-      component: () => import('../components/BrakDostepu.vue'),
+      component: BrakDostepu,
       meta: { uprawnienia: null }
     },
     {
       path: '/zmianaHasla',
       name: 'zmianaHasla',
-      component: () => import('../components/zmianaHasla.vue'),
+      component: zmianaHasla,
       meta: { uprawnienia: null }
     },
     {
       path: '/mojeRezerwacje',
       name: 'mojeRezerwacje',
-      component: () => import('../components/klient/MojeRezerwacje.vue'),
+      component: MojeRezerwacje,
       meta: { uprawnienia: null }
     },
     {
       path: '/przedluzenie/:id',
       name: 'przedluzenie',
-      component: () => import('../components/klient/Przedluzenie.vue'),
+      component: Przedluzenie,
       meta: { uprawnienia: null }
     },
     {
       path: '/rezerwacja/:id/ubezpieczenia',
       name: 'rezerwacjaUbezpieczenie',
-      component: () => import('../components/RezerwacjaUbezpieczenie.vue'),
+      component: RezerwacjaUbezpieczenie,
       meta: { uprawnienia: null }
     },
     {
       path: '/podsumowanie',
       name: 'podsumowanie',
-      component: () => import('../components/klient/RezerwacjaPodsumowanie.vue'),
+      component: RezerwacjaPodsumowanie,
       meta: { uprawnienia: ['klient'] }
     },
     // Pracownik
     {
       path: '/pracownik',
       name: 'pracownik',
-      component: () => import('../components/pracownik/Pracownik.vue'),
+      component: Pracownik,
       meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     {
       path: '/przedluzenia',
       name: 'przedluzenia',
-      component: () => import('../components/pracownik/Przedluzenia.vue'),
+      component: Przedluzenia,
       meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     {
       path: '/rezerwacja/:id/info',
       name: 'rezerwacje',
-      component: () => import('../components/pracownik/RezerwacjaInfo.vue'),
+      component: RezerwacjaInfo,
       meta: { uprawnienia: ['pracownik', 'admin'] }
     },
     //admin
@@ -87,19 +101,19 @@ const router = createRouter({
     {
       path: '/listaPracownikow',
       name: 'listaPracownikow',
-      component: () => import('../components/admin/ListaPracownikow.vue'),
+      component: ListaPracownikow,
       meta: { uprawnienia: ['admin'] }
     },
     {
       path: '/listaSamochodow',
       name: 'listaSamochodow',
-      component: () => import('../components/admin/ListaSamochodow.vue'),
+      component: ListaSamochodow,
       meta: { uprawnienia: ['admin'] }
     },
     {
       path: '/listaUbezpieczen',
       name: 'listaUbezpieczen',
-      component: () => import('../components/admin/ListaUbezpieczen.vue'),
+      component: ListaUbezpieczen,
       meta: { uprawnienia: ['admin'] }
     }
   ]

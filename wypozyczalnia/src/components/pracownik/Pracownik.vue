@@ -55,7 +55,7 @@ const ZmianaDnia = async () => {
     </div>
     <div class="okno">
       <h1 class="tytul">Do odbioru</h1>
-      <div v-if="listaZakonczen == null">lista pusta</div>
+
       <v-list-item v-for="wypozyczenie in listaZakonczen" :key="wypozyczenie.id">
         <div class="tekst">
           NR: {{ wypozyczenie.id }} | {{ wypozyczenie.samochod.marka }}

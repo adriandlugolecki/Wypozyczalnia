@@ -5,8 +5,8 @@ import { watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import { onBeforeMount } from 'vue'
 import router from './router'
-var AudioSuccess = new Audio('/../src/assets/success.mp3')
-var AudioError = new Audio('/../src/assets/error.mp3')
+var AudioSuccess = new Audio('success.mp3')
+var AudioError = new Audio('error.mp3')
 let timeout = null
 
 onBeforeMount(() => {
