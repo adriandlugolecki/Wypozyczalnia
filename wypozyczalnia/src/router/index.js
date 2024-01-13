@@ -21,7 +21,14 @@ const router = createRouter({
       path: '/',
       name: 'rezerwacja',
       component: Rezerwacja,
-      meta: { uprawnienia: null }
+      meta: { uprawnienia: null },
+      beforeEnter: () => {
+        if (uzytkownik.uprawnienia == 'pracownik' || uzytkownik.uprawnienia == 'admin') {
+          return {
+            path: '/pracownik'
+          }
+        }
+      }
     },
     {
       path: '/logowanie',

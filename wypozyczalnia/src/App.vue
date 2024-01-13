@@ -4,7 +4,6 @@ import { alert, uzytkownik } from './main'
 import { watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import { onBeforeMount } from 'vue'
-import router from './router'
 var AudioSuccess = new Audio('success.mp3')
 var AudioError = new Audio('error.mp3')
 let timeout = null
@@ -12,7 +11,6 @@ let timeout = null
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
   if (token != null) {
-    router.push('/pracownik')
     const wygasniecieTokenu = new Date(JSON.parse(atob(token.split('.')[1])).exp * 1000)
     if (wygasniecieTokenu < Date.now()) {
       localStorage.clear()
