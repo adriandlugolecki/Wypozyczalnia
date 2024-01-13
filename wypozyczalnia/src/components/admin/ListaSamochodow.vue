@@ -119,7 +119,7 @@ const zablokujOdblokuj = async (id) => {
 @media screen and (max-width: 500px) {
   .okno {
     text-align: center;
-    width: 380px;
+    width: 350px;
     border: 1px solid grey;
     background-color: var(--okno);
     border-radius: 15px;

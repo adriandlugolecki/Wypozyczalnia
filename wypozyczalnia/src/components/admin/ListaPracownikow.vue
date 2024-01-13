@@ -73,7 +73,7 @@ const submit = async () => {
 
 @media screen and (max-width: 500px) {
   .okno {
-    width: 370px;
+    width: 350px;
     text-align: center;
     border: 1px solid grey;
     background-color: var(--okno);
