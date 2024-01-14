@@ -2,6 +2,7 @@
 import { onBeforeMount, ref } from 'vue'
 import { axiosToken, alert } from '../../main'
 import router from '../../router'
+import { zdjecieAdres } from '../../main'
 
 const wypozyczenie = ref()
 const czyWydano = ref(false)
@@ -14,7 +15,7 @@ onBeforeMount(async () => {
     idWypozyczenia.value = router.currentRoute.value.params['id']
     var res = await axiosToken.get(`/Pracownik/WypozyczenieInfo/${idWypozyczenia.value}`)
     wypozyczenie.value = res.data
-    zrodlo.value = 'https://localhost:7122/Photos/' + wypozyczenie.value.samochod.id + '.png'
+    zrodlo.value = zdjecieAdres + wypozyczenie.value.samochod.id + '.png'
   } catch (error) {}
 })
 const Wydaj = async (id) => {
